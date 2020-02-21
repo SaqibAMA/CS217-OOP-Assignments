@@ -4,7 +4,13 @@
 
 using namespace std;
 
+
 void allocateTriangular(int*** M, int n) {
+
+    /*
+     * Function to allocate memory
+     * for a 2D Triangular Matrix
+     */
 
     int** mArray = new int*[n];
     for (int i = 0; i < n; i++) {
@@ -17,6 +23,11 @@ void allocateTriangular(int*** M, int n) {
 
 void deallocate(int** &M, int n) {
 
+    /*
+     * Function to deallocate memory
+     * of any 2D Matrix
+    */
+
     for (int i = 0; i < n; i++)
         delete[] *(M + i);
 
@@ -26,6 +37,11 @@ void deallocate(int** &M, int n) {
 }
 
 bool isTriangular(int** M, int n) {
+
+    /*
+     * Function to check if a matrix
+     * is triangular or not.
+    */
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < i; j++) {
@@ -39,6 +55,14 @@ bool isTriangular(int** M, int n) {
 
 void inputTriangular(int*** M, int &n) {
 
+    /*
+     * Function to take a matrix
+     * input and convert it into
+     * triangular.
+     */
+
+    // Takes the order of the matrix if it
+    // is not specified.
     if (n <= 0) {
         cout << "ENTER ORDER OF THE MATRIX -> ";
         cin >> n;
@@ -52,12 +76,15 @@ void inputTriangular(int*** M, int &n) {
 
     cout << "\nINPUT THE CONTENTS ROW BY ROW" << endl;
 
+    // Buffer Matrix to hold data
     int** buffM = new int*[n];
     for (int i = 0; i < n; i++)
         *(buffM + i) = new int[n];
 
     bool isTri = false;
 
+    // Continues to take input until
+    // Matrix is not triangular
     while (!isTri) {
         for (int i = 0; i < n; i++) {
             cout << "ENTER R" << i + 1 << ": ";
@@ -84,29 +111,42 @@ void inputTriangular(int*** M, int &n) {
 
 void readFromFile(int*** A, int &aSize, int*** B, int &bSize) {
 
+    /*
+     * Function to read 2 matrices from
+     * the specified file
+     */
+
     ifstream fin;
     fin.open("sampleMatrices.txt");
 
     int n = 0;
     bool endReading = false;
 
+    // Keeps the status of which matrix has been read
     bool m1Stored = false, m2Stored = false;
 
+    // Main file reading loop
     while (!fin.eof() && !endReading) {
 
+        // Takes the order
         fin >> n;
         fin.ignore();
 
+        // Buffer matrix to keep data
         int** buffM = new int*[n];
         for (int i = 0; i < n; i++)
             *(buffM + i) = new int[n];
 
+        // Taking file input into buffer
+        // matrix
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 fin >> *(*(buffM + i) + j);
             }
         }
 
+        // Checking if buffer matrix is triangular
+        // If it's not, option is given to truncate values
         if (!isTriangular(buffM, n)) {
             cout << "THE MATRIX READ FROM THE FILE IS\n"
             << "NOT UPPER TRIANGULAR! SOME VALUES WILL BE OMITTED!"
@@ -162,6 +202,11 @@ void readFromFile(int*** A, int &aSize, int*** B, int &bSize) {
 
 void printTriangular(int** M, int n, int mode = 0) {
 
+    /*
+     * Functiont to print a triangular matrix
+     * row wise or column wise
+     */
+
     cout << "ROW WISE REPRESENTATION: " << endl;
     for (int i = 0; i < n; i++) {
         cout << "R: ";
@@ -173,6 +218,7 @@ void printTriangular(int** M, int n, int mode = 0) {
         cout << endl;
     }
 
+    // Special mode to print the matrix column wise
     if (mode != 0) {
         cout << "\nCOLUMN WISE REPRESENTATION: " << endl;
         for (int i = 0; i < n; i++) {
@@ -191,13 +237,25 @@ void printTriangular(int** M, int n, int mode = 0) {
 
 void swapRows(int** A, int r1, int r2) {
 
+    /*
+     * Function to swap the rows
+     * of the triangular matrix
+    */
+
+    // Swapping the row pointers
     int* temp = *(A + r1);
     *(A + r1) = *(A + r2);
     *(A + r2) = temp;
 
 }
 
+// Helper function for matrix multiplication.
+
 int colProduct(const int* A, int** B, int n, int c) {
+
+    /*
+     * Function to multiply 2 columns
+     */
 
     int sum = 0;
 
@@ -249,30 +307,31 @@ void copyRow(int* &A, int* B, int t = 0) {
 
 void deleteRow(int** &A, int& n, int r) {
 
-    int** newA = new int*[n - 1];
-    for (int i = 0, j = 0; i < n; i++) {
+    if (r < n && r > 0) {
+        int **newA = new int *[n - 1];
+        for (int i = 0, j = 0; i < n; i++) {
 
-        if (i == 0 && i != r) {
-            newA[j] = new int[n - i];
-            copyRow(newA[j], A[i], -1);
-            j++;
-        }
-        else {
-            if (i != r) {
-                newA[j] = new int[n - i + 1];
-                copyRow(newA[j], A[i]);
+            if (i == 0 && i != r) {
+                newA[j] = new int[n - i];
+                copyRow(newA[j], A[i], -1);
                 j++;
+            } else {
+                if (i != r) {
+                    newA[j] = new int[n - i + 1];
+                    copyRow(newA[j], A[i]);
+                    j++;
+                }
             }
+
         }
 
+        for (int i = 0; i < n; i++)
+            delete[] A[i];
+        delete[] A;
+
+        A = newA;
+        n--;
     }
-
-    for (int i = 0; i < n; i++)
-        delete[] A[i];
-    delete[] A;
-
-    A = newA;
-    n--;
 }
 
 int main() {
@@ -307,6 +366,7 @@ int main() {
         << "| 6. Multiply matrices                |" << endl
         << "| 7. Swap rows                        |" << endl
         << "| 8. Delete row                       |" << endl
+        << "| 0. Exit                             |" << endl
         << " -------------------------------------"
         << endl;
 
@@ -333,6 +393,7 @@ int main() {
             if (mAllocated) {
                 mAllocated = false;
                 deallocate(M, n);
+                cout << "Memory deallocated!" << endl;
             } else {
                 cout << "No memory has been allocated!" << endl;
             }
