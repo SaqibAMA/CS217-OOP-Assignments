@@ -2,9 +2,8 @@
 
 using namespace std;
 
-// Part 01
-
-// Custom strlen function
+// Question 02
+// Helper functions for string manipulation.
 int stringLen(const char* str) {
 
     int i = 0;
@@ -17,7 +16,78 @@ int stringLen(const char* str) {
 
 }
 
-// Function to concatenate two strings
+// Converts the string into lower case characters
+// for uniform checking
+void convertToLower(char* &s) {
+
+    char* lowerS = new char[stringLen(s)];
+    int i;
+    for (i = 0; s[i] != '\0'; i++){
+        if (s[i] >= 'A' && s[i] <= 'Z')
+            lowerS[i] = s[i] + 32;
+        else
+            lowerS[i] = s[i];
+    }
+    lowerS[i] = '\0';
+
+    delete[] s;
+    s = lowerS;
+
+}
+
+// To copy one string into another string
+void copyString(char* str1, char* str2) {
+
+    int i;
+    for (i = 0; str2[i] != '\0'; i++)
+        str1[i] = str2[i];
+    str1[i] = '\0';
+
+}
+
+// Appends a string at the tail of the other
+// also handles deletion of last characters
+void appendString(char* str1, char* str2, int n = 0) {
+
+    int i, j;
+    for (i = stringLen(str1) - n, j = 0; str2[j] != '\0'; i++, j++) {
+        str1[i] = str2[j];
+    }
+    str1[i] = '\0';
+
+}
+
+// Checks for vowels
+bool isVowel (char c) {
+    return (c == 'a' ||
+           c == 'e' ||
+           c == 'i' ||
+           c == 'o' ||
+           c == 'u');
+}
+
+// Checks if the string is
+bool isEqual(char* str1, char* str2) {
+
+    int str1Len = stringLen(str1), str2Len = stringLen(str2);
+
+    if (str1Len == str2Len) {
+        int i = 0;
+
+        while (str1[i] != '\0') {
+            if (str1[i] != str2[i])
+                return false;
+            i++;
+        }
+    }
+    else {
+        return false;
+    }
+
+    return true;
+}
+
+// Question 2, Part 01. Function to concatenate two strings.
 void StringConcatenate (char *str1, char *str2) {
 
     int str1Len = stringLen(str1);
@@ -29,6 +99,8 @@ void StringConcatenate (char *str1, char *str2) {
     str1[j] = '\0';
 }
 
+// Question 2, Part 02. Function to compress a string.
+// i.e. aaaaaabbbbdd => abd
 void CompressString(char* str){
 
     int strSize = stringLen(str);
@@ -60,6 +132,8 @@ void CompressString(char* str){
 
 }
 
+// Question 2, Part 03. Function to reverse a sentence.
+// i.e. I am Pakistani => Pakistan am I
 char* ReverseSentence(char* str) {
 
     int strSize = stringLen(str);
@@ -97,14 +171,68 @@ char* ReverseSentence(char* str) {
 
 }
 
-void plural(char** s) {
+// Question 2, Part 04. Function to convert a 2D
+// array of words into plurals.
+// i.e. blunt => blunts, cat => cats
+void plural(char** s, int wCount) {
 
-    int wordCount = sizeof(s);
+    for (int i = 0; i < wCount; i++) {
+        convertToLower(*(s + i));
 
-    for (int i = 0; i < wordCount; i++) {
+        // Requirement 01
+        if (s[i][stringLen(s[i]) - 1] == 'h' &&
+                (s[i][stringLen(s[i]) - 2] == 'c' ||
+                s[i][stringLen(s[i]) - 2] == 's')) {
+            appendString(s[i], "es");
+        } // Requirement 02
+        else if (s[i][stringLen(s[i]) - 1] == 's') {
+            appendString(s[i], "es");
+        } // Requirement 03
+        else if (s[i][stringLen(s[i]) - 1] == 'y') {
 
-        int wordLen = stringLen(*(s + i));
-        cout << wordLen << endl;
+            if (isVowel(s[i][stringLen(s[i]) - 2])) {
+                appendString(s[i], "s");
+            }
+            else {
+                appendString(s[i], "ies", 1);
+            }
+
+        } // Requirement 04
+        else if (s[i][stringLen(s[i]) - 1] == 'z') {
+
+            if (isVowel(s[i][stringLen(s[i]) - 2])) {
+                appendString(s[i], "zes");
+            }
+            else {
+                appendString(s[i], "es");
+            }
+
+        }
+        else {
+
+            // Special cases
+            char* sCases[] = {"child", "goose", "man", "woman",
+                              "tooth", "foot", "mouse", "person"};
+
+            char* sCasesP[] = {"children", "geese", "men", "women",
+                               "teeth", "feet", "mice", "people"};
+
+            int sCount = sizeof(sCases) / sizeof(sCases[0]);
+            bool isSpecial = false;
+
+            for (int j = 0; j < sCount; j++){
+                if (isEqual(s[i], sCases[j])) {
+                    copyString(s[i], sCasesP[j]);
+                    isSpecial = true;
+                }
+            }
+
+            // Simply appending "s" if no special case is found
+            if(!isSpecial) {
+                appendString(s[i], "s");
+            }
+
+        }
 
     }
 
@@ -127,11 +255,21 @@ int main(){
     char str4[] = "I am Pakistani";
 
     // String reversal function
-    //char* revString = ReverseSentence(str4);
-    //cout << revString << endl;
+    // char* revString = ReverseSentence(str4);
+    // cout << revString << endl;
 
-    char* s[] = {"Student", "Party", "Quiz", "Ass"};
-    plural(s);
+    char* s[] = {"Student", "Party", "Quiz", "Bat", "Man", "Lunch"};
+    int wCount = sizeof(s) / sizeof(s[0]);
+
+    /*cout << "The words before conversion: " << endl;
+    for (int i = 0; i < wCount; i++)
+        cout << s[i] << endl;
+
+    plural(s, wCount);
+
+    cout << "The words after conversion: " << endl;
+    for (int i = 0; i < wCount; i++)
+        cout << s[i] << endl;*/
 
     return 0;
 }

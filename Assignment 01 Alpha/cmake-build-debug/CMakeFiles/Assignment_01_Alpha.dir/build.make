@@ -56,27 +56,27 @@ include CMakeFiles/Assignment_01_Alpha.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/Assignment_01_Alpha.dir/flags.make
 
-CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.obj: CMakeFiles/Assignment_01_Alpha.dir/flags.make
-CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.obj: ../Question_02.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 01 Alpha\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.obj"
-	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\Assignment_01_Alpha.dir\Question_02.cpp.obj -c "D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 01 Alpha\Question_02.cpp"
+CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.obj: CMakeFiles/Assignment_01_Alpha.dir/flags.make
+CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.obj: ../Question_01.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 01 Alpha\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.obj"
+	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\Assignment_01_Alpha.dir\Question_01.cpp.obj -c "D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 01 Alpha\Question_01.cpp"
 
-CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.i"
-	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 01 Alpha\Question_02.cpp" > CMakeFiles\Assignment_01_Alpha.dir\Question_02.cpp.i
+CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.i"
+	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 01 Alpha\Question_01.cpp" > CMakeFiles\Assignment_01_Alpha.dir\Question_01.cpp.i
 
-CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.s"
-	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 01 Alpha\Question_02.cpp" -o CMakeFiles\Assignment_01_Alpha.dir\Question_02.cpp.s
+CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.s"
+	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 01 Alpha\Question_01.cpp" -o CMakeFiles\Assignment_01_Alpha.dir\Question_01.cpp.s
 
 # Object files for target Assignment_01_Alpha
 Assignment_01_Alpha_OBJECTS = \
-"CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.obj"
+"CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.obj"
 
 # External object files for target Assignment_01_Alpha
 Assignment_01_Alpha_EXTERNAL_OBJECTS =
 
-Assignment_01_Alpha.exe: CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.obj
+Assignment_01_Alpha.exe: CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.obj
 Assignment_01_Alpha.exe: CMakeFiles/Assignment_01_Alpha.dir/build.make
 Assignment_01_Alpha.exe: CMakeFiles/Assignment_01_Alpha.dir/linklibs.rsp
 Assignment_01_Alpha.exe: CMakeFiles/Assignment_01_Alpha.dir/objects1.rsp

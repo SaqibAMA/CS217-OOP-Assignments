@@ -122,32 +122,32 @@ Assignment_01_Alpha/fast:
 	$(MAKE) -f CMakeFiles\Assignment_01_Alpha.dir\build.make CMakeFiles/Assignment_01_Alpha.dir/build
 .PHONY : Assignment_01_Alpha/fast
 
-Question_02.obj: Question_02.cpp.obj
+Question_01.obj: Question_01.cpp.obj
 
-.PHONY : Question_02.obj
+.PHONY : Question_01.obj
 
 # target to build an object file
-Question_02.cpp.obj:
-	$(MAKE) -f CMakeFiles\Assignment_01_Alpha.dir\build.make CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.obj
-.PHONY : Question_02.cpp.obj
+Question_01.cpp.obj:
+	$(MAKE) -f CMakeFiles\Assignment_01_Alpha.dir\build.make CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.obj
+.PHONY : Question_01.cpp.obj
 
-Question_02.i: Question_02.cpp.i
+Question_01.i: Question_01.cpp.i
 
-.PHONY : Question_02.i
+.PHONY : Question_01.i
 
 # target to preprocess a source file
-Question_02.cpp.i:
-	$(MAKE) -f CMakeFiles\Assignment_01_Alpha.dir\build.make CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.i
-.PHONY : Question_02.cpp.i
+Question_01.cpp.i:
+	$(MAKE) -f CMakeFiles\Assignment_01_Alpha.dir\build.make CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.i
+.PHONY : Question_01.cpp.i
 
-Question_02.s: Question_02.cpp.s
+Question_01.s: Question_01.cpp.s
 
-.PHONY : Question_02.s
+.PHONY : Question_01.s
 
 # target to generate assembly for a file
-Question_02.cpp.s:
-	$(MAKE) -f CMakeFiles\Assignment_01_Alpha.dir\build.make CMakeFiles/Assignment_01_Alpha.dir/Question_02.cpp.s
-.PHONY : Question_02.cpp.s
+Question_01.cpp.s:
+	$(MAKE) -f CMakeFiles\Assignment_01_Alpha.dir\build.make CMakeFiles/Assignment_01_Alpha.dir/Question_01.cpp.s
+.PHONY : Question_01.cpp.s
 
 # Help Target
 help:
@@ -158,9 +158,9 @@ help:
 	@echo ... Assignment_01_Alpha
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... Question_02.obj
-	@echo ... Question_02.i
-	@echo ... Question_02.s
+	@echo ... Question_01.obj
+	@echo ... Question_01.i
+	@echo ... Question_01.s
 .PHONY : help
 
 
