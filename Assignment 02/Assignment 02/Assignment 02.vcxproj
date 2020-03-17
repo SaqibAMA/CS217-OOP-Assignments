@@ -78,12 +78,21 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ticTacToe.cpp" />
+    <ClCompile Include="uTicTacToe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ticTacToe.h" />
+    <ClInclude Include="uTicTacToe.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="cPos.txt" />
+    <Text Include="Game.txt" />
+    <Text Include="log.txt" />
+    <Text Include="uGame.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="gameWon.mp3" />
+    <Media Include="moveFailed.mp3" />
+    <Media Include="moveSuccess.mp3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

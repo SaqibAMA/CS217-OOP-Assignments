@@ -21,15 +21,38 @@
     <ClCompile Include="ticTacToe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="uTicTacToe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ticTacToe.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="uTicTacToe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="cPos.txt">
+    <Text Include="Game.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="uGame.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="log.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="moveFailed.mp3">
+      <Filter>Source Files</Filter>
+    </Media>
+    <Media Include="moveSuccess.mp3">
+      <Filter>Source Files</Filter>
+    </Media>
+    <Media Include="gameWon.mp3">
+      <Filter>Source Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

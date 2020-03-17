@@ -4,6 +4,8 @@
 #include <Windows.h>
 #include <conio.h>
 #include "ticTacToe.h"
+#include "uTicTacToe.h"
+
 
 using namespace std;
 
@@ -114,6 +116,7 @@ int getChoice(){
 
 		} else if (GetAsyncKeyState(VK_RETURN) & 0x0D000) {
 			
+			system("cls");
 			Sleep(100);
 			return choice;
 
@@ -219,6 +222,38 @@ int main(){
 		system("cls");
 
 		game.print();
+	
+		int i = 0, j = 0;
+
+		while (true) {
+
+			i = game.getRow();
+			j = game.getCol();
+			
+			game.makeMove(i, j, false);
+			game.print();
+
+
+		}
+
+	} else if (mode == 2) {
+		
+		uTicTacToe game;
+
+		game.print();
+
+		int i = 0, j = 0;
+
+		while (true) {
+
+			i = game.getRow();
+			j = game.getCol();
+			
+			game.makeMove(i, j, false);
+			game.print();
+
+
+		}
 
 	}
 
