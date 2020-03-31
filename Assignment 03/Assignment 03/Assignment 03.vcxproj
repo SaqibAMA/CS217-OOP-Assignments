@@ -76,7 +76,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="q2.cpp" />
+    <ClCompile Include="driver.cpp" />
+    <ClCompile Include="HugeInt.cpp" />
+    <ClCompile Include="MyString.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HugeInt.h" />
+    <ClInclude Include="MyString.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
