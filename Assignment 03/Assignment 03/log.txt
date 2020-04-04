@@ -1,0 +1,81 @@
+999999999 
+Adding...
+carry -> 0
+(*this)[length - 1 - i] -> 9
+length - 1 - i: 8
+length: 9
+i: 0
+getDigit(num, numLen - 1 - i): 9
+currSum -> 18
+999999999 
+Adding...
+carry -> 1
+(*this)[length - 1 - i] -> 9
+length - 1 - i: 7
+length: 9
+i: 1
+getDigit(num, numLen - 1 - i): 9
+currSum -> 19
+999999999 
+Adding...
+carry -> 1
+(*this)[length - 1 - i] -> 9
+length - 1 - i: 6
+length: 9
+i: 2
+getDigit(num, numLen - 1 - i): 9
+currSum -> 19
+999999999 
+Adding...
+carry -> 1
+(*this)[length - 1 - i] -> 9
+length - 1 - i: 5
+length: 9
+i: 3
+getDigit(num, numLen - 1 - i): 9
+currSum -> 19
+999999999 
+Adding...
+carry -> 1
+(*this)[length - 1 - i] -> 9
+length - 1 - i: 4
+length: 9
+i: 4
+getDigit(num, numLen - 1 - i): 9
+currSum -> 19
+999999999 
+Adding...
+carry -> 1
+(*this)[length - 1 - i] -> 9
+length - 1 - i: 3
+length: 9
+i: 5
+getDigit(num, numLen - 1 - i): 9
+currSum -> 19
+999999999 
+Adding...
+carry -> 1
+(*this)[length - 1 - i] -> 9
+length - 1 - i: 2
+length: 9
+i: 6
+getDigit(num, numLen - 1 - i): 9
+currSum -> 19
+999999999 
+Adding...
+carry -> 1
+(*this)[length - 1 - i] -> 9
+length - 1 - i: 1
+length: 9
+i: 7
+getDigit(num, numLen - 1 - i): 9
+currSum -> 19
+999999999 
+Adding...
+carry -> 1
+(*this)[length - 1 - i] -> 9
+length - 1 - i: 0
+length: 9
+i: 8
+getDigit(num, numLen - 1 - i): 9
+currSum -> 19

@@ -1,4 +1,4 @@
-﻿Build started 01/04/2020 10:14:38 PM.
+﻿Build started 04/04/2020 7:51:49 PM.
      1>Project "D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 03\Assignment 03\Assignment 03.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt driver.cpp
@@ -12,4 +12,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.26
+Time Elapsed 00:00:01.41

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 #include "MyString.h"
 #include "HugeInt.h"
 
@@ -9,22 +10,22 @@ int main() {
 	//54136543 643643541 63413643(5) 443541634
 	//5413654364364354163413643544354163
 
-	HugeInt h1(123456);
+	// 333179521389983125971113233711
+
+	HugeInt h1(999999999);
+
+	HugeInt h3(999999999);
 
 	HugeInt h2(h1);
 
-	HugeInt h3(-4568898);
+	clock_t t = clock();
+	cout << "Started..." << endl;
 
-
-	h1 = h3;
-
-	cin >> h1;
-
-	h3 = h1;
-
-	cout << h3 << endl;
-
-	cout << h1 << endl;
+	cout << (h1 * 999999) << endl;
 	
+	double time = (clock() - t) / 1000;
+
+	cout << "\nTime: " << (double) time << " seconds" << endl;
+
 	return 0;
 }

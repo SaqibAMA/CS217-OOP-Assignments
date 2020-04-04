@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <fstream>
 
 using namespace std;
 
@@ -24,6 +25,7 @@ public:
 	HugeInt();
 	HugeInt(int);
 	HugeInt(const HugeInt&);
+	HugeInt(int*, int, bool);
 
 	// Operators
 	int operator[](const int);
@@ -31,14 +33,30 @@ public:
 	HugeInt& operator = (const HugeInt&);
 	bool operator == (const HugeInt&);
 	bool operator != (const HugeInt&);
+
+	// make relational ones
+	// for int as well
 	bool operator < (const HugeInt&);
 	bool operator > (const HugeInt&);
 	bool operator <= (const HugeInt&);
 	bool operator >= (const HugeInt&);
 
 	// Helper functions
-	void print();
 	int getNumLength(int);
+	int getDigit(int, int);
+
+	// Arithmetic
+
+	// + operator has a dependecy on - operator
+	// There is an issue when we add negative numbers into
+	// positive numbers
+	HugeInt operator + (const int);
+
+	// This gives wrong results
+	HugeInt operator + (HugeInt&);
+
+	// This is obsolete because operator + is obsolete
+	HugeInt operator * (const int);
 
 	// Stream insertion & extraction
 	friend ostream& operator << (ostream&, const HugeInt&);
