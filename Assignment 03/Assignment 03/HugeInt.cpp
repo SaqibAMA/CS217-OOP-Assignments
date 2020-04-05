@@ -35,52 +35,6 @@ HugeInt::HugeInt(const HugeInt& H) {
 
 }
 
-HugeInt::HugeInt(int* H, int s, bool p) {
-	
-
-	this->maxLen = 50;
-	this->polarity = p;
-
-
-	// Clean up
-	
-	for (int i = 0; i < s && H[i] == 0;) {
-		
-		while (H[i] == 0) {
-			
-			for (int j = i; j < s - 1; j++) {
-				
-				H[j] = H[j + 1];
-
-			}
-
-			s--;
-
-		}
-
-	}
-
-	this->length = s;
-	this->rows = (int) ceil(length / 9.0);
-
-
-	this->ptr = new int[rows];
-
-	for (int i = 0, rowCount = 0; i < s; i += 9) {
-		
-		int temp = 0;
-		for (int j = s - 1 - i, k = 0; j > s - 10 - i && j >= 0; j--, k++) {
-		
-			temp += H[j]* (int)(pow(10, k));
-
-		}
-
-		ptr[rowCount++] = abs(temp);
-
-	}
-
-}
-
 int HugeInt::operator[](const int i) {
 	
 	if (i < getNumLength(ptr[rows - 1])) {
@@ -305,10 +259,10 @@ HugeInt HugeInt::operator + (const int num) {
 
 		}
 
-		cout << "sum -> ";
+		/*cout << "sum -> ";
 		for (int i = 0; i < sumLen; i++)
 			cout << temp[i];
-		cout << endl;
+		cout << endl;*/
 
 		HugeInt tempObj;
 
@@ -323,14 +277,14 @@ HugeInt HugeInt::operator + (const int num) {
 			
 			numBuff = 0;
 
-			for (int j = sumLen - 1 - i, dCount = 0; j >= 0 && j >= sumLen - 10 - i; j--, dCount++) {
+			for (int j = sumLen - 1 - i, dCount = 0; j >= 0 && j >= sumLen - 9 - i; j--, dCount++) {
 				
-				numBuff += temp[j] * pow(10, dCount);
-				cout << "numBuff-> " << numBuff << endl;
+				numBuff += temp[j] * (int)pow(10, dCount);
+			//	cout << "numBuff-> " << numBuff << endl;
 
 			}
 
-			cout << "rCount-> " << rCount << endl;
+			//cout << "rCount-> " << rCount << endl;
 			tempObj.ptr[rCount] = numBuff;
 
 		}
@@ -347,10 +301,26 @@ HugeInt HugeInt::operator + (const int num) {
 
 }
 
+bool HugeInt::isZero(const HugeInt& H) {
+	
+	for (int i = 0; i < H.rows; i++)
+		if (H.ptr[i] != 0) return false;
+
+	return true;
+}
+
 HugeInt HugeInt::operator + (HugeInt& H) {
 	
 
 	if (this->polarity == 0 && H.polarity == 0) {
+
+		if(isZero(*this)) return H;
+		if(isZero(H)) return *this;
+
+		
+		/*cout << "\n...Adding...\n" << endl;
+		cout << *this << endl;
+		cout << H << endl;*/
 		
 		int carry = 0;
 
@@ -424,16 +394,24 @@ HugeInt HugeInt::operator + (HugeInt& H) {
 
 			for (int j = sumLen - 1 - i, dCount = 0; j >= 0 && j >= sumLen - 9 - i; j--, dCount++) {
 				
-				numBuff += temp[j] * pow(10, dCount);
-				/*cout << "numBuff-> " << numBuff << endl;*/
+				//cout << "temp[j]" << temp[j] << endl;
+				//cout << "j: " << j << endl;
+
+				numBuff += temp[j] * (int)pow(10, dCount);
+				//cout << "numBuff-> " << numBuff << endl;
 
 			}
 
-			/*cout << "rCount-> " << rCount << endl;*/
+			//cout << "rCount-> " << rCount << endl;
 			tempObj.ptr[rCount] = numBuff;
-			/*cout << "ptr[rCount]: " << tempObj.ptr[rCount] << endl;*/
+			//cout << "ptr[rCount]: " << tempObj.ptr[rCount] << endl;
 
 		}
+
+		/*cout << "sum -> ";
+		for (int i = 0; i < sumLen; i++)
+			cout << temp[i];
+		cout << endl;*/
 
 		delete[] temp;
 
@@ -450,24 +428,422 @@ HugeInt HugeInt::operator + (HugeInt& H) {
 
 HugeInt HugeInt::operator * (const int n) {
 	
-	HugeInt temp(*this);
-
-	for (int i = 0; i < n - 1; i++) {
-	
-		temp = temp + *this;
+	if (isZero(*this) || n == 0) {
+		
+		HugeInt temp;
+		return temp;
 
 	}
 
-	return temp;
+	int _n = abs(n);
+
+	int aLen = this->length;
+	int bLen = getNumLength(n);
+
+	int carry = 0;
+	int currValue = 0;
+	int rowInd = 0, colInd = 0;
+
+	int** rows = new int*[bLen];
+	for (int i = 0; i < bLen; i++) {
+	
+		rows[i] = new int[aLen + 1];
+
+		for (int j = 0; j < aLen + 1; j++) {
+			
+			rows[i][j] = 0;
+
+		}
+
+	}
+
+	for (int i = bLen - 1, rowInd = 0; i >= 0; i--, rowInd++) {
+	
+
+
+		for (int j = aLen - 1, colInd = aLen; j >= 0; j--, colInd--) {
+
+		
+
+			currValue = carry + ((*this)[j] * getDigit(_n, i));
+
+			if (currValue > 9) {
+			
+				//cout << currValue % 10 << " ";
+
+				rows[rowInd][colInd] = currValue % 10;
+
+				carry = currValue / 10;
+
+			} else {
+				
+				//cout << currValue << " ";
+
+				rows[rowInd][colInd] = currValue;
+
+			}
+
+		}
+
+		if (carry > 0) {
+
+			// cout << carry << " ";
+			rows[rowInd][colInd] = carry;
+		
+		}
+
+		carry = 0;
+
+	}
+
+	int currSum = 0;
+	carry = 0;
+
+	int prodLen = bLen + aLen + 1;
+	int* prod = new int[prodLen];
+
+	for (int i = 0; i < prodLen; i++)
+		prod[i] = 0;
+
+	int k = 0;
+	for (int i = aLen; i >= 0; i--) {
+		
+		
+		currSum = 0;
+
+		for (int j = 0; i + j <= aLen && j < bLen; j++) {
+			
+
+			//cout << rows[j][i + j] << " ";
+
+			currSum += rows[j][i + j];
+
+		}
+
+
+		currSum += carry;
+
+		//cout << "curr " << currSum << endl;
+
+
+		if (currSum > 9) {
+			
+			carry = currSum / 10;
+			prod[prodLen - 1 - k] = currSum % 10;
+
+		} else {
+			
+			prod[prodLen - 1 - k] = currSum;
+			carry = 0;
+
+		}
+
+
+		k++;
+
+	}
+
+	for (int i = 1; i < bLen; i++) {
+
+		currSum = 0;
+		
+		for (int j = 0; i + j < bLen ; j++) {
+		
+			//cout << rows[i + j][j] << " ";
+			currSum += rows[i + j][j];
+
+		}
+
+		currSum += carry;
+
+
+		if (currSum > 9) {
+			
+			carry = currSum / 10;
+			prod[prodLen - 1 - k] = currSum % 10;
+
+		} else {
+			
+			prod[prodLen - 1 - k] = currSum;
+			carry = 0;
+
+		}
+
+
+		k++;
+
+
+	}
+
+
+	// Clean Up
+
+	for (int i = 0; i < prodLen && prod[i] == 0;) {
+		
+		while (prod[i] == 0) {
+			
+			for (int j = i; j < prodLen - 1; j++) {
+				
+				prod[j] = prod[j + 1];
+
+			}
+
+			prodLen--;
+
+		}
+
+		i = 0;
+
+	}
+
+	HugeInt tempObj;
+
+	tempObj.rows = (int) ceil(prodLen/9.0);
+	tempObj.ptr = new int [tempObj.rows];
+	tempObj.polarity = (this->polarity ^ (n < 0));
+	tempObj.length = prodLen;
+
+	int numBuff = 0;
+
+	for (int i = 0, rCount = 0; i < prodLen; i += 9, rCount++) {
+			
+		numBuff = 0;
+
+		for (int j = prodLen - 1 - i, dCount = 0; j >= 0 && j >= prodLen - 9 - i; j--, dCount++) {
+				
+			numBuff += prod[j] * (int)pow(10, dCount);
+		//	cout << "numBuff-> " << numBuff << endl;
+
+		}
+
+		//cout << "rCount-> " << rCount << endl;
+		tempObj.ptr[rCount] = numBuff;
+
+	}
+
+	delete[] prod;
+
+	return tempObj;
+
 
 }
 
-ostream& operator << (ostream& out, const HugeInt& H) {
+HugeInt HugeInt::operator * (HugeInt& H) {
+
+
+	
+	if (isZero(*this) || isZero(H)) {
+		
+		HugeInt temp;
+		return temp;
+
+	}
+
+	int aLen = this->length;
+	int bLen = H.length;
+
+	int carry = 0;
+	int currValue = 0;
+	int rowInd = 0, colInd = 0;
+
+	int** rows = new int*[bLen];
+	for (int i = 0; i < bLen; i++) {
+	
+		rows[i] = new int[aLen + 1];
+
+		for (int j = 0; j < aLen + 1; j++) {
+			
+			rows[i][j] = 0;
+
+		}
+
+	}
+
+	for (int i = bLen - 1, rowInd = 0; i >= 0; i--, rowInd++) {
+	
+
+
+		for (int j = aLen - 1, colInd = aLen; j >= 0; j--, colInd--) {
+
+		
+
+			currValue = carry + ((*this)[j] * H[i]);
+
+			if (currValue > 9) {
+			
+				//cout << currValue % 10 << " ";
+
+				rows[rowInd][colInd] = currValue % 10;
+
+				carry = currValue / 10;
+
+			} else {
+				
+				//cout << currValue << " ";
+
+				rows[rowInd][colInd] = currValue;
+
+			}
+
+		}
+
+		if (carry > 0) {
+
+			// cout << carry << " ";
+			rows[rowInd][colInd] = carry;
+		
+		}
+
+		carry = 0;
+
+	}
+
+	int currSum = 0;
+	carry = 0;
+
+	int prodLen = bLen + aLen + 1;
+	int* prod = new int[prodLen];
+
+	for (int i = 0; i < prodLen; i++)
+		prod[i] = 0;
+
+	int k = 0;
+	for (int i = aLen; i >= 0; i--) {
+		
+		
+		currSum = 0;
+
+		for (int j = 0; i + j <= aLen && j < bLen; j++) {
+			
+
+			//cout << rows[j][i + j] << " ";
+
+			currSum += rows[j][i + j];
+
+		}
+
+
+		currSum += carry;
+
+		//cout << "curr " << currSum << endl;
+
+
+		if (currSum > 9) {
+			
+			carry = currSum / 10;
+			prod[prodLen - 1 - k] = currSum % 10;
+
+		} else {
+			
+			prod[prodLen - 1 - k] = currSum;
+			carry = 0;
+
+		}
+
+
+		k++;
+
+	}
+
+	for (int i = 1; i < bLen; i++) {
+
+		currSum = 0;
+		
+		for (int j = 0; i + j < bLen ; j++) {
+		
+			//cout << rows[i + j][j] << " ";
+			currSum += rows[i + j][j];
+
+		}
+
+		currSum += carry;
+
+
+		if (currSum > 9) {
+			
+			carry = currSum / 10;
+			prod[prodLen - 1 - k] = currSum % 10;
+
+		} else {
+			
+			prod[prodLen - 1 - k] = currSum;
+			carry = 0;
+
+		}
+
+
+		k++;
+
+
+	}
+
+
+	// Clean Up
+
+	for (int i = 0; i < prodLen && prod[i] == 0;) {
+		
+		while (prod[i] == 0) {
+			
+			for (int j = i; j < prodLen - 1; j++) {
+				
+				prod[j] = prod[j + 1];
+
+			}
+
+			prodLen--;
+
+		}
+
+		i = 0;
+
+	}
+
+	HugeInt tempObj;
+
+	tempObj.rows = (int) ceil(prodLen/9.0);
+	tempObj.ptr = new int [tempObj.rows];
+	tempObj.polarity = (this->polarity ^ H.polarity);
+	tempObj.length = prodLen;
+
+	int numBuff = 0;
+
+	for (int i = 0, rCount = 0; i < prodLen; i += 9, rCount++) {
+			
+		numBuff = 0;
+
+		for (int j = prodLen - 1 - i, dCount = 0; j >= 0 && j >= prodLen - 9 - i; j--, dCount++) {
+				
+			numBuff += prod[j] * (int)pow(10, dCount);
+		//	cout << "numBuff-> " << numBuff << endl;
+
+		}
+
+		//cout << "rCount-> " << rCount << endl;
+		tempObj.ptr[rCount] = numBuff;
+
+	}
+
+	delete[] prod;
+
+	return tempObj;
+
+
+
+}
+
+ostream& operator << (ostream& out, HugeInt& H) {
 
 	(H.polarity == 1)? cout << "-" : cout << "+";
 	for (int i = H.rows - 1; i >= 0; i--) {
 		
-		if (H.ptr[i] != 0) out << H.ptr[i] << " ";
+		if (H.ptr[i] != 0) {
+
+			for (int j = 0; j < abs(H.getNumLength(H.ptr[i]) - 9); j++)
+				cout << "0";
+
+			out << H.ptr[i] << " ";
+
+		}
 		else out << "000000000" << " ";
 	
 	}

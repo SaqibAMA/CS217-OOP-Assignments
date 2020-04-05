@@ -44,22 +44,16 @@ public:
 	// Helper functions
 	int getNumLength(int);
 	int getDigit(int, int);
+	bool isZero(const HugeInt&);
 
 	// Arithmetic
-
-	// + operator has a dependecy on - operator
-	// There is an issue when we add negative numbers into
-	// positive numbers
 	HugeInt operator + (const int);
-
-	// This gives wrong results
 	HugeInt operator + (HugeInt&);
-
-	// This is obsolete because operator + is obsolete
 	HugeInt operator * (const int);
+	HugeInt operator * (HugeInt&);
 
 	// Stream insertion & extraction
-	friend ostream& operator << (ostream&, const HugeInt&);
+	friend ostream& operator << (ostream&, HugeInt&);
 	friend istream& operator >> (istream&, HugeInt&);
 
 	// Destructors

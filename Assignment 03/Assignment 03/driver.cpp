@@ -12,20 +12,14 @@ int main() {
 
 	// 333179521389983125971113233711
 
-	HugeInt h1(999999999);
+	HugeInt h1, h2;
 
-	HugeInt h3(999999999);
+	cin >> h1;
+	cin >> h2;
 
-	HugeInt h2(h1);
 
-	clock_t t = clock();
-	cout << "Started..." << endl;
+	cout << (h1 * h2) << endl;
 
-	cout << (h1 * 999999) << endl;
-	
-	double time = (clock() - t) / 1000;
-
-	cout << "\nTime: " << (double) time << " seconds" << endl;
 
 	return 0;
 }
