@@ -14,9 +14,20 @@ int main() {
 
 	HugeInt h1, h2;
 
+	cout << "Enter Int: ";
 	cin >> h1;
+
+	cout << "Enter Int2: ";
 	cin >> h2;
 
+	cout << "h1-> " << h1 << endl;
+
+	/*int n;
+	cout << "enter n->";
+	cin >> n;*/
+
+	// 1000000000000014000000000000
+	// 123
 
 	cout << (h1 * h2) << endl;
 

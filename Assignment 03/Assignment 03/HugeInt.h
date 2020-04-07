@@ -45,16 +45,21 @@ public:
 	int getNumLength(int);
 	int getDigit(int, int);
 	bool isZero(const HugeInt&);
+	bool isArrayGreater(int*, int, int*, int);
 
 	// Arithmetic
 	HugeInt operator + (const int);
 	HugeInt operator + (HugeInt&);
 	HugeInt operator * (const int);
 	HugeInt operator * (HugeInt&);
+	HugeInt operator - (const int);
+	HugeInt operator - (HugeInt&);
+	HugeInt operator / (HugeInt&);
 
 	// Stream insertion & extraction
 	friend ostream& operator << (ostream&, HugeInt&);
 	friend istream& operator >> (istream&, HugeInt&);
+	// friend HugeInt operator - (const int, HugeInt&);
 
 	// Destructors
 	~HugeInt();
