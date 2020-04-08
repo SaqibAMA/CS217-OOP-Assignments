@@ -1,8 +1,12 @@
-﻿Build started 07/04/2020 7:42:09 PM.
+﻿Build started 09/04/2020 2:16:33 AM.
      1>Project "D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 03\Assignment 03\Assignment 03.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt driver.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt MyString.cpp driver.cpp
+         MyString.cpp
+         Generating Code...
+         Compiling...
          driver.cpp
+         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 03\Debug\Assignment 03.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 03\Debug\Assignment 03.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 03\Debug\Assignment 03.lib" /MACHINE:X86 Debug\driver.obj
          Debug\HugeInt.obj
@@ -12,4 +16,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.51
+Time Elapsed 00:00:02.41

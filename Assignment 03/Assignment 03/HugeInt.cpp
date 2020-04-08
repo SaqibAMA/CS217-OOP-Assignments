@@ -334,12 +334,49 @@ HugeInt HugeInt::operator + (HugeInt& H) {
 		int numLen = H.length;
 		int _length = this->length;
 
-		int* tempA = new int[numLen];
-		int* tempB = new int[_length];
+		int* tempA = new int[_length];
+		int* tempB = new int[numLen];
+		
 
-		for (int i = 0; i < numLen; i++) tempA[i] = H[i];
-		for (int i = 0; i < _length; i++) tempB[i] = (*this)[i];
+		for (int i = 0; i < _length; i++) tempA[i] = -1;
 
+
+
+		/// array copy me masla aaraha hai
+
+
+		for (int i = 0, dCount = _length - 1; i < this->rows && dCount >= 0; i++, dCount -= 9) {
+		
+			
+
+			for (int j = dCount, k = 8; j >= dCount - 9 && j >= 0; j--, k--) {
+				
+				if (ptr[i] == 0) {
+					tempA[j] = 0;
+				}
+				else {
+
+					tempA[j] = getDigit(ptr[i], k);
+
+				}
+
+				cout << tempA[j];
+
+
+			}
+
+			cout << endl;
+			
+
+		}
+
+		cout << "tempA-> ";
+		for (int i = 0; i < _length; i++) cout << tempA[i];
+		cout << endl;
+
+		/*cout << "tempB-> ";
+		for (int i = 0; i < _length; i++) cout << tempB[i];
+		cout << endl;*/
 
 		int sumLen = (numLen > length) ? numLen + 2 : length + 2;
 
@@ -800,19 +837,6 @@ HugeInt HugeInt::operator - (HugeInt& H) {
 
 }
 
-bool HugeInt::isArrayGreater(int* A, int aLen, int* B, int bLen) {
-
-	if (aLen != bLen) return false;
-
-	for (int i = 0 , j = aLen - 1; i < aLen; i++, j--) {
-		
-		if (A[j] < B[i]) return false;
-
-	}
-
-	return true;
-}
-
 HugeInt HugeInt::operator / (HugeInt& H) {
 	
 	HugeInt objA, objB;
@@ -989,6 +1013,8 @@ istream& operator >> (istream& in, HugeInt& H) {
 
 	H.rows = (int) ceil(buffLen / 9.0);
 	H.ptr = new int[H.rows];
+
+	for (int i = 0; i < H.rows; i++) H.ptr[i] = 0;
 
 	if (buffLen == 0) {
 		
