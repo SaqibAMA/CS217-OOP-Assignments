@@ -38,6 +38,7 @@ public:
 	// Helper functions
 	int getNumLength(const int) const;
 	bool isZero(const HugeInt&);
+	bool isArrayGreater(int*, int, int*, int);
 
 
 	// Stream insertion and extraction

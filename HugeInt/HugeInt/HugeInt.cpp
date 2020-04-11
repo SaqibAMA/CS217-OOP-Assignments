@@ -128,17 +128,36 @@ bool HugeInt::operator != (const HugeInt& H) {
 
 bool HugeInt::operator < (const HugeInt& H) {
 	
+	//cout << "length of *this -> " << this->length << endl;
+	//cout << "length of H ->" << H.length << endl;
+
 	if ((this->length > H.length) ||
 		(this->polarity == 0 && H.polarity == 1)) return false;
 
+	//cout << "Length verified!" << endl;
+
 	if (this->length < H.length) return true;
+
+	//cout << "Length verified again!" << endl;
 
 	if (this->length == H.length) {
 	
 		for (int i = rows - 1; i >= 0; i--) {
 		
 			if (this->ptr[i] < H.ptr[i]) {
+
+				//cout << "this->ptr[i] -> " << this->ptr[i] << endl;
+				//cout << "H.ptr[i] -> " << H.ptr[i] << endl;
+				//
+				//cout << "row result-> ";
+				//cout << (this->ptr[i] < H.ptr[i]) << endl;
+
 				return true;
+
+			} else if (this->ptr[i] != H.ptr[i]) {
+				
+				return false;
+
 			}
 
 		}
@@ -352,9 +371,24 @@ HugeInt HugeInt::operator - (const HugeInt& H) {
 		opA = (i < objA.rows) ? objA.ptr[i] : 0;
 		opB = (i < objB.rows) ? objB.ptr[i] : 0;
 
-		if (opA > opB) {
+		//cout << "opA->" << opA << endl;
+		//cout << "opB->" << opB << endl;
+
+
+		// added this opA == opB condition because the program
+		// was getting a weird carry problem
+
+		if (opA == opB) {
+		
+			if (carry) carry++;
+
+			currDiff = opA - opB;
+
+		}
+		else if (opA > opB) {
 			
 			currDiff = opA - opB - carry;
+			carry = 0; // potentially bad
 
 		} else {
 			
@@ -619,23 +653,376 @@ HugeInt HugeInt::operator * (const int n) {
 
 }
 
+
 HugeInt HugeInt::operator / (const HugeInt& H) {
 
 	
 	HugeInt objA(*this);	// Dividend
 	HugeInt objB(H);		// Divisor
 
-	int divisorLen = objB.length;
-	int dividendLen = objA.length;
-
-	int* divisorBuff = new int[divisorLen];
-	int* dividendBuff = new int[dividendLen];
+	//					-------------------
+	//	25 (divisor)	|	12345 (dividend)
 
 
+	if (H.rows < 2 && H.ptr[0] == 1) return *this;
+	if (isZero(objA)) {
+		
+		HugeInt temp(0);
+		return temp;
 
-	HugeInt temp(0);
-	return temp;
+	}
+	if (isZero(objB)) {
+		
+		cout << "Undefined!" << endl;
+		HugeInt temp(0);
+		return temp;
+
+	}
+
+
+	HugeInt dvdBuff(0);
+	HugeInt result(0);
+
+	/*
+	
+	~Remarks
+
+	Deal with cases where there are only single
+	row integers.
+
+	i.e. 1324 & 21313465;
+
+	*/
+
+
+	/*
+	
+	Finding a portion of objA that
+	is sufficient enough to be 
+	divided by ObjB.
+
+	*/
+
+	int currRow = objA.rows - 1;
+	int dCount = 0, digitsLeft = objA.length;
+
+	bool zeroRow = false;
+
+
+	while (dvdBuff < objB) {
+	
+	
+		dvdBuff = dvdBuff * 10;
+
+		int num = objA.ptr[currRow];
+
+		if (num > 0) {
+
+			int digit = 0;
+		
+			if (num >= 99999999 && currRow != objA.rows - 1) {
+
+				if (getNumLength(num) - dCount - 1 >= 0)
+					digit = int(num / pow(10, getNumLength(num) - dCount - 1))
+					% 10;
+				else
+					digit = int(num / pow(10, getNumLength(num) - dCount))
+					% 10;
+
+
+
+			} else if (num <= 99999999 && currRow != objA.rows - 1) {
+			
+				digit = int(num / pow(10, getNumLength(1000000000 + num) - dCount - 1)) % 10;
+
+
+			} else if (currRow == objA.rows - 1) {
+			
+				digit = int(num / pow(10, getNumLength(num) - dCount - 1))
+					% 10;
+
+			}
+
+			dCount++;
+
+			dvdBuff = dvdBuff + digit;
+
+			if (dCount == getNumLength(num) && currRow == objA.rows - 1) {
+			
+				currRow--;
+				dCount = 0;
+
+			}
+
+			if (dCount == 10) {
+			
+				currRow--;
+				dCount = 0;
+
+			}
+
+		} else if (num == 0) {
+		
+				if (!zeroRow) {
+			
+					dCount = 0;
+					zeroRow = true;
+
+				}
+
+				dCount++;
+
+				if (zeroRow && dCount == 10) {
+			
+					zeroRow = false;
+					dCount = 0;
+					currRow--;
+
+				}
+
+
+			}
+
+
+	}
+
+	digitsLeft -= dvdBuff.length;
+
+	
+	/*
+	
+	Finding a quotient big enough to
+	divide dvdBuff. Quotient is "i".
+	The value that can be subtracted from
+	dvdBuff is divBuff.
+
+	*/
+
+	while (objA - (result * objB) > objB && digitsLeft >= 0) {
+
+		cout << "dCount at the start of the loop->" << dCount << endl;
+
+		HugeInt divBuff(objB);
+
+		int i = 1;
+
+		while (divBuff < dvdBuff) {
+		
+			divBuff = objB * i;
+			i++;
+
+		}
+
+		if (i > 1) i--;
+		if (divBuff != dvdBuff && divBuff > dvdBuff) {
+		
+			i--;
+			divBuff = divBuff - objB;
+
+		}
+
+		cout << "bigEnoughNum is-> " << divBuff << endl;
+		cout << "dvdBuff->" << dvdBuff << endl;
+		cout << "quotient->" << i << endl;
+
+		if (i > 0) {
+		
+			cout << "current Row->" << objA.ptr[currRow] << endl;
+
+
+			dvdBuff = dvdBuff - divBuff;
+
+			result = (result * 10) + i;
+
+
+			dvdBuff = dvdBuff * 10;
+
+			int num = objA.ptr[currRow];
+
+			if (num > 0) {
+
+				int digit = 0;
+		
+					if (num > 99999999 && currRow != objA.rows - 1) {
+
+						if (getNumLength(num) - dCount - 1 >= 0)
+							digit = int(num 
+							/ pow(10, getNumLength(num) - dCount - 1))
+							% 10;
+						else
+							digit = int(num 
+							/ pow(10, getNumLength(num) - dCount))
+							% 10;
+
+
+
+					} else if (num <= 99999999 
+						&& currRow != objA.rows - 1) {
+			
+							if (dCount >= 9 - getNumLength(num)) {
+								digit = int(num
+							/ pow(10, getNumLength(1000000000 + num)
+							- dCount + 2)) % 10;
+							}
+
+
+					} else if (currRow == objA.rows - 1) {
+			
+						digit = int(num 
+							/ pow(10, getNumLength(num) - dCount - 1))
+							% 10;
+
+					}
+
+					dCount++;
+					digitsLeft--;
+
+					dvdBuff = dvdBuff + digit;
+
+					if (dCount == getNumLength(num) 
+						&& currRow == objA.rows - 1) {
+			
+						currRow--;
+						dCount = 0;
+
+					}
+
+					if (dCount == 10) {
+			
+						currRow--;
+						dCount = 0;
+
+					}
+
+
+				} else if (num == 0) {
+		
+					if (!zeroRow) {
+						dCount = 0;
+						zeroRow = true;
+					}
+					dCount++;
+					digitsLeft--;
+
+					if (zeroRow && dCount == 10) {
+						zeroRow = false;
+						dCount = 0;
+						currRow--;
+					}
+
+			
+				}
+
+
+
+		} else if (i == 0) {
+
+			while (dvdBuff < objB && digitsLeft > 0) {
+
+
+				result = result * 10;
+
+				dvdBuff = dvdBuff * 10;
+
+
+
+				int num = objA.ptr[currRow];
+
+
+				// bringing down a number
+				if (num > 0) {
+
+					int digit = 0;
+		
+						if (num > 99999999 && currRow != objA.rows - 1) {
+
+							if (getNumLength(num) - dCount - 1 >= 0)
+								digit = int(num 
+								/ pow(10, getNumLength(num) - dCount - 1))
+								% 10;
+							else
+								digit = int(num 
+								/ pow(10, getNumLength(num) - dCount))
+								% 10;
+
+
+
+						} else if (num <= 99999999 
+							&& currRow != objA.rows - 1) {
+			
+							digit = int(num
+							/ pow(10, getNumLength(1000000000 + num)
+							- dCount - 2)) % 10;
+
+
+						} else if (currRow == objA.rows - 1) {
+			
+							digit = int(num 
+								/ pow(10, getNumLength(num) - dCount - 1))
+								% 10;
+
+						}
+
+						dCount++;
+						digitsLeft--;
+
+						dvdBuff = dvdBuff + digit;
+
+						if (dCount == getNumLength(num) 
+							&& currRow == objA.rows - 1) {
+			
+							currRow--;
+							dCount = 0;
+
+						}
+
+						if (dCount == 10) {
+			
+							currRow--;
+							dCount = 0;
+
+						}
+
+
+				} else if (num == 0) {
+		
+					if (!zeroRow) {
+						dCount = 0;
+						zeroRow = true;
+					}
+					dCount++;
+					digitsLeft--;
+
+					if (zeroRow && dCount == 10) {
+						zeroRow = false;
+						dCount = 0;
+						currRow--;
+					}
+
+				}
+
+			}
+
+			if (isZero(dvdBuff)) {
+				
+				result = (result * 10);
+
+			}
+
+		}
+
+		cout << "result ------>" << result << endl;
+
+	}
+
+
+
+
+	return result;
+
+
 }
+
 
 // Helper functions
 
@@ -659,6 +1046,21 @@ int HugeInt::getNumLength(const int n) const {
 	}
 
 	return len;
+
+}
+
+bool HugeInt::isArrayGreater(int* A, int As, int* B, int Bs) {
+	
+	if (As < Bs) return false;
+	if (As > Bs) return true;
+
+	for (int i = 0; i < As; i++) {
+		
+		if (A[i] < B[i]) return false;
+
+	}
+
+	return true;
 
 }
 
