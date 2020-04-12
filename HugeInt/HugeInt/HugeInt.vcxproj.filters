@@ -23,8 +23,13 @@
     <ClCompile Include="HugeInt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="driver.cpp">
+    <ClCompile Include="driverForHugeInt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="buff.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

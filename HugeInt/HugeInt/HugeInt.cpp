@@ -127,30 +127,22 @@ bool HugeInt::operator != (const HugeInt& H) {
 }
 
 bool HugeInt::operator < (const HugeInt& H) {
-	
-	//cout << "length of *this -> " << this->length << endl;
-	//cout << "length of H ->" << H.length << endl;
+
+	if (*this == H) return false;
 
 	if ((this->length > H.length) ||
 		(this->polarity == 0 && H.polarity == 1)) return false;
 
-	//cout << "Length verified!" << endl;
+
 
 	if (this->length < H.length) return true;
 
-	//cout << "Length verified again!" << endl;
 
 	if (this->length == H.length) {
 	
 		for (int i = rows - 1; i >= 0; i--) {
 		
 			if (this->ptr[i] < H.ptr[i]) {
-
-				//cout << "this->ptr[i] -> " << this->ptr[i] << endl;
-				//cout << "H.ptr[i] -> " << H.ptr[i] << endl;
-				//
-				//cout << "row result-> ";
-				//cout << (this->ptr[i] < H.ptr[i]) << endl;
 
 				return true;
 
@@ -162,6 +154,8 @@ bool HugeInt::operator < (const HugeInt& H) {
 
 		}
 
+		return false;
+
 	}
 
 	return false;
@@ -170,6 +164,7 @@ bool HugeInt::operator < (const HugeInt& H) {
 
 bool HugeInt::operator > (const HugeInt& H) {
 	
+	if (*this == H) return false;
 	return !(*this < H);
 
 }
@@ -653,10 +648,17 @@ HugeInt HugeInt::operator * (const int n) {
 
 }
 
+HugeInt HugeInt::operator / (const int n) {
+	
+	HugeInt nObj(n);
+
+	return (*this / nObj);
+
+}
 
 HugeInt HugeInt::operator / (const HugeInt& H) {
 
-	
+
 	HugeInt objA(*this);	// Dividend
 	HugeInt objB(H);		// Divisor
 
@@ -665,7 +667,15 @@ HugeInt HugeInt::operator / (const HugeInt& H) {
 
 
 	if (H.rows < 2 && H.ptr[0] == 1) return *this;
-	if (isZero(objA)) {
+	
+	if (*this == H) {
+	
+		HugeInt temp(1);
+		return temp;
+
+	}
+
+	if (isZero(objA) || (objB > objA)) {
 		
 		HugeInt temp(0);
 		return temp;
@@ -673,9 +683,10 @@ HugeInt HugeInt::operator / (const HugeInt& H) {
 	}
 	if (isZero(objB)) {
 		
-		cout << "Undefined!" << endl;
-		HugeInt temp(0);
-		return temp;
+		//cout << "Undefined!" << endl;
+		std::cerr << "Invalid argument!";
+		// HugeInt temp(0);
+		// return temp;
 
 	}
 
@@ -720,7 +731,7 @@ HugeInt HugeInt::operator / (const HugeInt& H) {
 
 			int digit = 0;
 		
-			if (num >= 99999999 && currRow != objA.rows - 1) {
+			if (num > 99999999 && currRow != objA.rows - 1) {
 
 				if (getNumLength(num) - dCount - 1 >= 0)
 					digit = int(num / pow(10, getNumLength(num) - dCount - 1))
@@ -733,7 +744,10 @@ HugeInt HugeInt::operator / (const HugeInt& H) {
 
 			} else if (num <= 99999999 && currRow != objA.rows - 1) {
 			
-				digit = int(num / pow(10, getNumLength(1000000000 + num) - dCount - 1)) % 10;
+
+				digit = getDigit(1000000000 + num, dCount + 1);
+
+				// digit = int(num / pow(10, getNumLength(1000000000 + num) - dCount - 1)) % 10;
 
 
 			} else if (currRow == objA.rows - 1) {
@@ -800,7 +814,7 @@ HugeInt HugeInt::operator / (const HugeInt& H) {
 
 	while (objA - (result * objB) > objB && digitsLeft >= 0) {
 
-		cout << "dCount at the start of the loop->" << dCount << endl;
+		//cout << "dCount at the start of the loop->" << dCount << endl;
 
 		HugeInt divBuff(objB);
 
@@ -821,13 +835,13 @@ HugeInt HugeInt::operator / (const HugeInt& H) {
 
 		}
 
-		cout << "bigEnoughNum is-> " << divBuff << endl;
-		cout << "dvdBuff->" << dvdBuff << endl;
-		cout << "quotient->" << i << endl;
+		//cout << "bigEnoughNum is-> " << divBuff << endl;
+		//cout << "dvdBuff->" << dvdBuff << endl;
+		//cout << "quotient->" << i << endl;
 
 		if (i > 0) {
 		
-			cout << "current Row->" << objA.ptr[currRow] << endl;
+			//cout << "current Row->" << objA.ptr[currRow] << endl;
 
 
 			dvdBuff = dvdBuff - divBuff;
@@ -859,11 +873,7 @@ HugeInt HugeInt::operator / (const HugeInt& H) {
 					} else if (num <= 99999999 
 						&& currRow != objA.rows - 1) {
 			
-							if (dCount >= 9 - getNumLength(num)) {
-								digit = int(num
-							/ pow(10, getNumLength(1000000000 + num)
-							- dCount + 2)) % 10;
-							}
+						digit = getDigit(1000000000 + num, dCount + 1);
 
 
 					} else if (currRow == objA.rows - 1) {
@@ -950,9 +960,7 @@ HugeInt HugeInt::operator / (const HugeInt& H) {
 						} else if (num <= 99999999 
 							&& currRow != objA.rows - 1) {
 			
-							digit = int(num
-							/ pow(10, getNumLength(1000000000 + num)
-							- dCount - 2)) % 10;
+							digit = getDigit(1000000000 + num, dCount + 1);
 
 
 						} else if (currRow == objA.rows - 1) {
@@ -1011,11 +1019,9 @@ HugeInt HugeInt::operator / (const HugeInt& H) {
 
 		}
 
-		cout << "result ------>" << result << endl;
+		//cout << "result ------>" << result << endl;
 
 	}
-
-
 
 
 	return result;
@@ -1064,6 +1070,26 @@ bool HugeInt::isArrayGreater(int* A, int As, int* B, int Bs) {
 
 }
 
+int HugeInt::getDigit(int n, int ind) {
+
+	if (ind < getNumLength(n)) {
+
+		int l = getNumLength(n);
+		
+		while (l > ind + 1) {
+		
+			n /= 10;
+			l--;
+
+		}
+
+		return (n % 10);
+
+	}
+
+	return 0;
+
+}
 
 // Stream insertion and extraction
 
@@ -1090,8 +1116,8 @@ ostream& operator << (ostream& out, const HugeInt& H) {
 
 istream& operator >> (istream& in, HugeInt& H) {
 
-	char buff[51];
-	in.getline(buff, 51);
+	char buff[100];
+	in.getline(buff, 100);
 
 	(buff[0] == '-') ? H.polarity = 1 : H.polarity = 0;
 

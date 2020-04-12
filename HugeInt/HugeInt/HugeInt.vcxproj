@@ -79,8 +79,11 @@
     <ClInclude Include="HugeInt.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="driver.cpp" />
+    <ClCompile Include="driverForHugeInt.cpp" />
     <ClCompile Include="HugeInt.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="buff.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

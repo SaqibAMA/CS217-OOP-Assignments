@@ -33,12 +33,14 @@ public:
 	HugeInt operator * (const HugeInt&);
 	HugeInt operator - (const int);
 	HugeInt operator - (const HugeInt&);
+	HugeInt operator / (const int);
 	HugeInt operator / (const HugeInt&);
 
 	// Helper functions
 	int getNumLength(const int) const;
 	bool isZero(const HugeInt&);
 	bool isArrayGreater(int*, int, int*, int);
+	int getDigit(int, int);
 
 
 	// Stream insertion and extraction

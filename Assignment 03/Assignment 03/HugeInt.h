@@ -1,31 +1,19 @@
-// program bugs when you only enter 0
-
-#pragma once
-
 #include <iostream>
-#include <cstring>
-#include <fstream>
 
 using namespace std;
 
+#pragma once
+
 class HugeInt
 {
-private:
-	int* ptr;
-	int length;
-	int rows;
-	int maxLen;
-
-	// 0 for positive
-	// 1 for negative
-	bool polarity;
-
 public:
+
+	// Constructors
 	// Constructors
 	HugeInt();
 	HugeInt(int);
 	HugeInt(const HugeInt&);
-	HugeInt(int*, int, bool);
+	HugeInt(int*, int, bool, bool);
 
 	// Operators
 	int operator[](const int);
@@ -33,35 +21,39 @@ public:
 	HugeInt& operator = (const HugeInt&);
 	bool operator == (const HugeInt&);
 	bool operator != (const HugeInt&);
-
-	// make relational ones
-	// for int as well
 	bool operator < (const HugeInt&);
 	bool operator > (const HugeInt&);
 	bool operator <= (const HugeInt&);
 	bool operator >= (const HugeInt&);
 
-	// Helper functions
-	int getNumLength(int);
-	int getDigit(int, int);
-	bool isZero(const HugeInt&);
-	bool isArrayGreater(int*, int, int*, int);
-
 	// Arithmetic
 	HugeInt operator + (const int);
-	HugeInt operator + (HugeInt&);
+	HugeInt operator + (const HugeInt&);
 	HugeInt operator * (const int);
-	HugeInt operator * (HugeInt&);
+	HugeInt operator * (const HugeInt&);
 	HugeInt operator - (const int);
-	HugeInt operator - (HugeInt&);
-	HugeInt operator / (HugeInt&);
+	HugeInt operator - (const HugeInt&);
+	HugeInt operator / (const int);
+	HugeInt operator / (const HugeInt&);
 
-	// Stream insertion & extraction
-	friend ostream& operator << (ostream&, HugeInt&);
+	// Helper functions
+	int getNumLength(const int) const;
+	bool isZero(const HugeInt&);
+	bool isArrayGreater(int*, int, int*, int);
+	int getDigit(int, int);
+
+
+	// Stream insertion and extraction
+	friend ostream& operator << (ostream&, const HugeInt&);
 	friend istream& operator >> (istream&, HugeInt&);
-	// friend HugeInt operator - (const int, HugeInt&);
 
-	// Destructors
+	// Destructor
 	~HugeInt();
+
+private:
+	int *ptr;
+	int length;
+	int rows;
+	bool polarity;
 };
 
