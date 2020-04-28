@@ -1,0 +1,14 @@
+Patient
+PID, fname, lname, day, month, year, Age, Nid, History
+
+Patient History
+PID, Disease type, day, month, year, hor, min, sec, DID, Fee
+
+Doctor
+DID, fname, lname, day, month, year, Age, Nid, specialization
+
+Patients Visited
+DID, Pid, pid, ...
+
+Appointment
+DiseaseType, pid, did, day, month, year, hour, min, sec, token, fee, status

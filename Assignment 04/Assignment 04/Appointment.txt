@@ -1,0 +1,8 @@
+Knee_Pain 6 3 26 4 2018 3 30 0 1 1500 0
+Joint_Pain 5 3 26 4 2018 4 30 0 2 1500 0
+Foot_Pain 8 6 30 4 2018 3 30 0 1 1500 0
+Heart_checkup 3 4 2 5 2018 8 30 0 1 2000 0
+Heart_checkup 1 4 2 5 2018 9 30 0 2 2000 0
+Food_Cunsultation 9 5 29 4 2018 5 30 0 1 3000 0
+Food_Cunsultation 1 5 29 4 2018 6 30 0 2 3000 0
+Food_Cunsultation 3 5 29 4 2018 7 30 0 3 3000 0

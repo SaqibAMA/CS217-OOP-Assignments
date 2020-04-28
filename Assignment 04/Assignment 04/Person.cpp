@@ -42,10 +42,10 @@ Person::Person(const Person& P) {
 }
 
 
-Name Person::getPName() {return pName;}
-Date Person::getDOB() {return DOB;}
-int Person::getAge() {return age;}
-int Person::getID() {return ID;}
+Name Person::getPName() const {return pName;}
+Date Person::getDOB() const {return DOB;}
+int Person::getAge() const {return age;}
+int Person::getID() const {return ID;}
 
 void Person::setPName(Name& N) {
 	

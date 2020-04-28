@@ -22,10 +22,10 @@ public:
 	Person(const Person&);
 
 	// Getters and Setters
-	Name getPName();
-	Date getDOB();
-	int getAge();
-	int getID();
+	Name getPName() const;
+	Date getDOB() const;
+	int getAge() const;
+	int getID() const;
 
 	void setPName(Name&);
 	void setDOB(Date&);

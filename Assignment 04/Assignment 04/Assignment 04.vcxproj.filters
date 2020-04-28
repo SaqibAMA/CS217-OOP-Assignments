@@ -33,6 +33,18 @@
     <ClCompile Include="pRecord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Patient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Doctor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Appointment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Clinic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Name.h">
@@ -50,5 +62,37 @@
     <ClInclude Include="pRecord.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Patient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Doctor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Appointment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Clinic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Appointment.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Doctor.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Metadata.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Patient - History.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Patient.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Patients visited.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

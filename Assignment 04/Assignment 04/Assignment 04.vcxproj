@@ -76,19 +76,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Appointment.cpp" />
+    <ClCompile Include="Clinic.cpp" />
     <ClCompile Include="Date.cpp" />
+    <ClCompile Include="Doctor.cpp" />
     <ClCompile Include="driver.cpp" />
     <ClCompile Include="mTime.cpp" />
     <ClCompile Include="Name.cpp" />
+    <ClCompile Include="Patient.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="pRecord.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Appointment.h" />
+    <ClInclude Include="Clinic.h" />
     <ClInclude Include="Date.h" />
+    <ClInclude Include="Doctor.h" />
     <ClInclude Include="mTime.h" />
     <ClInclude Include="Name.h" />
+    <ClInclude Include="Patient.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="pRecord.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Appointment.txt" />
+    <Text Include="Doctor.txt" />
+    <Text Include="Metadata.txt" />
+    <Text Include="Patient - History.txt" />
+    <Text Include="Patient.txt" />
+    <Text Include="Patients visited.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
