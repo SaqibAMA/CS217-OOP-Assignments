@@ -47,12 +47,25 @@ public:
 
 	// Helpers
 	bool patientIDIsUnique(int);
+	bool doctorIDIsUnique(int);
+	bool tokenNumberIsUnique(int);
+
 	bool patientExists(char*);
+	bool doctorExists(char*);
+	bool dateExists(Date&);
 
 
 	// Options
 	void printDB();
 	void addPatient(Patient& P);
+	void addDoctor(Doctor& D);
+	void addAppointment(Appointment& A);
+	void resolveAppointment(int, int, Date&);
+	void printAppointmentsByDate(Date& D);
+	void printAppointmentsByDoctor(int);
+	void printPatientsByDoctorAndDate(int, Date&);
+	void printInteractionDetails(int, int);
+	void printPatientsByCommonDoctor(int);
 
 	// Destructors
 	~Clinic();

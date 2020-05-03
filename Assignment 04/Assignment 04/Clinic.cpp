@@ -97,7 +97,7 @@ void Clinic::loadAppointmentsFromFile(char* fileName) {
 
 		fin >> buff;
 
-		apts[i].setStatus(atoi(buff));
+		apts[i].setStatus(bool(atoi(buff)));
 
 		fin.ignore();
 
@@ -300,7 +300,7 @@ void Clinic::loadPatientsHistory(char* fileName) {
 			tempRecord.setAssignedDoc(atoi(buff));
 
 			fin >> buff;
-			tempRecord.setFeePaid(atof(buff));
+			tempRecord.setFeePaid((float) atof(buff));
 
 			char ch = fin.get();
 			endOfLine = (ch == '\n' || fin.eof());
@@ -415,16 +415,17 @@ void Clinic::updateAppointments() {
 void Clinic::printAppointments() {
 
 	for (int i = 0; i < aptCount; i++) {
-		
-		cout << "Appointment ->" << i + 1 << "\n\n";
-		cout << "Doc ID -> " << apts[i].getDiD() << endl;
-		cout << "Patient ID -> " << apts[i].getPiD() << endl;
-		cout << "Apt. Date -> " << apts[i].getAppDate() << endl;
-		cout << "Apt. Time -> " << apts[i].getAppTime() << endl;
-		cout << "Disease Type -> " << apts[i].getDiseaseType() << endl;
-		cout << "Token No. -> " << apts[i].getTokenNumber() << endl;
-		cout << "Fee -> " << apts[i].getFee() << endl;
-		cout << "Status -> " << apts[i].getStatus() << endl;
+
+		cout
+			<< "NO: " << i + 1 << " "
+			<< "DID: " << apts[i].getDiD() << " "
+			<< "PID: " << apts[i].getPiD() << "   "
+			<< "Date: "<< apts[i].getAppDate() << " "
+			<< "Time: " << apts[i].getAppTime() << "   "
+			<< "Disease: " << apts[i].getDiseaseType() << "   "
+			<< "Token: " << apts[i].getTokenNumber() << " "
+			<< "Fee: " << apts[i].getFee() << " "
+			<< "Status: " << apts[i].getStatus() << endl;
 
 	}
 
@@ -434,8 +435,23 @@ void Clinic::printDoctors() {
 	
 	for (int i = 0; i < docCount; i++) {
 		
-		cout << doctors[i] << endl;
+
+		cout
+			<< "Name: " << doctors[i].getPName() << " "
+			<< "Age: " << doctors[i].getAge() << " "
+			<< "DOB: " << doctors[i].getDOB() << " "
+			<< "ID: " << doctors[i].getID() << "   "
+			<< "DID: " << doctors[i].getDId() << " "
+			<< "Spec.: " << doctors[i].getSpecialization() << " " << endl
+			<< "P. Visited: ";
 		
+		int* pVis = doctors[i].getPatientsVisited();
+		int pVisSize = doctors[i].getPatientsVisitedSize();
+
+		for (int j = 0; j < pVisSize && pVis != nullptr; j++) cout << pVis[j] << " ";
+		
+		cout << "\n\n";
+
 	}
 
 }
@@ -444,7 +460,37 @@ void Clinic::printPatients() {
 	
 	for (int i = 0; i < patientCount; i++) {
 		
-		cout << patients[i] << endl;
+		cout
+			<< "\n\nName: " << patients[i].getPName() << " "
+			<< "Age: " << patients[i].getAge() << " "
+			<< "DOB: " << patients[i].getDOB() << " "
+			<< "ID: " << patients[i].getID() << " "
+			<< "PID: " << patients[i].getPId() << " "
+			<< "\n\nHistory: ";
+
+		if (patients[i].getHasHistory()) {
+
+			pRecord** history = patients[i].getHistory();
+			int historySize = patients[i].getHistorySize();
+
+			for (int i = 0; i < historySize; i++) {
+				
+				cout << endl 
+				<< "\nDID: " << history[i][0].getAssignedDoc() << " "
+				<< "Disease Type" << history[i][0].getDiseaseType() << " "
+				<< "Vis. Date: " << history[i][0].getVisDate() << " "
+				<< "Vis. Time: " << history[i][0].getVisTime() << endl;
+
+			}
+		
+		}
+		else {
+			
+			cout << "None." << endl;
+
+		}
+
+		cout << endl << endl;
 
 	}
 
@@ -484,11 +530,13 @@ bool Clinic::patientExists(char* name) {
 
 }
 
-bool Clinic::patientIDIsUnique(int i) {
+bool Clinic::patientIDIsUnique(int n) {
 
 	for (int i = 0; i < patientCount; i++) {
-		
-		if (i == patients[i].getPId()) return false;
+
+		if (n == patients[i].getPId()) {
+			return false;
+		}
 
 	}
 
@@ -496,6 +544,41 @@ bool Clinic::patientIDIsUnique(int i) {
 
 }
 
+bool Clinic::doctorExists(char* name) {
+	
+	for (int i = 0; i < docCount; i++) {
+		
+		if (strcmp(name, doctors[i].getPName().getFirstName()) == 0) return true;
+
+	}
+
+	return false;
+
+}
+
+bool Clinic::doctorIDIsUnique(int n) {
+	
+	for (int i = 0; i < docCount; i++) {
+		
+		if (n == doctors[i].getDId()) return false;
+
+	}
+
+	return true;
+
+}
+
+bool Clinic::tokenNumberIsUnique(int n) {
+	
+	for (int i = 0; i < aptCount; i++) {
+		
+		if (n == apts[i].getTokenNumber()) return false;
+
+	}
+
+	return true;
+
+}
 
 void Clinic::printMenu() {
 
@@ -523,6 +606,19 @@ void Clinic::printMenu() {
 
 }
 
+bool Clinic::dateExists(Date& D) {
+	
+	for (int i = 0; i < aptCount; i++) {
+
+		if (apts[i].getAppDate().getDay() == D.getDay() &&
+			apts[i].getAppDate().getMonth() == D.getMonth() &&
+			apts[i].getAppDate().getYear() == D.getYear()) return true;
+
+	}
+
+	return false;
+
+}
 
 // Options
 
@@ -564,8 +660,9 @@ void Clinic::printDB() {
 	for (int i = 0, yDev = 0; i < aptCount; i++, yDev += 3) {
 	
 		gotoxy(118, 5 + yDev);
-		cout << apts[i].getAppDate() << " ";
-		cout << apts[i].getAppTime() << "\t\t";
+		cout << apts[i].getAppDate() << "\t\t";
+		cout << apts[i].getAppTime() << " ";
+		cout << " DID: " << apts[i].getDiD() << " PID: " << apts[i].getPiD() << " ";
 		(apts[i].getStatus()) ? cout << "Completed." : cout << "Pending.";
 
 	}
@@ -588,7 +685,247 @@ void Clinic::addPatient(Patient& P) {
 
 	_patients[patientCount++] = P;
 
+	if (patients != nullptr) delete[] patients;
+
 	patients = _patients;
+
+}
+
+void Clinic::addDoctor(Doctor& D) {
+	
+	Doctor* _doctors = new Doctor[docCount + 1];
+
+	for (int i = 0; i < docCount; i++) {
+		
+		_doctors[i] = doctors[i];
+
+	}
+
+	_doctors[docCount++] = D;
+
+	if (doctors != nullptr) delete[] doctors;
+
+	doctors = _doctors;
+
+}
+
+void Clinic::addAppointment(Appointment& A) {
+	
+	Appointment* _apts = new Appointment[aptCount + 1];
+
+	for (int i = 0; i < aptCount; i++) {
+		
+		_apts[i] = apts[i];
+
+	}
+
+	_apts[aptCount++] = A;
+
+	if (apts != nullptr) delete[] apts;
+
+	apts = _apts;
+
+}
+
+void Clinic::resolveAppointment(int dId, int pId, Date& D) {
+
+	for (int i = 0; i < aptCount; i++) {
+
+
+		/*cout << "Conditions->" << endl;
+		cout << apts[i].getDiD() << dId << (apts[i].getDiD() == dId) << endl;
+*/
+		
+		if (
+			apts[i].getDiD() == dId &&
+			apts[i].getPiD() == pId &&
+			apts[i].getAppDate().getDay() == D.getDay() &&
+			apts[i].getAppDate().getMonth() == D.getMonth() &&
+			apts[i].getAppDate().getYear() == D.getYear() &&
+			apts[i].getStatus() == false
+			) {
+		
+				int docInd, pInd;
+
+				
+				apts[i].setStatus(true);
+				
+				for (int j = 0; j < docCount; j++) {
+					
+					if (doctors[j].getDId() == dId) docInd = j;
+
+				}
+				
+				for (int j = 0; j < patientCount; j++) {
+					
+					if (patients[j].getPId() == pId) pInd = j;
+
+				}
+
+				doctors[docInd].addPatientVisited(pId);
+				patients[pInd].addRecord(apts[i].getDiseaseType(), apts[i].getAppDate(), apts[i].getAppTime(), dId, apts[i].getFee());
+		}
+
+	}
+
+}
+
+void Clinic::printAppointmentsByDate(Date& D) {
+	
+	for (int i = 0; i < aptCount; i++) {
+		
+		if (
+			apts[i].getAppDate().getDay() == D.getDay() &&
+			apts[i].getAppDate().getMonth() == D.getMonth() &&
+			apts[i].getAppDate().getYear() == D.getYear() &&
+			apts[i].getStatus() == 0) {
+			
+				cout << apts[i] << endl;
+
+		}
+
+	}
+
+}
+
+void Clinic::printAppointmentsByDoctor(int dId) {
+
+	bool found = false;
+
+	for (int i = 0; i < aptCount; i++) {
+		
+		if (apts[i].getDiD() == dId && apts[i].getStatus() == 0) {
+			
+			found = true;
+			cout << apts[i] << endl;
+
+		}
+
+	}
+
+	if (!found) cout << "No appointments found!" << endl;
+
+}
+
+void Clinic::printPatientsByDoctorAndDate(int dId, Date& D) {
+	
+	bool historyFound = false;
+
+	for (int i = 0; i < patientCount; i++) {
+		
+		pRecord** history = patients[i].getHistory();
+		int historySize = patients[i].getHistorySize();
+
+		if (history != nullptr && historySize > 0) {
+		
+			for (int j = 0; j < historySize; j++) {
+				
+				if (
+					history[j][0].getAssignedDoc() == dId &&
+					history[j][0].getVisDate().getDay() == D.getDay() &&
+					history[j][0].getVisDate().getMonth() == D.getMonth() &&
+					history[j][0].getVisDate().getYear() == D.getYear()
+					) {
+					
+						historyFound = true;
+
+						cout << "\nDoctor ID: " << dId << " visited, " << patients[i].getPName() << " on " << history[j][0].getVisDate() << endl;
+						cout << "\nPatient Details-> \n" << endl;
+						cout << patients[i] << endl; 
+
+				}
+
+			}
+		
+		}
+
+	}
+
+	if (!historyFound) cout << "No patients found! " << endl;
+
+}
+
+void Clinic::printInteractionDetails(int dId, int pId) {
+	
+	bool historyFound = false;
+
+	for (int i = 0; i < patientCount; i++) {
+		
+		if (patients[i].getPId() == pId) {		
+		
+				pRecord** history = patients[i].getHistory();
+				int historySize = patients[i].getHistorySize();
+
+				if (history != nullptr && historySize > 0) {
+		
+					for (int j = 0; j < historySize; j++) {
+				
+						if (history[j][0].getAssignedDoc() == dId) {
+					
+								historyFound = true;
+
+								cout << "\nDoctor ID: " << dId << " visited, " << patients[i].getPName() << " on " << history[j][0].getVisDate() << endl;
+
+						}
+
+					}
+		
+				}
+		
+		}
+
+	}
+
+	if (!historyFound) cout << "No history found! " << endl;
+
+
+}
+
+void Clinic::printPatientsByCommonDoctor(int dId) {
+
+	cout << "Doctor details-> " << endl;
+
+	for (int i = 0; i < docCount; i++) {
+		
+		if (doctors[i].getDId() == dId) {
+			
+			cout << doctors[i] << endl;
+
+		}
+
+	}
+
+
+	bool historyFound = false;
+
+	for (int i = 0; i < patientCount; i++) {
+		
+		pRecord** history = patients[i].getHistory();
+		int historySize = patients[i].getHistorySize();
+
+		if (history != nullptr) {
+			
+			
+			for (int j = 0; j < historySize; j++) {
+				
+				if (history[j][0].getAssignedDoc() == dId) {
+
+					historyFound = true;
+					
+					cout << "\nDoctor ID: " << dId << " visited, " << patients[i].getPName() << " on " << history[j][0].getVisDate() << endl;
+					cout << "\nPatient Details-> \n" << endl;
+					cout << patients[i] << endl;
+
+				}
+
+			}
+
+
+		}
+
+	}
+
+	if (!historyFound) cout << "No such patients found!" << endl;
 
 }
 

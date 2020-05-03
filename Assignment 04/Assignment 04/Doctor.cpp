@@ -15,6 +15,7 @@ Doctor::Doctor(int dId, Name pName, Date DOB, int age, int nId, char* specializa
 	
 	this->dId = dId;
 	this->patientsVisited = nullptr;
+	this->patientsVisitedSize = 0;
 
 	if (specialization[0] == '\0') {
 		this->specialization = new char('\0');
@@ -86,12 +87,17 @@ void Doctor::setSpecialization(char* specialization) {
 }
 
 void Doctor::setPatientsVisited(int* patientsVisited, int patientsVisitedSize) {
+	
 	if (this->patientsVisited != nullptr)
 		delete[] this->patientsVisited;
 	
 	this->patientsVisitedSize = patientsVisitedSize;
 
-	this->patientsVisited = new int[patientsVisitedSize];
+	if (patientsVisitedSize > 0) {
+		this->patientsVisited = new int[patientsVisitedSize];
+	} else {
+		this->patientsVisited = nullptr;
+	}
 
 	for (int i = 0; i < patientsVisitedSize; i++) {
 		this->patientsVisited[i] = patientsVisited[i];
@@ -118,6 +124,9 @@ void Doctor::addPatientVisited(int patient) {
 		_patientsVisited[this->patientsVisitedSize] = patient;
 
 		this->patientsVisitedSize++;
+
+		delete[] this->patientsVisited;
+		this->patientsVisited = _patientsVisited;
 
 	}
 
@@ -149,6 +158,21 @@ ostream& operator << (ostream& out, const Doctor& D) {
 	}
 
 	return out;
+}
+
+Doctor& Doctor::operator = (Doctor& D) {
+	
+	this->setPName(D.getPName());
+	this->setDOB(D.getDOB());
+	this->setAge(D.getAge());
+	this->setID(D.getID());
+	
+	this->setDId(D.getDId());
+	this->setSpecialization(D.getSpecialization());
+	this->setPatientsVisited(D.getPatientsVisited(), D.getPatientsVisitedSize());
+
+	return *this;
+
 }
 
 Doctor::~Doctor() {

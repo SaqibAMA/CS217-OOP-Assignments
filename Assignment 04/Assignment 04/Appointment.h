@@ -45,6 +45,7 @@ public:
 
 	// Operators
 	Appointment& operator = (Appointment&);
+	friend ostream& operator << (ostream&, const Appointment&);
 
 	// Destructor
 	~Appointment();

@@ -122,16 +122,18 @@ void Patient::addRecord(char* DiseaseType, Date& visDate, mTime& visTime, int As
 
 	if (historySize > 0) {
 		for (int i = 0; i < historySize; i++)
-			delete history[i];
+			delete this->history[i];
 
-		delete[] history;
+		delete[] this->history;
 	}
 
-	history = _history;
+	this->history = _history;
 
 	historySize++;
 
-	this->hasHistory = (historySize > 0);
+
+
+	this->hasHistory = true;
 
 }
 
@@ -154,7 +156,7 @@ ostream& operator << (ostream& out, const Patient& P) {
 	
 	out << "\n\nHistory -> ";
 
-	if (P.historySize > 0) {
+	if (P.historySize > 0 || P.hasHistory) {
 		
 		out << "\n\n";
 		P.printRecords();

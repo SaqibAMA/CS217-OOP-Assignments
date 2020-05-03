@@ -39,6 +39,6 @@ public:
 
 
 	// Destructor
-	~Person();
+	virtual ~Person();
 };
 

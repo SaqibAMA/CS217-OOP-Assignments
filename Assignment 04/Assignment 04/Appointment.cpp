@@ -23,6 +23,7 @@ Appointment::Appointment(char* DiseaseType, int pId, int dId, Date& appDate, mTi
 	this->appTime = appTime;
 
 	this->pId = pId;
+	this->dId = dId;
 	this->tokenNumber = tokenNumber;
 	this->fee = fee;
 	this->status = status;
@@ -151,6 +152,24 @@ Appointment& Appointment::operator = (Appointment& A) {
 	this->setStatus(A.getStatus());
 
 	return *this;
+
+}
+
+ostream& operator << (ostream& out, const Appointment& A) {
+	
+	out << "Appointment Details-> " << endl;
+	out << "Disease Type-> " << A.DiseaseType << endl;
+	out << "Patient ID-> " << A.pId << endl;
+	out << "Doctor ID-> " << A.dId << endl;
+	out << "Token Number-> " << A.tokenNumber << endl;
+	out << "Fee -> " << A.fee << endl;
+	out << "Appointment Status-> ";
+	(A.status) ? out << "Completed." << endl : out << "Pending." << endl;
+	out << "Appointment Time-> " << A.appTime << endl;
+	out << "Appointment Date-> " << A.appDate << endl;
+
+
+	return out;
 
 }
 

@@ -34,6 +34,7 @@ public:
 
 	// Output Operator
 	friend ostream& operator << (ostream&, const Doctor&);
+	Doctor& operator = (Doctor&);
 	
 	// Destructor
 	~Doctor();
