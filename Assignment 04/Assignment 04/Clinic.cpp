@@ -710,20 +710,91 @@ void Clinic::addDoctor(Doctor& D) {
 }
 
 void Clinic::addAppointment(Appointment& A) {
-	
-	Appointment* _apts = new Appointment[aptCount + 1];
 
-	for (int i = 0; i < aptCount; i++) {
+	int patientInd = 0;
+
+	for (int i = 0; i < patientCount; i++) {
 		
-		_apts[i] = apts[i];
+		if (patients[i].getPId() == A.getPiD()) {
+			
+			patientInd = i;
+
+		}
 
 	}
 
-	_apts[aptCount++] = A;
+	int docInd = 0;
 
-	if (apts != nullptr) delete[] apts;
+	for (int i = 0; i < docCount; i++) {
+		
+		if (doctors[i].getDId() == A.getDiD()) {
+			
+			docInd = i;
 
-	apts = _apts;
+		}
+
+	}
+
+	bool aptValid = false;
+
+	if (patients[patientInd].getAge() <= 12
+		&& strcmp(doctors[docInd].getSpecialization(), "Child_Specialist") != 0) {
+
+
+		bool childSpecialistExists = false;
+		int childSpecialistInd = 0;
+
+		for (int i = 0; i < docCount && ! childSpecialistExists; i++) {
+			
+			childSpecialistExists = 
+				(strcmp(doctors[i].getSpecialization(), "Child_Specialist") == 0);
+			childSpecialistInd = i;
+
+		}
+
+		if (childSpecialistExists) {
+		
+			A.setDiD(doctors[childSpecialistInd].getDId());
+
+			cout << "Child Specialist assigned because the patient was 12 years old! " << endl;
+
+			aptValid = true;
+
+
+		}
+
+
+	}
+	else {
+	
+		aptValid = true;
+
+	}
+
+	if (aptValid) {
+		
+		Appointment* _apts = new Appointment[aptCount + 1];
+
+		for (int i = 0; i < aptCount; i++) {
+
+			_apts[i] = apts[i];
+
+		}
+
+		_apts[aptCount++] = A;
+
+		if (apts != nullptr) delete[] apts;
+
+		apts = _apts;
+
+	}
+	else {
+
+		cout << "Appointment failed!" << endl <<
+			"The patient is less than 12 years old and we don't have a Child Specialist!"
+			<< endl;
+
+	}
 
 }
 
