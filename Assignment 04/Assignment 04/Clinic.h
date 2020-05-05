@@ -66,6 +66,7 @@ public:
 	void printPatientsByDoctorAndDate(int, Date&);
 	void printInteractionDetails(int, int);
 	void printPatientsByCommonDoctor(int);
+	void saveData(char*, char*, char*, char*, char*);
 
 	// Destructors
 	~Clinic();

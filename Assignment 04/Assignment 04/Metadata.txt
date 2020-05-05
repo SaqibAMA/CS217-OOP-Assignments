@@ -12,3 +12,10 @@ DID, Pid, pid, ...
 
 Appointment
 DiseaseType, pid, did, day, month, year, hour, min, sec, token, fee, status
+
+1 4
+2 2 3 7
+3 3 8
+4 3 7
+5 0
+6 2

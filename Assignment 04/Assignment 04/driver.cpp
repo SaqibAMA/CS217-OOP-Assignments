@@ -507,6 +507,10 @@ int main(){
 
 	}
 
+	myClinic.saveData("Appointment.txt",
+		"Doctor.txt", "Patient.txt", "Patient - History.txt",
+		"Patients visited.txt");
+
 
 
 

@@ -1000,6 +1000,171 @@ void Clinic::printPatientsByCommonDoctor(int dId) {
 
 }
 
+void Clinic::saveData(char* aptFile,
+	char* docFile,
+	char* pFile,
+	char* pHistoryFile,
+	char* pVisitedFile) {
+	
+
+	// Saving Appointments
+
+	ofstream fout;
+	fout.open(aptFile);
+
+
+	for (int i = 0; i < aptCount; i++) {
+
+		fout << apts[i].getDiseaseType() << " "
+			<< apts[i].getPiD() << " "
+			<< apts[i].getDiD() << " "
+			<< apts[i].getAppDate().getDay() << " "
+			<< apts[i].getAppDate().getMonth() << " "
+			<< apts[i].getAppDate().getYear() << " "
+			<< apts[i].getAppTime().getHour() << " "
+			<< apts[i].getAppTime().getMin() << " "
+			<< apts[i].getAppTime().getSec() << " "
+			<< apts[i].getTokenNumber() << " "
+			<< apts[i].getFee() << " "
+			<< apts[i].getStatus();
+
+		if (i < aptCount - 1) fout << endl;
+
+	}
+
+
+	fout.close();
+
+
+	// Saving Doctors
+
+	fout.open(docFile);
+
+
+	for (int i = 0; i < docCount; i++) {
+		
+		fout
+			<< doctors[i].getDId() << " "
+			<< doctors[i].getPName().getFirstName() << " "
+			<< doctors[i].getPName().getLastName() << " "
+			<< doctors[i].getDOB().getDay() << " "
+			<< doctors[i].getDOB().getMonth() << " "
+			<< doctors[i].getDOB().getYear() << " "
+			<< doctors[i].getAge() << " "
+			<< doctors[i].getID() << " "
+			<< doctors[i].getSpecialization();
+
+		if (i < docCount - 1) fout << endl;
+
+	}
+
+
+	fout.close();
+
+	
+	// Saving patients
+
+	fout.open(pFile);
+
+
+	for (int i = 0; i < patientCount; i++) {
+		
+		fout
+			<< patients[i].getPId() << " "
+			<< patients[i].getPName().getFirstName() << " "
+			<< patients[i].getPName().getLastName() << " "
+			<< patients[i].getDOB().getDay() << " "
+			<< patients[i].getDOB().getMonth() << " "
+			<< patients[i].getDOB().getYear() << " "
+			<< patients[i].getAge() << " "
+			<< patients[i].getID() << " "
+			<< patients[i].getHasHistory();
+
+		if (i < patientCount - 1) fout << endl;
+
+	}
+
+
+	fout.close();
+
+	// Saving Patient History
+
+	fout.open(pHistoryFile);
+
+
+	for (int i = 0; i < patientCount; i++) {
+	
+		if (patients[i].getHasHistory()) {
+		
+
+			pRecord** history = patients[i].getHistory();
+			int historySize = patients[i].getHistorySize();
+
+			fout << patients[i].getPId() << " ";
+
+			for (int j = 0; j < historySize; j++) {
+			
+				fout
+					<< history[j][0].getDiseaseType() << " "
+					<< history[j][0].getVisDate().getDay() << " "
+					<< history[j][0].getVisDate().getMonth() << " "
+					<< history[j][0].getVisDate().getYear() << " "
+					<< history[j][0].getVisTime().getHour() << " "
+					<< history[j][0].getVisTime().getMin() << " "
+					<< history[j][0].getVisTime().getSec() << " "
+					<< history[j][0].getAssignedDoc() << " "
+					<< history[j][0].getFeePaid();
+
+				if (j < historySize - 1) fout << " ";
+			
+			}
+
+
+			if (i < patientCount - 1) fout << endl;
+
+		
+		}
+
+	}
+
+	fout.close();
+
+
+	// Saving Patients Visited
+
+	fout.open(pVisitedFile);
+
+	for (int i = 0; i < docCount; i++) {
+		
+		fout << doctors[i].getDId() << " ";
+
+		if (doctors[i].getPatientsVisitedSize() > 0) {
+			
+			for (int j = 0;
+				j < doctors[i].getPatientsVisitedSize();
+				j++) {
+			
+				fout << doctors[i].getPatientsVisited()[j] << " ";
+
+			}
+
+		}
+		else {
+		
+			fout << 0;
+
+		}
+
+		if (i < docCount - 1) fout << endl;
+
+	}
+
+
+	fout.close();
+
+
+}
+
 Clinic::~Clinic() {
 
 	if (patientCount > 0) delete[] patients;
