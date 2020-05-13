@@ -16,6 +16,9 @@
     <Filter Include="Source Files\assets">
       <UniqueIdentifier>{b9a37685-eb45-409e-a625-33cf9daf1a6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\savedGames">
+      <UniqueIdentifier>{e1a7b0a0-7c49-4209-8eae-0c6e994f2db6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,5 +44,10 @@
     <Image Include="assets\favicon.png">
       <Filter>Source Files\assets</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="savedGames\savedGamesList.txt">
+      <Filter>Source Files\savedGames</Filter>
+    </Text>
   </ItemGroup>
 </Project>

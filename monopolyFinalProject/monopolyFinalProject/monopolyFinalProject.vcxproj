@@ -154,6 +154,9 @@
     <Image Include="assets\new-game-button.png" />
     <Image Include="assets\selection-screen.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="savedGames\savedGamesList.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
