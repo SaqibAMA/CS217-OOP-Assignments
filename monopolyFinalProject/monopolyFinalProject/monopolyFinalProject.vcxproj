@@ -144,11 +144,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\SFML\include\Bank.cpp" />
+    <ClCompile Include="..\SFML\include\Board.cpp" />
+    <ClCompile Include="..\SFML\include\Monopoly.cpp" />
+    <ClCompile Include="..\SFML\include\Player.cpp" />
+    <ClCompile Include="..\SFML\include\Property.cpp" />
+    <ClCompile Include="..\SFML\include\Space.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\character-face-cards.png" />
     <Image Include="assets\favicon.png" />
+    <Image Include="assets\game-screen.png" />
     <Image Include="assets\intro-splash-screen.png" />
     <Image Include="assets\load-game-button.png" />
     <Image Include="assets\new-game-button.png" />
@@ -156,6 +163,14 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="savedGames\savedGamesList.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\SFML\include\Bank.h" />
+    <ClInclude Include="..\SFML\include\Board.h" />
+    <ClInclude Include="..\SFML\include\Monopoly.h" />
+    <ClInclude Include="..\SFML\include\Player.h" />
+    <ClInclude Include="..\SFML\include\Property.h" />
+    <ClInclude Include="..\SFML\include\Space.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,55 @@
+#include "CommercialProperty.h"
+#include <cstring>
+using namespace std;
+//CONSTRUCTOS
+CommercialProperty::CommercialProperty():Property() {
+	purchasePrice=0;
+	rentPrice=0;
+	mortgagedPrice = 0;
+}
+CommercialProperty::CommercialProperty(char* spaceType, int* playersOnSpace, int playersOnSpaceCount, char* propertyName, char* propertyGroup, int propertyID, int ownnerID, bool mortgaged, int purchasePrice, int rentPrice, int mortgagedPrice):Property(spaceType, playersOnSpace, playersOnSpaceCount, propertyName, propertyGroup, propertyID, ownnerID, mortgaged)
+{
+	this->purchasePrice = purchasePrice;
+	this->rentPrice = rentPrice;
+	this->mortgagedPrice = mortgagedPrice;
+}
+CommercialProperty::CommercialProperty(CommercialProperty& CommPro) {
+	this->purchasePrice = CommPro.getPurchasePrice();
+	this->rentPrice = CommPro.getRentPrice();
+	this->mortgagedPrice = CommPro.getMortgagedPrice();
+
+	this->setSpaceType(CommPro.getSpaceType());
+	this->setPlayersOnSpace(CommPro.getPlayersOnSpace(), CommPro.getPlayersOnSpaceCount());
+	this->setPlayersOnSpaceCount(CommPro.getPlayersOnSpaceCount());
+	this->setPropertyName(CommPro.getPropertyName());
+	this->setPropertyGroup(CommPro.getPropertyGroup());
+	this->setPropertyID(CommPro.getPropertyID());
+	this->setOwnerID(CommPro.getOwnerID());
+	this->setMortgaged(CommPro.getMortgaged());
+}
+//SETTERS
+void CommercialProperty::setPurchasePrice(int purchasePrice) {
+	this->purchasePrice = purchasePrice;
+}
+void CommercialProperty::setRentPrice(int rentPrice) {
+	this->rentPrice = rentPrice;
+}
+void CommercialProperty::setMortgagedPrice(int mortgagedPrice) {
+	this->mortgagedPrice = mortgagedPrice;
+}
+//GETTERS
+int CommercialProperty::getPurchasePrice() {
+	return purchasePrice;
+}
+int CommercialProperty::getRentPrice() {
+	return rentPrice;
+}
+int CommercialProperty::getMortgagedPrice() {
+	return mortgagedPrice;
+}
+//DESTRUCTOR
+CommercialProperty::~CommercialProperty(){
+	purchasePrice = 0;
+	rentPrice = 0;
+	mortgagedPrice = 0;
+}

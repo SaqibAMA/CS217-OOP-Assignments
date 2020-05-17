@@ -2,13 +2,35 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-
+#include <Monopoly.h>
 
 using namespace std;
 
 
+/*
+
+Screenshot code:
+
+if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+
+                        sf::Texture texture;
+                        texture.create(window.getSize().x, window.getSize().y);
+                        texture.update(window);
+                        texture.copyToImage().saveToFile("ss.png");
+
+                    }
+
+
+*/
+
+
 int main()
 {
+
+    // Monopoly object to run the entire
+    // gameplay
+
+    Monopoly game;
     
     // Creating an SFML window
     sf::RenderWindow window(sf::VideoMode(1280, 720),
@@ -240,6 +262,8 @@ int main()
 
             }
 
+            game.setTotalPlayers(totalPlayers);
+
 
         }
         else {
@@ -439,6 +463,49 @@ int main()
         }
 
     }
+
+
+    // Main game loop
+
+
+    // Creating a window that is resizable
+    window.create(sf::VideoMode(1280, 720), "Monopoly by Saqib, Nabeel, Abdur Rehman, & Salman",
+        sf::Style::Close | sf::Style::Resize);
+
+    // Setting up the favicon for that window again
+    window.setIcon(314, 229, favicon.getPixelsPtr());
+
+    sf::Texture gameScreenTexture;
+    gameScreenTexture.loadFromFile("assets/game-screen.png");
+    sf::RectangleShape gameScreen(sf::Vector2f(1280.0f, 720.0f));
+    gameScreen.setTexture(&gameScreenTexture);
+
+    gameScreenTexture.setSmooth(true);
+
+
+    while (window.isOpen()) {
+    
+
+        sf::Event evt;
+        while (window.pollEvent(evt)) {
+        
+
+            if (evt.type == evt.Closed) {
+            
+                // game.saveGame(0);
+                window.close();
+
+            }
+
+
+        }
+
+        window.draw(gameScreen);
+        window.display();
+
+
+    }
+
 
     return 0;
 }

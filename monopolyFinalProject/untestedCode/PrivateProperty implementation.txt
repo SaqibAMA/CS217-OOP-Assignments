@@ -1,0 +1,147 @@
+#include "PrivateProperty.h"
+#include <cstring>
+using namespace std;
+//CONSTRUCTORS
+PrivateProperty::PrivateProperty():Property() {
+	purchasePrice = 0;
+	rentPrice = 0;
+	mortgagedPrice = 0;
+	houseCount = 0;
+	hotelCount = 0;
+	shopCount = 0;
+	hasWifi = 0;
+	hasGas = 0;
+	hasElectricity = 0;
+}
+PrivateProperty::PrivateProperty(char* spaceType, int* playersOnSpace, int playersOnSpaceCount, char* propertyName, char* propertyGroup, int propertyID, int ownnerID, bool mortgaged,int purchasePrice, int rentPrice, int mortgagedPrice, int houseCount, int hotelCount, int shopCount, bool hasWifi, bool hasGas, bool hasElectricity):Property(spaceType, playersOnSpace, playersOnSpaceCount,propertyName,propertyGroup,propertyID,ownnerID,mortgaged)
+{
+	this->purchasePrice = purchasePrice;
+	this->rentPrice = rentPrice;
+	this->mortgagedPrice = mortgagedPrice;
+	this->houseCount = houseCount;
+	this->hotelCount = hotelCount;
+	this->shopCount = shopCount;
+	this->hasWifi = hasWifi;
+	this->hasGas = hasGas;
+	this->hasElectricity = hasElectricity;
+}
+PrivateProperty::PrivateProperty(PrivateProperty& PriPro) {
+	this->purchasePrice = PriPro.getPurchasePrice();
+	this->rentPrice = PriPro.getRentPrice();
+	this->mortgagedPrice = PriPro.getMortgagedPrice();
+	this->houseCount = PriPro.getHouseCount();
+	this->hotelCount = PriPro.getHotelCount();
+	this->shopCount = PriPro.getShopCount();
+	this->hasWifi = PriPro.getHasWifi();
+	this->hasGas = PriPro.getHasGas();
+	this->hasElectricity = PriPro.getHasElectricity();
+
+	this->setSpaceType(PriPro.getSpaceType());
+	this->setPlayersOnSpace(PriPro.getPlayersOnSpace(), PriPro.getPlayersOnSpaceCount());
+	this->setPlayersOnSpaceCount(PriPro.getPlayersOnSpaceCount());
+	this->setPropertyName(PriPro.getPropertyName());
+	this->setPropertyGroup(PriPro.getPropertyGroup());
+	this->setPropertyID(PriPro.getPropertyID());
+	this->setOwnerID(PriPro.getOwnerID());
+	this->setMortgaged(PriPro.getMortgaged());
+}
+//SETTERS
+void PrivateProperty::setPurchasePrice(int purchasePrice) {
+	this->purchasePrice = purchasePrice;
+}
+void PrivateProperty::setRentPrice(int rentPrice) {
+	this->rentPrice = rentPrice;
+}
+void PrivateProperty::setMortgagedPrice(int mortgagedPrice) {
+	this->mortgagedPrice = mortgagedPrice;
+}
+void PrivateProperty::setHouseCount(int houseCount) {
+	this->houseCount = houseCount;
+}
+void PrivateProperty::setHotelCount(int hotelCount) {
+	this->hotelCount = hotelCount;
+}
+void PrivateProperty::setShopCount(int shopCount) {
+	this->shopCount = shopCount;
+}
+void PrivateProperty::setHasWifi(bool hasWifi) {
+	this->hasWifi = hasWifi;
+}
+void PrivateProperty::setHasGas(bool hasWifi) {
+	this->hasGas = hasGas;
+}
+void PrivateProperty::setHasElectricity(bool) {
+	this->hasElectricity = hasElectricity;
+}
+//GETTERS
+int PrivateProperty::getPurchasePrice() {
+	return purchasePrice;
+}
+int PrivateProperty::getRentPrice() {
+	return rentPrice;
+}
+int PrivateProperty::getMortgagedPrice() {
+	return mortgagedPrice;
+}
+int PrivateProperty::getHouseCount() {
+	return houseCount;
+}
+int PrivateProperty::getHotelCount() {
+	return hotelCount;
+}
+int PrivateProperty::getShopCount() {
+	return shopCount;
+}
+bool PrivateProperty::getHasWifi() {
+	return hasWifi;
+}
+bool PrivateProperty::getHasGas() {
+	return hasGas;
+}
+bool PrivateProperty::getHasElectricity() {
+	return hasElectricity;
+}
+//SPECIAL FUNCITONS
+void PrivateProperty::addHouse() {
+	houseCount++;
+}
+void PrivateProperty::addHotel() {
+	hotelCount++;
+}
+void PrivateProperty::addShop() {
+	shopCount++;
+}
+void PrivateProperty::addWifi() {
+	hasWifi = true;
+}
+void PrivateProperty::addGas(){
+	hasGas = true;
+}
+void PrivateProperty::addElectricity() {
+	hasElectricity = true;
+}
+int PrivateProperty::calculateRent() {
+	int newRentPrice = 0;
+	newRentPrice = (((rentPrice * 0.3) * houseCount) + ((rentPrice * 0.8) * hotelCount) + ((rentPrice * 0.6) * shopCount) + rentPrice);
+	if (hasWifi == true) {
+		newRentPrice = newRentPrice + ((rentPrice * 0.1));
+	}
+	if (hasGas == true) {
+		newRentPrice = newRentPrice + ((rentPrice * 0.2));
+	}
+	if (hasElectricity == true) {
+		newRentPrice = newRentPrice + ((rentPrice * 0.2));
+	}
+}
+//DESTRUCTOR
+PrivateProperty::~PrivateProperty() {
+	purchasePrice = 0;
+	rentPrice = 0;
+	mortgagedPrice = 0;
+	houseCount = 0;
+	hotelCount = 0;
+	shopCount = 0;
+	hasWifi = 0;
+	hasGas = 0;
+	hasElectricity = 0;
+}

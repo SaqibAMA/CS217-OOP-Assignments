@@ -1,0 +1,27 @@
+#include "Property.h"
+#include "Space.h"
+#include <cstring>
+using namespace std;
+class CommercialProperty:public Property
+{
+	//DATA MEMBERS
+	int purchasePrice;
+	int rentPrice;
+	int mortgagedPrice;
+public:
+	//CONSTRUCTOS
+	CommercialProperty();
+	CommercialProperty(char* spaceType, int*, int, char*, char*, int, int, bool, int, int, int);
+	CommercialProperty(CommercialProperty&);
+	//SETTERS
+	void setPurchasePrice(int);
+	void setRentPrice(int);
+	void setMortgagedPrice(int);
+	//GETTERS
+	int getPurchasePrice();
+	int getRentPrice();
+	int getMortgagedPrice();
+	//DESTRUCTOR
+	~CommercialProperty();
+};
+
