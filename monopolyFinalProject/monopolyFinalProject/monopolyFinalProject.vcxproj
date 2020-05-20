@@ -162,6 +162,7 @@
     <Image Include="assets\selection-screen.png" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="files\bCoord.txt" />
     <Text Include="savedGames\savedGamesList.txt" />
   </ItemGroup>
   <ItemGroup>

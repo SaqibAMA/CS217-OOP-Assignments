@@ -467,6 +467,8 @@ int main()
 
     // Main game loop
 
+    window.close();
+
 
     // Creating a window that is resizable
     window.create(sf::VideoMode(1280, 720), "Monopoly by Saqib, Nabeel, Abdur Rehman, & Salman",
@@ -483,6 +485,42 @@ int main()
     gameScreenTexture.setSmooth(true);
 
 
+    // Files names for all the player pieces
+
+    const char* playerPieceFileName[5] = {
+    
+        "assets/player1.png",
+        "assets/player2.png",
+        "assets/player3.png",
+        "assets/player4.png",
+        "assets/player5.png"
+
+    };
+
+    // Initializing all of the pieces
+
+    //int totalPlayers = game.getTotalPlayers();
+
+    int totalPlayers = game.getTotalPlayers();
+
+    sf::Texture* playerTextures = new sf::Texture[totalPlayers];
+    sf::RectangleShape* playerPieces = new sf::RectangleShape[totalPlayers];
+
+
+    // Setting up all of the textures
+
+    for (int i = 0; i < totalPlayers; i++) {
+
+        playerTextures[i].loadFromFile(playerPieceFileName[i]);
+        playerPieces[i].setTexture(&playerTextures[i]);
+        playerPieces[i].setSize(sf::Vector2f(20.0f, 20.0f));
+
+        playerTextures[i].setSmooth(true);
+
+    }
+
+    int i = 0;  // dummy
+
     while (window.isOpen()) {
     
 
@@ -498,9 +536,27 @@ int main()
             }
 
 
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+
+                i++;
+
+
+            }
+
+
         }
 
+
         window.draw(gameScreen);
+
+        game.printPlayerOnCell(window, playerPieces[0], i % 40, 0);
+        game.printPlayerOnCell(window, playerPieces[1], i % 40 + 1, 1);
+
+        //for (int j = 0; j < totalPlayers; j++) {
+        //    game.printPlayerOnCell(window, playerPieces[j], i % 40, j);
+        //}
+
         window.display();
 
 
