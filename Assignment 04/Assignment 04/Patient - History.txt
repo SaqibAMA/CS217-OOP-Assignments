@@ -1,7 +1,5 @@
-1 21 4 1 3 0 0 0 0 2 Fever 2 5 2017 3 30 0 2 1000 Joint_Pain 5 11 2017 5 30 0 6 1500  21 4 2018 3 30 0 0 0
-2 
+2 Fever 2 5 2017 3 30 0 2 1000 Joint_Pain 5 11 2017 5 30 0 6 1500
 3 Chest_Pain 3 8 2017 8 30 0 4 2000 Chest_Pain 5 9 2017 8 30 0 4 2000 Malaria 2 5 2017 4 30 0 2 1000
 4 Broken_Arm 4 5 2017 3 30 0 3 1500 Broken_Arm 5 5 2017 3 30 0 3 1500 Measles 5 2 2018 3 30 0 1 2000
-6 Knee_Pain 26 4 2018 3 30 0 3 1500
 7 Viral_Infection 3 8 2017 7 45 0 2 1000 Chest_Discomfort 5 12 2017 8 30 0 4 2000
 8 Knee_Pain 21 4 2018 3 30 0 3 1500

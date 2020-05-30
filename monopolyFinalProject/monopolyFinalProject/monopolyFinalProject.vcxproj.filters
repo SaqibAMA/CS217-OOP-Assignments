@@ -68,6 +68,9 @@
     <Image Include="assets\game-screen.png">
       <Filter>Source Files\assets</Filter>
     </Image>
+    <Image Include="assets\camera.png">
+      <Filter>Source Files\assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="savedGames\savedGamesList.txt">

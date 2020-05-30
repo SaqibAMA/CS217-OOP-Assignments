@@ -2,26 +2,11 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <ctime>
+
 #include <Monopoly.h>
 
 using namespace std;
-
-
-/*
-
-Screenshot code:
-
-if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-
-                        sf::Texture texture;
-                        texture.create(window.getSize().x, window.getSize().y);
-                        texture.update(window);
-                        texture.copyToImage().saveToFile("ss.png");
-
-                    }
-
-
-*/
 
 
 int main()
@@ -467,12 +452,12 @@ int main()
 
     // Main game loop
 
-    window.close();
+    //window.close();
 
 
     // Creating a window that is resizable
-    window.create(sf::VideoMode(1280, 720), "Monopoly by Saqib, Nabeel, Abdur Rehman, & Salman",
-        sf::Style::Close | sf::Style::Resize);
+    //window.create(sf::VideoMode(1280, 720), "Monopoly by Saqib, Nabeel, Abdur Rehman, & Salman",
+    //    sf::Style::Close | sf::Style::Resize);
 
     // Setting up the favicon for that window again
     window.setIcon(314, 229, favicon.getPixelsPtr());
@@ -483,6 +468,10 @@ int main()
     gameScreen.setTexture(&gameScreenTexture);
 
     gameScreenTexture.setSmooth(true);
+
+
+
+    // ****** PRIMARY GAME LOGIC ******
 
 
     // Files names for all the player pieces
@@ -502,10 +491,10 @@ int main()
     //int totalPlayers = game.getTotalPlayers();
 
     int totalPlayers = game.getTotalPlayers();
+    game.initializePositions();
 
     sf::Texture* playerTextures = new sf::Texture[totalPlayers];
     sf::RectangleShape* playerPieces = new sf::RectangleShape[totalPlayers];
-
 
     // Setting up all of the textures
 
@@ -519,7 +508,24 @@ int main()
 
     }
 
-    int i = 0;  // dummy
+    // Camera button for Screenshot
+
+    sf::Texture cameraButtonTexture;
+    cameraButtonTexture.loadFromFile("assets/camera.png");
+    sf::RectangleShape cameraButton(sf::Vector2f(106.5f, 80.25f));
+    cameraButton.setTexture(&cameraButtonTexture);
+    cameraButton.setPosition(1150.0f, 620.0f);
+    cameraButtonTexture.setSmooth(true);
+
+
+    // Dice button for Dice
+
+    sf::Texture diceButtonTexture;
+    diceButtonTexture.loadFromFile("assets/diceButton.png");
+    sf::RectangleShape diceButton(sf::Vector2f(111.0f, 111.0f));
+    diceButton.setPosition(750.0f, 595.0f);
+    diceButton.setTexture(&diceButtonTexture);
+
 
     while (window.isOpen()) {
     
@@ -539,7 +545,35 @@ int main()
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 
 
-                i++;
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                sf::FloatRect cameraButtonBounds = cameraButton.getGlobalBounds();
+                sf::FloatRect diceButtonBounds = diceButton.getGlobalBounds();
+
+                // Screenshot function
+
+                if (cameraButtonBounds.contains(mousePos)) {
+
+
+                    sf::Texture texture;
+                    texture.create(window.getSize().x, window.getSize().y);
+                    texture.update(window);
+                    texture.copyToImage().saveToFile("screenshot.png");
+
+
+                }
+
+                if (diceButtonBounds.contains(mousePos)) {
+                
+
+
+
+
+                }
+
+
+
+                game.movePlayer(0);
 
 
             }
@@ -549,13 +583,16 @@ int main()
 
 
         window.draw(gameScreen);
+        window.draw(cameraButton);
+        window.draw(diceButton);
 
-        game.printPlayerOnCell(window, playerPieces[0], i % 40, 0);
-        game.printPlayerOnCell(window, playerPieces[1], i % 40 + 1, 1);
+        // Prints all the player pieces on the board
+        for (int i = 0; i < totalPlayers; i++) {
 
-        //for (int j = 0; j < totalPlayers; j++) {
-        //    game.printPlayerOnCell(window, playerPieces[j], i % 40, j);
-        //}
+            game.printPlayerOnCell(window, playerPieces[i],
+                game.getPlayerPosition(i), i);
+
+        }
 
         window.display();
 

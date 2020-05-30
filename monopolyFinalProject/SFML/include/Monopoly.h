@@ -50,17 +50,26 @@ public:
 	void setTotalPlayers(int totalPlayers);
 	int getTotalPlayers();
 
+
+	// Member functions
+
 	void printPlayerOnCell(sf::RenderWindow&,
 		sf::RectangleShape,
 		int, int);
+	void initializePositions();
+	int getPlayerPosition(int);
+
+	void movePlayer(int);
+
+
 
 	~Monopoly();
 
 private:
 	Bank bank;
 	Board board;
-	int totalPlayers;
 	Point* bCoord;
+	int* playerPosition;
 
 };
 

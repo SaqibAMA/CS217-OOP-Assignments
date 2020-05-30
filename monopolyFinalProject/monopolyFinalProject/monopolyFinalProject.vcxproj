@@ -153,6 +153,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\camera.png" />
     <Image Include="assets\character-face-cards.png" />
     <Image Include="assets\favicon.png" />
     <Image Include="assets\game-screen.png" />

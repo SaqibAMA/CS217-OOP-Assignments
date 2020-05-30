@@ -3,13 +3,7 @@
 
 Monopoly::Monopoly() {
 
-	totalPlayers = 0;
-
-	/*
-	
-	row 1 Y: 650px;
-
-	*/
+	board.setPlayerCount(0);
 
 	bCoord = new Point[40];
 
@@ -29,6 +23,8 @@ Monopoly::Monopoly() {
 
 	}
 
+	playerPosition = nullptr;
+
 
 	fin.close();
 
@@ -40,15 +36,13 @@ Monopoly::Monopoly() {
 void Monopoly::setTotalPlayers(int totalPlayers) {
 
 
-	if (totalPlayers > 0)
-		this->totalPlayers = totalPlayers;
-
+	board.setPlayerCount(totalPlayers);
 
 }
 
 int Monopoly::getTotalPlayers() {
 
-	return totalPlayers;
+	return board.getPlayerCount();
 
 }
 
@@ -84,10 +78,35 @@ void Monopoly::printPlayerOnCell(
 
 }
 
+
+void Monopoly::initializePositions() {
+
+
+	playerPosition = new int[board.getPlayerCount()];
+
+	for (int i = 0; i < board.getPlayerCount(); i++) {
+		playerPosition[i] = 0;
+	}
+
+
+}
+
+int Monopoly::getPlayerPosition(int playerID) {
+
+	return playerPosition[playerID];
+
+}
+
+void Monopoly::movePlayer(int playerID) {
+
+	playerPosition[playerID]++;
+	playerPosition[playerID] %= 40;
+
+}
+
 // Destructor
 
 Monopoly::~Monopoly() {
 
-	totalPlayers = 0;
 
 }

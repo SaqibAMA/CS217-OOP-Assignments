@@ -1,0 +1,15 @@
+﻿  Bank.cpp
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Bank.h(5,10): fatal error C1083: Cannot open include file: 'Property.h': No such file or directory
+  Board.cpp
+  Monopoly.cpp
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Monopoly.h(4,10): fatal error C1083: Cannot open include file: 'Bank.h': No such file or directory
+  Player.cpp
+  Property.cpp
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Property.cpp(2,10): fatal error C1083: Cannot open include file: 'Property.h': No such file or directory
+  Space.cpp
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Space.cpp(14,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Space.cpp(30,25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Space.cpp(45,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  main.cpp
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\monopolyFinalProject\main.cpp(1,10): fatal error C1083: Cannot open include file: 'SFML/Graphics.hpp': No such file or directory
+  Generating Code...

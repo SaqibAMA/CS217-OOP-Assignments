@@ -1,5 +1,8 @@
-﻿  Clinic.cpp
+﻿  driver.cpp
+d:\fast\semester 02\oop\assignments\cs217-oop-assignments\assignment 04\assignment 04\driver.cpp(314): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+  Clinic.cpp
 d:\fast\semester 02\oop\assignments\cs217-oop-assignments\assignment 04\assignment 04\clinic.cpp(96): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
 d:\fast\semester 02\oop\assignments\cs217-oop-assignments\assignment 04\assignment 04\clinic.cpp(100): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
 d:\fast\semester 02\oop\assignments\cs217-oop-assignments\assignment 04\assignment 04\clinic.cpp(229): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+  Generating Code...
   Assignment 04.vcxproj -> D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\Assignment 04\Debug\Assignment 04.exe
