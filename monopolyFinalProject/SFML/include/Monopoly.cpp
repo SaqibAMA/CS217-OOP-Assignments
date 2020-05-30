@@ -37,6 +37,7 @@ void Monopoly::setTotalPlayers(int totalPlayers) {
 
 
 	board.setPlayerCount(totalPlayers);
+	board.allocatePrevTurns();
 
 }
 
@@ -103,6 +104,41 @@ void Monopoly::movePlayer(int playerID) {
 	playerPosition[playerID] %= 40;
 
 }
+
+void Monopoly::playDice(sf::RenderWindow& window,
+	sf::RectangleShape* dice, sf::Texture* diceTexture) {
+
+
+	const char* diceTextureImg[6] =
+	{
+		"assets/dice_1.png",
+		"assets/dice_2.png",
+		"assets/dice_3.png",
+		"assets/dice_4.png",
+		"assets/dice_5.png",
+		"assets/dice_6.png"
+
+	};
+
+
+	int* diceNum = board.rollDice();
+
+	if (diceNum[0] > 0 && diceNum[1] > 0) {
+
+		diceTexture[0].loadFromFile(diceTextureImg[diceNum[0] - 1]);
+		diceTexture[1].loadFromFile(diceTextureImg[diceNum[1] - 1]);
+
+
+	
+	}
+	else {
+	
+		
+
+	}
+
+}
+
 
 // Destructor
 

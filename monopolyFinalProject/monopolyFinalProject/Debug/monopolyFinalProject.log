@@ -1,4 +1,5 @@
 ﻿  Board.cpp
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Board.cpp(12,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Monopoly.cpp
   main.cpp
   Generating Code...

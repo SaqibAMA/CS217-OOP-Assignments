@@ -523,8 +523,41 @@ int main()
     sf::Texture diceButtonTexture;
     diceButtonTexture.loadFromFile("assets/diceButton.png");
     sf::RectangleShape diceButton(sf::Vector2f(111.0f, 111.0f));
-    diceButton.setPosition(750.0f, 595.0f);
+    diceButton.setPosition(750.0f, 600.0f);
     diceButton.setTexture(&diceButtonTexture);
+
+    // Two dices
+    
+
+    const char* diceTextureImg[6] =
+    {
+        "assets/dice_1.png",
+        "assets/dice_2.png",
+        "assets/dice_3.png",
+        "assets/dice_4.png",
+        "assets/dice_5.png",
+        "assets/dice_6.png"
+
+    };
+
+
+    sf::Texture* diceTexture = new sf::Texture[2];
+    diceTexture[0].loadFromFile(diceTextureImg[0]);
+    diceTexture[1].loadFromFile(diceTextureImg[1]);
+
+    sf::RectangleShape* dice = new sf::RectangleShape[2];
+    for (int i = 0; i < 2; i++) {
+        dice[i].setSize(sf::Vector2f(80.0f, 80.f));
+        dice[i].setPosition(120.0f + (i * 75), 520.0f);
+        dice[i].setTexture(&diceTexture[i]);
+        diceTexture[i].setSmooth(true);
+    }
+
+
+    sf::Clock clk;
+    sf::Time animInt = sf::seconds(0.5f);
+
+    bool diceAnim = false;
 
 
     while (window.isOpen()) {
@@ -564,9 +597,11 @@ int main()
                 }
 
                 if (diceButtonBounds.contains(mousePos)) {
-                
 
+                    clk.restart();
+                    diceAnim = true;
 
+                    game.playDice(window, dice, diceTexture);
 
 
                 }
@@ -581,17 +616,34 @@ int main()
 
         }
 
-
         window.draw(gameScreen);
         window.draw(cameraButton);
         window.draw(diceButton);
 
+        // Prints the dices on the board
+
+        if (clk.getElapsedTime().asMilliseconds() < animInt.asMilliseconds() && diceAnim) {
+
+            diceTexture[0].loadFromFile(diceTextureImg[rand() % 6]);
+            diceTexture[1].loadFromFile(diceTextureImg[rand() % 6]);
+
+        }
+        else {
+            
+            diceAnim = false;
+            clk.restart();
+
+        }
+
+
+        for (int i = 0; i < 2; i++) {
+            window.draw(dice[i]);
+        }
+
         // Prints all the player pieces on the board
         for (int i = 0; i < totalPlayers; i++) {
-
             game.printPlayerOnCell(window, playerPieces[i],
                 game.getPlayerPosition(i), i);
-
         }
 
         window.display();
