@@ -1,7 +1,11 @@
+#pragma once
+
 #include "Space.h"
 #include <cstring>
+
 using namespace std;
-class Property :public Space
+
+class Property : public Space
 {
 	//DATA MEMBERS
 	char* propertyName;

@@ -1,5 +1,16 @@
 #include "Monopoly.h"
 
+const char* diceTextureImg[6] =
+{
+	"assets/dice_1.png",
+	"assets/dice_2.png",
+	"assets/dice_3.png",
+	"assets/dice_4.png",
+	"assets/dice_5.png",
+	"assets/dice_6.png"
+
+};
+
 
 Monopoly::Monopoly() {
 
@@ -98,10 +109,16 @@ int Monopoly::getPlayerPosition(int playerID) {
 
 }
 
-void Monopoly::movePlayer(int playerID) {
+void Monopoly::movePlayer(int playerID, int currRollCount) {
 
-	playerPosition[playerID]++;
+
+	//cout << "\nMoving from " << playerPosition[playerID];
+
+	playerPosition[playerID] += currRollCount;
 	playerPosition[playerID] %= 40;
+
+	//cout << "\nTo -> " << playerPosition[playerID] << endl;
+
 
 }
 
@@ -109,33 +126,97 @@ void Monopoly::playDice(sf::RenderWindow& window,
 	sf::RectangleShape* dice, sf::Texture* diceTexture) {
 
 
-	const char* diceTextureImg[6] =
-	{
-		"assets/dice_1.png",
-		"assets/dice_2.png",
-		"assets/dice_3.png",
-		"assets/dice_4.png",
-		"assets/dice_5.png",
-		"assets/dice_6.png"
-
-	};
-
-
 	int* diceNum = board.rollDice();
+
+	//cout << "--Dice--" << endl;
+	//cout << "a: " << diceNum[0] << ", b: " << diceNum[1] << endl;
+
 
 	if (diceNum[0] > 0 && diceNum[1] > 0) {
 
 		diceTexture[0].loadFromFile(diceTextureImg[diceNum[0] - 1]);
 		diceTexture[1].loadFromFile(diceTextureImg[diceNum[1] - 1]);
+		
+
+		if (board.getDRollCount() < 3 && board.getDRollCount() > 0) {
+
+			if (diceNum[0] != diceNum[1]) {
+				
+				board.setDRollCount(0);
+
+				board.setCurrRollAmount(
+					board.getCurrRollAmount() +
+					diceNum[0] +
+					diceNum[1]
+				);
+				
+				movePlayer(board.getPreviousTurn(), board.getCurrRollAmount());
+
+				board.setTurn(
+
+					((board.getTurn() + 1) % board.getPlayerCount())
+
+				);
+
+			}
+
+			if (board.getDRollCount() == 1) {
+				board.setCurrRollAmount(diceNum[0] + diceNum[1]);
+			}
+			else {
+				board.setCurrRollAmount(
+					board.getCurrRollAmount() +
+					diceNum[0] +
+					diceNum[1]
+				);
+			}
+
+		}
+		else if (board.getDRollCount() == 3) {
+
+			board.setCurrRollAmount(0);
+
+		}
+		else {
+			
+			board.setCurrRollAmount(diceNum[0] + diceNum[1]);
+			movePlayer(board.getPreviousTurn(), board.getCurrRollAmount());
 
 
-	
+		}
+
 	}
 	else {
 	
-		
+		board.setCurrRollAmount(0);
 
 	}
+
+	
+	//cout << "Curr Roll Amount ->" << board.getCurrRollAmount() <<  endl;
+
+
+
+	
+}
+
+void Monopoly::updateDiceTextures(sf::Texture* diceTexture) {
+
+
+	diceTexture[0].loadFromFile(
+		diceTextureImg[
+			board.getPrevTurns()[board.getPlayerCount() - 1][0]
+				- (board.getPrevTurns()[board.getPlayerCount() - 1][0] != 0)
+		]
+	);
+
+	diceTexture[1].loadFromFile(
+		diceTextureImg[
+			board.getPrevTurns()[board.getPlayerCount() - 1][1]
+				- (board.getPrevTurns()[board.getPlayerCount() - 1][1] != 0)
+		]
+	);
+
 
 }
 

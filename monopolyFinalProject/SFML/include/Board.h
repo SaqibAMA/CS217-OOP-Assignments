@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
+#include <Space.h>
+#include "PrivateProperty.h"
+#include "CommercialProperty.h"
 
 using namespace std;
 
@@ -13,8 +16,12 @@ private:
 	int** prevTurns;
 	int previousTurn;
 	int playerCount;
-	int turn;		// keeps the turn of the player
-	int dRollCount;	// keeps track of double rolls
+	int turn;				// keeps the turn of the player
+	int dRollCount;			// keeps track of double rolls
+	int currRollAmount;		// keep the amount of steps that
+							// a user has accumulated
+
+	Space** cells;
 
 public:
 	Board();
@@ -35,6 +42,9 @@ public:
 
 	int getPreviousTurn();
 	void setPreviousTurn(int);
+
+	int getCurrRollAmount();
+	void setCurrRollAmount(int);
 
 
 	~Board();

@@ -526,8 +526,30 @@ int main()
     diceButton.setPosition(750.0f, 600.0f);
     diceButton.setTexture(&diceButtonTexture);
 
-    // Two dices
+
+    // Player Icons
+
+    const char* playerIconTextureImg[5] = {
+        "assets/player_icon_1.png",
+        "assets/player_icon_2.png",
+        "assets/player_icon_3.png",
+        "assets/player_icon_4.png",
+        "assets/player_icon_5.png"
+    };
+
+    sf::Texture* playerIconTexture = new sf::Texture[totalPlayers];
+    sf::RectangleShape* playerIcon = new sf::RectangleShape[totalPlayers];
+    for (int i = 0; i < totalPlayers; i++) {
+
+        playerIconTexture[i].loadFromFile(playerIconTextureImg[i]);
+        playerIcon[i].setTexture(&playerIconTexture[i]);
+        playerIcon[i].setPosition(720.0f + (i * 100), 20.0f);
+        playerIcon[i].setSize(sf::Vector2f(120.5f, 155.0f));
     
+    }
+
+
+    // Two dices
 
     const char* diceTextureImg[6] =
     {
@@ -608,7 +630,7 @@ int main()
 
 
 
-                game.movePlayer(0);
+                // game.updatePositions();
 
 
             }
@@ -619,6 +641,11 @@ int main()
         window.draw(gameScreen);
         window.draw(cameraButton);
         window.draw(diceButton);
+
+
+        // Prints all the player icons on the screen
+        for (int i = 0; i < totalPlayers; i++)
+            window.draw(playerIcon[i]);
 
         // Prints the dices on the board
 
@@ -632,6 +659,7 @@ int main()
             
             diceAnim = false;
             clk.restart();
+            game.updateDiceTextures(diceTexture);
 
         }
 

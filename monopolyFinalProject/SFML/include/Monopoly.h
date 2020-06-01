@@ -59,11 +59,12 @@ public:
 	void initializePositions();
 	int getPlayerPosition(int);
 
-	void movePlayer(int);
+	void movePlayer(int, int);
 
 	void playDice(sf::RenderWindow&, sf::RectangleShape*,
 		sf::Texture*);
 
+	void updateDiceTextures(sf::Texture*);
 
 
 	~Monopoly();

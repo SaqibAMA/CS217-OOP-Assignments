@@ -17,7 +17,7 @@ Space::Space(char* spaceType, int* playersOnSpace, int playersOnSpaceCount) {
 		this->spaceType[i] = spaceType[i];
 	}
 	this->spaceType[size] = '\0';
-	this->playersOnSpace = new int[5];
+	this->playersOnSpace = new int[playersOnSpaceCount];
 	this->playersOnSpaceCount = playersOnSpaceCount;
 	for (int i = 0; i < playersOnSpaceCount; i++) {
 		this->playersOnSpace[i] = playersOnSpace[i];

@@ -146,8 +146,10 @@
   <ItemGroup>
     <ClCompile Include="..\SFML\include\Bank.cpp" />
     <ClCompile Include="..\SFML\include\Board.cpp" />
+    <ClCompile Include="..\SFML\include\CommercialProperty.cpp" />
     <ClCompile Include="..\SFML\include\Monopoly.cpp" />
     <ClCompile Include="..\SFML\include\Player.cpp" />
+    <ClCompile Include="..\SFML\include\PrivateProperty.cpp" />
     <ClCompile Include="..\SFML\include\Property.cpp" />
     <ClCompile Include="..\SFML\include\Space.cpp" />
     <ClCompile Include="main.cpp" />
@@ -169,8 +171,11 @@
   <ItemGroup>
     <ClInclude Include="..\SFML\include\Bank.h" />
     <ClInclude Include="..\SFML\include\Board.h" />
+    <ClInclude Include="..\SFML\include\Card.h" />
+    <ClInclude Include="..\SFML\include\CommercialProperty.h" />
     <ClInclude Include="..\SFML\include\Monopoly.h" />
     <ClInclude Include="..\SFML\include\Player.h" />
+    <ClInclude Include="..\SFML\include\PrivateProperty.h" />
     <ClInclude Include="..\SFML\include\Property.h" />
     <ClInclude Include="..\SFML\include\Space.h" />
   </ItemGroup>

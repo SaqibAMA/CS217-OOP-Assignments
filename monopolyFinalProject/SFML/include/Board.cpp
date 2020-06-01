@@ -13,6 +13,50 @@ Board::Board() {
 
 	previousTurn = 0;
 
+	currRollAmount = 0;
+
+
+
+	// Initializing Board Cells
+
+	cells = new Space * [40];
+
+
+	// Special Spaces
+
+	int specialSpaces[12] = {
+		0, 2, 4, 7,
+		10, 17, 20, 22,
+		30, 33, 36, 38
+	};
+
+	for (int i = 0; i < 12; i++)
+		cells[specialSpaces[i]] = new Space;
+
+	int privatePropertySpaces[20] = {
+	
+		1, 3, 6, 8,
+		9, 11, 13, 14,
+		16, 18, 19, 21,
+		23, 24, 26, 27,
+		29, 31, 32, 34,
+
+	};
+
+	for (int i = 0; i < 20; i++)
+		cells[privatePropertySpaces[i]] = new PrivateProperty;
+
+	
+	int commercialPropertySpaces[8] = {
+	
+		5, 12, 15, 25,
+		28, 35, 37, 39
+	
+	};
+
+	for (int i = 0; i < 8; i++)
+		cells[commercialPropertySpaces[i]] = new CommercialProperty;
+
 }
 
 int Board::getPlayerCount() {
@@ -47,30 +91,35 @@ int** Board::getPrevTurns() {
 
 int* Board::rollDice() {
 
-
-	cout << "turn -> " << turn << endl;
+	//cout << "Turn -> " << turn << endl;
 
 	int* diceNum = new int[2];
 
 	diceNum[0] = rand() % 6 + 1;
 	diceNum[1] = rand() % 6 + 1;
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < playerCount - 1; i++) {
 	
 		prevTurns[i][0] = prevTurns[i + 1][0];
 		prevTurns[i][1] = prevTurns[i + 1][1];
 
 	}
 
-	prevTurns[2][0] = diceNum[0];
-	prevTurns[2][1] = diceNum[1];
+	prevTurns[playerCount - 1][0] = diceNum[0];
+	prevTurns[playerCount - 1][1] = diceNum[1];
+
+	//cout << "-- Previous Turn Table --" << endl;
+
+	//for (int i = 0; i < playerCount; i++)
+	//	cout << "a: " << prevTurns[i][0] << " , b: " << prevTurns[i][1] << endl;
 
 	if (diceNum[0] != diceNum[1]) {
 	
-		turn++;
-		turn = turn % playerCount;
+		previousTurn = turn;
 
-		dRollCount = 0;
+		if (!dRollCount) {
+			turn = (turn + 1) % playerCount;
+		}
 
 	}
 	else {
@@ -82,7 +131,14 @@ int* Board::rollDice() {
 			diceNum[0] = -1;
 			diceNum[0] = -1;
 
-			cout << "dCount hit 3!" << endl;
+			//cout << "dCount hit 3!" << endl;
+
+			turn++;
+			turn = turn % playerCount;
+
+			dRollCount = 0;
+
+			currRollAmount = 0;
 
 		}
 
@@ -120,6 +176,12 @@ int Board::getPreviousTurn() {
 
 void Board::setPreviousTurn(int previousTurn) {
 	this->previousTurn = previousTurn; 
+}
+
+int Board::getCurrRollAmount() { return currRollAmount; }
+
+void Board::setCurrRollAmount(int currRollAmount) {
+	this->currRollAmount = currRollAmount;
 }
 
 Board::~Board() {

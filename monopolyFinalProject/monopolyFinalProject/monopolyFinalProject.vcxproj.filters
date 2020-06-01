@@ -39,10 +39,16 @@
     <ClCompile Include="..\SFML\include\Property.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\SFML\include\Space.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\SFML\include\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SFML\include\Space.cpp">
+    <ClCompile Include="..\SFML\include\PrivateProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SFML\include\CommercialProperty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -97,6 +103,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\SFML\include\Space.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SFML\include\Card.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SFML\include\PrivateProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SFML\include\CommercialProperty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
