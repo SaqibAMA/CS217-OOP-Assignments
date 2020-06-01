@@ -15,6 +15,8 @@ Board::Board() {
 
 	currRollAmount = 0;
 
+	jailPosition = 10;
+
 
 
 	// Initializing Board Cells
@@ -91,12 +93,11 @@ int** Board::getPrevTurns() {
 
 int* Board::rollDice() {
 
-	//cout << "Turn -> " << turn << endl;
-
 	int* diceNum = new int[2];
 
 	diceNum[0] = rand() % 6 + 1;
 	diceNum[1] = rand() % 6 + 1;
+
 
 	for (int i = 0; i < playerCount - 1; i++) {
 	
@@ -108,35 +109,31 @@ int* Board::rollDice() {
 	prevTurns[playerCount - 1][0] = diceNum[0];
 	prevTurns[playerCount - 1][1] = diceNum[1];
 
-	//cout << "-- Previous Turn Table --" << endl;
-
-	//for (int i = 0; i < playerCount; i++)
-	//	cout << "a: " << prevTurns[i][0] << " , b: " << prevTurns[i][1] << endl;
 
 	if (diceNum[0] != diceNum[1]) {
-	
+
 		previousTurn = turn;
 
-		if (!dRollCount) {
-			turn = (turn + 1) % playerCount;
+		if (dRollCount) {
+			dRollCount = 0;
 		}
+
+		turn = (turn + 1) % playerCount;
 
 	}
 	else {
-		
+
 		dRollCount++;
 
 		if (dRollCount == 3) {
 
 			diceNum[0] = -1;
-			diceNum[0] = -1;
+			diceNum[1] = -1;
 
 			//cout << "dCount hit 3!" << endl;
 
 			turn++;
 			turn = turn % playerCount;
-
-			dRollCount = 0;
 
 			currRollAmount = 0;
 
@@ -182,6 +179,10 @@ int Board::getCurrRollAmount() { return currRollAmount; }
 
 void Board::setCurrRollAmount(int currRollAmount) {
 	this->currRollAmount = currRollAmount;
+}
+
+int Board::getJailPosition() {
+	return jailPosition;
 }
 
 Board::~Board() {

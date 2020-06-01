@@ -22,6 +22,7 @@ private:
 							// a user has accumulated
 
 	Space** cells;
+	int jailPosition;
 
 public:
 	Board();
@@ -46,6 +47,7 @@ public:
 	int getCurrRollAmount();
 	void setCurrRollAmount(int);
 
+	int getJailPosition();
 
 	~Board();
 };

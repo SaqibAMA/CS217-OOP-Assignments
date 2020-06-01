@@ -59,7 +59,7 @@ public:
 	void initializePositions();
 	int getPlayerPosition(int);
 
-	void movePlayer(int, int);
+	void movePlayer(int, int, bool);
 
 	void playDice(sf::RenderWindow&, sf::RectangleShape*,
 		sf::Texture*);
