@@ -24,7 +24,12 @@ public:
 	int* getPlayersOnSpace();
 	int getPlayersOnSpaceCount();
 	//SEPCIAL FUNCTIONS
-	void putsPlayersOnSpace(int);
+
+
+	virtual void putsPlayersOnSpace(int playerID);
+
+	
+
 	void removePlayerFromSpace(int);
 
 	~Space();

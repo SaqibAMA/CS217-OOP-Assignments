@@ -66,7 +66,6 @@ public:
 
 	void updateDiceTextures(sf::Texture*);
 
-
 	~Monopoly();
 
 private:

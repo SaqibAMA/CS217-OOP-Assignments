@@ -163,12 +163,13 @@ void Monopoly::playDice(sf::RenderWindow& window,
 
 		if (board.getDRollCount() == 3) {
 
-			movePlayer(board.getPreviousTurn(), 0, true);
+			movePlayer(board.getTurn(), 0, true);
 
 			
-			board.setPreviousTurn(
+			board.setTurn(
 
-				board.getTurn()
+				(board.getTurn() + 1)
+				% board.getPlayerCount()
 
 			);
 

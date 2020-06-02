@@ -132,8 +132,8 @@ int* Board::rollDice() {
 
 			//cout << "dCount hit 3!" << endl;
 
-			turn++;
-			turn = turn % playerCount;
+			/*turn++;
+			turn = turn % playerCount;*/
 
 			currRollAmount = 0;
 

@@ -7,6 +7,7 @@ using namespace std;
 
 class Property : public Space
 {
+
 	//DATA MEMBERS
 	char* propertyName;
 	char* propertyGroup;
