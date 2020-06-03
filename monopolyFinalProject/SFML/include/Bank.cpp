@@ -50,10 +50,14 @@ Bank::Bank(Bank& obj) {
 //PROPERTY LIST SETTER
 void Bank::setPropertyList(Property** List) {
 	if (this->List != nullptr) {
-		delete this->List;
+		delete[] this->List;
 		this->List = nullptr;
 	}
+
+	
 	this->size = size;
+	
+	
 	this->List = new Property * [size];
 	for (int i = 0; i < size; i++) {
 		List[i] = new Property();

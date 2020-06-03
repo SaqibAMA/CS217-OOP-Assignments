@@ -685,6 +685,59 @@ int main()
 
     };
 
+
+    const char* commercialPropertyNames[8] = {
+    
+        "METRO ST.",
+        "LESCO",
+        "BUS ST.",
+        "RAILWAY ST.",
+        "WASA",
+        "ORANGE TRAIN",
+        "PTCL",
+        "SUI"
+
+    };
+
+    
+
+    const char* commercialPropertyPrices[8] = {
+
+        "2000",
+        "5000",
+        "2000",
+        "2500",
+        "4000",
+        "2500",
+        "8000",
+        "2500"
+
+    };
+
+    /*
+
+    int commercialPropertySpaces[8] = {
+
+        5, 12, 15, 25,
+        28, 35, 37, 39
+
+    };
+
+    */
+    
+    const char* commercialPropertyRents[8] = {
+
+        "200",
+        "450",
+        "200",
+        "350",
+        "400",
+        "350",
+        "500",
+        "350"
+
+    };
+
     // Text for Private Properties
 
     sf::Font cardFont;
@@ -737,7 +790,16 @@ int main()
     cardRent[2].setPosition(1070.0f, cardTitle[0].getPosition().y + 40.0f);
 
 
+    sf::Text* cardOwner = new sf::Text[3];
+    for (int i = 0; i < 3; i++) {
 
+        cardOwner[i].setFillColor(sf::Color(52, 152, 219));
+        cardOwner[i].setFont(stdFont);
+        cardOwner[i].setCharacterSize(10);
+
+        cardOwner[i].setString(privatePropertyRents[i]);
+
+    }
 
 
     while (window.isOpen()) {

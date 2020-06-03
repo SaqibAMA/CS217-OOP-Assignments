@@ -4,6 +4,7 @@
 #include <Space.h>
 #include "PrivateProperty.h"
 #include "CommercialProperty.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -20,6 +21,8 @@ private:
 	int dRollCount;			// keeps track of double rolls
 	int currRollAmount;		// keep the amount of steps that
 							// a user has accumulated
+
+	Player** players;
 
 	Space** cells;
 	int jailPosition;
@@ -48,6 +51,12 @@ public:
 	void setCurrRollAmount(int);
 
 	int getJailPosition();
+
+	Player** getPlayers();
+	
+	void allocatePlayers();
+
+	Space** getCells();
 
 	~Board();
 };

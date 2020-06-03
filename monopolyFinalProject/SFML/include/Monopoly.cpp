@@ -49,6 +49,7 @@ void Monopoly::setTotalPlayers(int totalPlayers) {
 
 	board.setPlayerCount(totalPlayers);
 	board.allocatePrevTurns();
+	board.allocatePlayers();
 
 }
 
@@ -56,6 +57,10 @@ int Monopoly::getTotalPlayers() {
 
 	return board.getPlayerCount();
 
+}
+
+Board Monopoly::getBoard() {
+	return board;
 }
 
 
@@ -200,6 +205,11 @@ void Monopoly::updateDiceTextures(sf::Texture* diceTexture) {
 	);
 
 
+}
+
+
+Bank Monopoly::getBank() {
+	return bank;
 }
 
 

@@ -50,6 +50,10 @@ public:
 	void setTotalPlayers(int totalPlayers);
 	int getTotalPlayers();
 
+	Board getBoard();
+	Bank getBank();
+
+
 
 	// Member functions
 

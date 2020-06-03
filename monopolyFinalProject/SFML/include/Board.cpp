@@ -3,6 +3,8 @@
 
 Board::Board() {
 
+	players = nullptr;
+
 	prevTurns = nullptr;
 	playerCount = 0;
 
@@ -183,6 +185,25 @@ void Board::setCurrRollAmount(int currRollAmount) {
 
 int Board::getJailPosition() {
 	return jailPosition;
+}
+
+Player** Board::getPlayers() {
+
+	return players;
+
+}
+
+void Board::allocatePlayers() {
+
+	this->players = new Player * [playerCount];
+
+	for (int i = 0; i < playerCount; i++)
+		this->players[i] = new Player("Saqib", i);
+
+}
+
+Space** Board::getCells() {
+	return cells;
 }
 
 Board::~Board() {

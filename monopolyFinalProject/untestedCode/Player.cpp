@@ -1,96 +1,6 @@
-#include <iostream>
-#include "Header.h"
-using namespace std;
-class player
-{
-private:
-	char* name;
-	int playerid;
-	int cash;
-	int* propertylist;
-	int  propertylistsize;
-	bool isInJail;
-	bool hasJailRescueCard;
-	bool isbankrupt;
-public:
-	player();
-	player(const char* Name, int Playerid);
-	player(const player& p);
-	char* getname();
-	int getplayerid();
-	int getcash();
-	int* getpropertylist();
-	int getpropertylistsize();
-	bool getIfisinjail();
-	bool getIfHasJailRescueCard();
-	bool getIfBankrupt();
-	void setname(char* Name);
-	void setplayerid(int id);
-	void setcash(int amount);
-	void setpropertylist(int* list);
-	void setpropertylistsize(int size);
-	void setIfisinjail(bool set);
-	void setIfHasJailRescueCard(bool set);
-	void setIfBankrupt(bool set);
-	void addproperty(int propertyid);
-	void removeproperty(int propertyid);
-	void addcash(int amount);
-	void deductcash(int amount);
-	player& operator=(const player& p)
-	{
-		int i = 0, f = 0, j = 0;
-		for (int k = 0; p.name[k] != '\0'; k++)
-		{
-			f++;
-		}
-		name = new char[f + 1];
-		for (j = 0; j < f; j++)
-		{
-			name[j] = p.name[j];
-
-		}
-		name[j] = '\0';
-		playerid = p.playerid;
-		cash = p.cash;
-		propertylist = p.propertylist;
-		propertylistsize = p.propertylistsize;
-		isInJail = p.isInJail;
-		hasJailRescueCard = p.hasJailRescueCard;
-		isbankrupt = p.isbankrupt;
-	}
-	friend ostream& operator<<(ostream& out, player& p);
-
-};
-ostream& operator<<(ostream& out, player& p)
-{
-	out << "Player name: " << p.getname() << endl;
-	out << "Player id: " << p.getplayerid() << endl;
-	out << "Cash: " << p.getcash() << endl;
-	out << "Properties : ";
-	for (int i = 0; i < p.getpropertylistsize(); i++)
-	{
-		out << p.getpropertylist()[i] << " ";
-	}
-	out << endl;
-	out << "Currently in Jail: ";
-	if (p.getIfisinjail() == 0)
-		out << "NO" << endl;
-	else
-		out << "Yes" << endl;
-	out << "Currently is Bankrupt: ";
-	if (p.getIfBankrupt() == 0)
-		out << "NO" << endl;
-	else
-		out << "Yes" << endl;
-	out << "Currently Has a Jail Resccue Card: ";
-	if (p.getIfHasJailRescueCard() == 0)
-		out << "NO" << endl;
-	else
-		out<<"Yes" << endl;
-	return out;
-
-}
-player::player()
+#include "Player.h"
+//UPDATED ACCORDING TO NEW DATA MEMBERS
+Player::Player()
 {
 	name = nullptr;
 	playerid = 0;
@@ -98,11 +8,12 @@ player::player()
 	propertylist = nullptr;
 	propertylistsize = 0;
 	isInJail = false;
-	hasJailRescueCard = false;
+	hasJailRescueCard = 0;
 	isbankrupt = false;
+	playerPosition = 0;
 
 }
-player::player(const char* Name, int Playerid)
+Player::Player(const char* Name, int Playerid)
 {
 	int i = 0, f = 0, j = 0;
 	for (int k = 0; Name[k] != '\0'; k++)
@@ -121,11 +32,13 @@ player::player(const char* Name, int Playerid)
 	propertylist = nullptr;
 	propertylistsize = 0;
 	isInJail = false;
-	hasJailRescueCard = false;
+	hasJailRescueCard = 0;
 	isbankrupt = false;
+	playerPosition = 0;
 
 }
-player::player(const player& p)
+
+Player::Player(const Player& p)
 {
 	int i = 0, f = 0, j = 0;
 	for (int k = 0; p.name[k] != '\0'; k++)
@@ -146,28 +59,27 @@ player::player(const player& p)
 	isInJail = p.isInJail;
 	hasJailRescueCard = p.hasJailRescueCard;
 	isbankrupt = p.isbankrupt;
+	playerPosition = p.playerPosition;
 }
-void player::addcash(int amount)
-{
-	cash = cash + amount;
-}
-void player::deductcash(int amount)
-{
-	if (cash >= amount)
-	{
-		cash = cash - amount;
 
-	}
-	else
-	{
-		isbankrupt = true;
-	}
+void Player::addCash(int amount)
+{
+	cash += amount;
+}
+void Player::deductCash(int amount)
+{
+
+	cash -= amount;
 
 }
-void player::addproperty(int id)
+void Player::addProperty(Property *id)
 {
 	int i = 0;
-	int* newpropertylist = new int[propertylistsize + 1];
+	Property** newpropertylist = new Property*[propertylistsize + 1];
+	for (int i = 0; i < propertylistsize + 1; i++) {
+		newpropertylist[i] = new Property;
+	}
+
 	for (i = 0; i < propertylistsize; i++)
 	{
 		newpropertylist[i] = propertylist[i];
@@ -177,13 +89,16 @@ void player::addproperty(int id)
 	propertylistsize++;
 	propertylist = newpropertylist;
 }
-void player::removeproperty(int id)
+void Player::removeProperty (Property *id)
 {
 	int i = 0, j;
-	int* newpropertylist = new int[propertylistsize - 1];
+	Property** newpropertylist = new Property * [propertylistsize - 1];
+	for (int i = 0; i < propertylistsize - 1; i++) {
+		newpropertylist[i] = new Property;
+	}
 	for (i = 0, j = 0; i < propertylistsize; i++)
 	{
-		if (propertylist[i] != id)
+		if (propertylist[i]->getPropertyID() != id->getPropertyID())
 		{
 			newpropertylist[j] = propertylist[i];
 			j++;
@@ -192,51 +107,63 @@ void player::removeproperty(int id)
 	propertylistsize--;
 	propertylist = newpropertylist;
 }
-int player::getcash()
+
+int Player::getCash()
 {
 	return cash;
 }
-int player::getpropertylistsize()
+
+int Player::getPropertyListSize()
 {
 	return propertylistsize;
 }
-int player::getplayerid()
+
+int Player::getPlayerID()
 {
 	return playerid;
 }
-char* player::getname()
+
+char* Player::getName()
 {
 	return name;
 }
-bool player::getIfBankrupt()
+
+bool Player::getIsBankrupt()
 {
 	return isbankrupt;
 }
-bool player::getIfHasJailRescueCard()
+
+int Player::getHasJailRescueCard()
 {
 	return hasJailRescueCard;
 }
-bool player::getIfisinjail()
+
+
+bool Player::getIsInJail()
 {
 	return isInJail;
 }
-void player::setcash(int amount)
+
+void Player::setCash(int amount)
 {
 	cash = amount;
 }
-void player::setpropertylistsize(int size)
+void Player::setPropertyListSize(int size)
 {
 	propertylistsize = size;
 }
-void player::setpropertylist(int* amount)
+
+void Player::setPropertyList(Property* amount)
 {
-	propertylist = amount;
+	propertylist[propertylistsize - 1] = amount;
 }
-void player::setplayerid(int id)
+
+void Player::setPlayerID(int id)
 {
 	playerid = id;
 }
-void player::setname(char* Name)
+
+void Player::setName(char* Name)
 {
 	int i = 0, f = 0, j = 0;
 	for (int k = 0; Name[k] != '\0'; k++)
@@ -251,31 +178,28 @@ void player::setname(char* Name)
 	}
 	name[j] = '\0';
 }
-void player::setIfisinjail(bool a)
+void Player::setIsInJail(bool a)
 {
 	isInJail = a;
 }
-void player::setIfBankrupt(bool a)
+void Player::setIsBankrupt(bool a)
 {
 	isbankrupt = a;
 }
-void player::setIfHasJailRescueCard(bool a)
+
+void Player::setHasJailRescueCard(int a)
 {
 	hasJailRescueCard = a;
 }
-int* player::getpropertylist()
+
+Property** Player::getPropertyList()
 {
 	return propertylist;
 }
-int main()
-{
-	player a("Salman",1);
-	cout << a<<endl;
-	a.addproperty(4);
-	a.addproperty(5);
-	a.addproperty(6);
-	a.addproperty(1);
-	cout << a<<endl;
-	a.removeproperty(6);
-	cout << a << endl;
+
+int Player::getPlayerPosition() {
+	return playerPosition;
+}
+void Player::setPlayerPosition(int x) {
+	playerPosition = x;
 }
