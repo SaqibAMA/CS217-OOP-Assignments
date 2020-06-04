@@ -73,17 +73,26 @@ Property** Bank::getPropertyList() {
 }
 
 //SELL PROPERTY FUNCTION
-void Bank::sellPropertyToPlayerByID(int Propertyid, Player player) {
+void Bank::sellPropertyToPlayerByID(Property* Propertyid, Player player) {
+
+
+	// Faulty code
+	// It sells on basis of index, not on ID
+
 	player.addProperty(Propertyid);
-	player.deductCash(List[Propertyid][0].getPurchasePrice());
-	List[Propertyid][0].setOwnerID(player.getPlayerID());
+	player.deductCash(List[Propertyid->getPropertyID()][0].getPurchasePrice());
+	List[Propertyid->getPropertyID()][0].setOwnerID(player.getPlayerID());
 }
 
 //BUY PROPERTY FUNCTION
-void Bank::purchasePropertyFromPlayerByID(int Propertyid, Player player) {
+void Bank::purchasePropertyFromPlayerByID(Property* Propertyid, Player player) {
+
+	// Faulty code
+	// It buys on basis of index, not ID
+
 	player.removeProperty(Propertyid);
-	player.addCash(List[Propertyid][0].getPurchasePrice());
-	List[Propertyid][0].setOwnerID(-1);
+	player.addCash(List[Propertyid->getPropertyID()][0].getPurchasePrice());
+	List[Propertyid->getPropertyID()][0].setOwnerID(-1);
 }
 
 //MORTAGE FUNCTION

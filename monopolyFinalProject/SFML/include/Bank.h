@@ -17,8 +17,8 @@ public:
 	Bank(Bank&);
 	void setPropertyList(Property**);
 	Property** getPropertyList();
-	void sellPropertyToPlayerByID(int, Player);
-	void purchasePropertyFromPlayerByID(int, Player);
+	void sellPropertyToPlayerByID(Property*, Player);
+	void purchasePropertyFromPlayerByID(Property*, Player);
 	void payMortageToPlayerByID(int, Player);
 	void declarePlayerBankruptByID(Player player);
 };

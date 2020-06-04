@@ -1,21 +1,25 @@
-
 #pragma once
-
 #include <iostream>
-
+#include "Property.h"
 using namespace std;
-
+//UPDATED 4/6/2020
 class Player
 {
 private:
+	//UPDATED DATA MEMBERS
 	char* name;
 	int playerid;
 	int cash;
-	int* propertylist;
+	Property** propertylist;
 	int  propertylistsize;
 	bool isInJail;
-	bool hasJailRescueCard;
-	bool isbankrupt;
+	int hasJailRescueCard;
+	int isbankrupt;
+	int playerPosition;
+
+	int inJailCount;
+
+
 public:
 	Player();
 	Player(const char* Name, int Playerid);
@@ -23,24 +27,25 @@ public:
 	char* getName();
 	int getPlayerID();
 	int getCash();
-	int* getPropertyList();
+	Property** getPropertyList();
 	int getPropertyListSize();
-	bool getIsInJail();
-	bool getHasJailRescueCard();
+	int getIsInJail();
+	int getHasJailRescueCard();
 	bool getIsBankrupt();
 	void setName(char* Name);
 	void setPlayerID(int id);
 	void setCash(int amount);
-	void setPropertyList(int* list);
+	void setPropertyList(Property* list);
 	void setPropertyListSize(int size);
 	void setIsInJail(bool);
-	void setHasJailRescueCard(bool);
+	void setHasJailRescueCard(int);
 	void setIsBankrupt(bool);
-	void addProperty(int propertyid);
-	void removeProperty(int propertyid);
+	void addProperty(Property* propertyid);
+	void removeProperty(Property* propertyid);
 	void addCash(int amount);
 	void deductCash(int amount);
-	
+	void setPlayerPosition(int);
+	int getPlayerPosition();
 	Player& operator = (const Player& p)
 	{
 		int i = 0, f = 0, j = 0;
@@ -63,5 +68,9 @@ public:
 		hasJailRescueCard = p.hasJailRescueCard;
 		isbankrupt = p.isbankrupt;
 	}
+
+
+	// Review
+	void atJail(Player& a);
 
 };

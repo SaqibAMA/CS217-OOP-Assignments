@@ -70,8 +70,12 @@ int Space::getPlayersOnSpaceCount() {
 }
 //SPECIAL FUNCTIONS
 void Space::putsPlayersOnSpace(int id) {
+
+	// faulty code
+
 	playersOnSpace[playersOnSpaceCount] = id;
 	playersOnSpaceCount--;
+
 }
 void Space::removePlayerFromSpace(int id) {
 	bool found = false;

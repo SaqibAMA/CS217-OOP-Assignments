@@ -5,6 +5,8 @@
 #include "PrivateProperty.h"
 #include "CommercialProperty.h"
 #include "Player.h"
+#include "Card.h"
+#include <fstream>
 
 using namespace std;
 
@@ -27,7 +29,11 @@ private:
 	Space** cells;
 	int jailPosition;
 
+	Card** Chance;				// Added 04th June
+	Card** CommunityChest;
+
 public:
+
 	Board();
 
 	int getPlayerCount();
@@ -57,6 +63,15 @@ public:
 	void allocatePlayers();
 
 	Space** getCells();
+
+
+	void executeCard(Card&);
+	void shufflecards();
+
+
+	/// New
+	void isAtGo(Player& a);
+	void goToJail(Player& a);
 
 	~Board();
 };

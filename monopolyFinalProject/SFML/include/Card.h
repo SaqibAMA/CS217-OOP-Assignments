@@ -51,6 +51,8 @@ public:
 
 	}
 
+	virtual int getCardType() = 0;
+
 	~Card() {
 		delete[] cardAction;
 	}

@@ -1,12 +1,18 @@
 #pragma once
-
 #include "Property.h"
+#include "Space.h"
+#include <cstring>
 
-class CommercialProperty: public Property {
 
+using namespace std;
+
+
+class CommercialProperty :public Property {
 public:
-	CommercialProperty() : Property() {
-		// do nothing
-	}
-
+	//CONSTRUCTOS
+	CommercialProperty();
+	CommercialProperty(char* spaceType, int*, int, char*, char*, int, int, bool, int, int, int);
+	CommercialProperty(CommercialProperty&);
+	~CommercialProperty();
 };
+

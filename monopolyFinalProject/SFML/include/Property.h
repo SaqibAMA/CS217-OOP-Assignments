@@ -42,6 +42,10 @@ public:
 	int getRentPrice();
 	int getMortgagePrice();
 
+	void setPurchasePrice(int);
+	void setRentPrice(int);
+	void setMortgagePrice(int);
+
 	//DESTRUCTOR
 	~Property();
 };

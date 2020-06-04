@@ -1,5 +1,5 @@
 #include <cstring>
-#include <Property.h>
+#include "Property.h"
 
 using namespace std;
 
@@ -56,7 +56,7 @@ Property::Property(char* spaceType,
 Property::Property(Property& pro) {
 	char* temp = pro.getPropertyName();
 	char* temp1 = pro.getPropertyGroup();
-	
+
 	int size = strlen(temp);
 	this->propertyName = new char[size + 1];
 	for (int i = 0; i < size; i++) {
@@ -99,7 +99,7 @@ void Property::setPropertyGroup(char* propertyGroup) {
 void Property::setPropertyID(int propertyID) {
 	this->propertyID = propertyID;
 }
-void Property::setOwnerID(int ownerID){
+void Property::setOwnerID(int ownerID) {
 	this->ownerID = ownerID;
 }
 void Property::setMortgaged(bool mortgaged) {
@@ -149,4 +149,14 @@ Property::~Property() {
 	}
 	propertyID = 0;
 	ownerID = 0;
+}
+
+void Property::setPurchasePrice(int P) {
+	purchasePrice = P;
+}
+void Property::setRentPrice(int R) {
+	rentPrice = R;
+}
+void Property::setMortgagePrice(int M) {
+	mortgagePrice = M;
 }

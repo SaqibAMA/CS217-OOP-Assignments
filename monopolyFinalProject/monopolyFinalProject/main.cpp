@@ -1,3 +1,6 @@
+
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
@@ -16,7 +19,7 @@ int main()
     // gameplay
 
     Monopoly game;
-    
+
     // Creating an SFML window
     sf::RenderWindow window(sf::VideoMode(1280, 720),
         "Monopoly by Saqib, Nabeel, Abdur Rehman, & Salman",
@@ -24,7 +27,7 @@ int main()
 
     // Standard Font
     sf::Font stdFont;
-    stdFont.loadFromFile ("fonts/Montserrat-Black.ttf");
+    stdFont.loadFromFile("fonts/Montserrat-Black.ttf");
 
 
     // Implementing the favicon
@@ -43,11 +46,11 @@ int main()
     bool gameStarted = false;
 
     while (!gameStarted) {
-    
+
         sf::Event evt;
         while (window.pollEvent(evt)) {
-        
-            if(evt.type == evt.Closed) {
+
+            if (evt.type == evt.Closed) {
 
                 window.close();
 
@@ -120,10 +123,10 @@ int main()
 
 
     while (window.isOpen() && gameStarted && choice == -1) {
-    
+
         sf::Event evt;
         while (window.pollEvent(evt)) {
-        
+
 
             if (evt.type == evt.Closed) {
 
@@ -131,7 +134,7 @@ int main()
 
             }
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            
+
 
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
@@ -139,13 +142,13 @@ int main()
                 sf::FloatRect loadGameButtonBounds = loadGameButton.getGlobalBounds();
 
                 if (newGameButtonBounds.contains(mousePos)) {
-                
+
                     choice = 1;
 
                 }
 
                 if (loadGameButtonBounds.contains(mousePos)) {
-                
+
                     choice = 2;
 
                 }
@@ -337,7 +340,7 @@ int main()
                         }
 
                         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                        
+
 
                             sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
@@ -377,10 +380,10 @@ int main()
                 totalGamesText.setFillColor(sf::Color(163, 191, 46));
                 totalGamesText.setPosition(sf::Vector2f(470.0f, 130.0f));
 
-                sf::Text *gamesListText = new sf::Text[totalGames];
+                sf::Text* gamesListText = new sf::Text[totalGames];
 
                 for (int i = 0; i < totalGames; i++) {
-                
+
                     gamesListText[i].setCharacterSize(30);
                     gamesListText[i].setFont(stdFont);
                     gamesListText[i].setFillColor(sf::Color(94, 60, 54));
@@ -393,18 +396,18 @@ int main()
                 int gameChoiceSelected = -1;
 
                 while (!gameStarted) {
-                
+
                     sf::Event evt;
                     while (window.pollEvent(evt)) {
-                    
+
                         if (evt.type == evt.Closed) {
-                        
+
                             window.close();
 
                         }
 
                         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                            
+
                             sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
                             // Checking if any of the game selections were used.
@@ -431,7 +434,7 @@ int main()
                     window.draw(totalGamesText);
 
                     for (int i = 0; i < totalGames; i++) {
-                    
+
                         window.draw(gamesListText[i]);
 
                     }
@@ -477,7 +480,7 @@ int main()
     // Files names for all the player pieces
 
     const char* playerPieceFileName[5] = {
-    
+
         "assets/player1.png",
         "assets/player2.png",
         "assets/player3.png",
@@ -545,7 +548,7 @@ int main()
         playerIcon[i].setTexture(&playerIconTexture[i]);
         playerIcon[i].setPosition(720.0f + (i * 100), 20.0f);
         playerIcon[i].setSize(sf::Vector2f(120.5f, 155.0f));
-    
+
     }
 
 
@@ -629,6 +632,7 @@ int main()
     // Private Property Names to iterate through, on cards
 
     int privatePropertyCardScroll = 0;
+    int commercialPropertyCardScroll = 0;
 
     const char* privatePropertyNames[20] = {
 
@@ -685,9 +689,19 @@ int main()
 
     };
 
+    int privatePropertySpaces[20] = {
+
+        1, 3, 6, 8,
+        9, 11, 13, 14,
+        16, 18, 19, 21,
+        23, 24, 26, 27,
+        29, 31, 32, 34,
+
+    };
+
 
     const char* commercialPropertyNames[8] = {
-    
+
         "METRO ST.",
         "LESCO",
         "BUS ST.",
@@ -698,8 +712,6 @@ int main()
         "SUI"
 
     };
-
-    
 
     const char* commercialPropertyPrices[8] = {
 
@@ -714,17 +726,6 @@ int main()
 
     };
 
-    /*
-
-    int commercialPropertySpaces[8] = {
-
-        5, 12, 15, 25,
-        28, 35, 37, 39
-
-    };
-
-    */
-    
     const char* commercialPropertyRents[8] = {
 
         "200",
@@ -772,10 +773,9 @@ int main()
     cardPrice[0].setPosition(785.0f, cardTitle[0].getPosition().y + 20.0f);
     cardPrice[1].setPosition(925.0f, cardTitle[0].getPosition().y + 20.0f);
     cardPrice[2].setPosition(1070.0f, cardTitle[0].getPosition().y + 20.0f);
-    
-    
-    sf::Text* cardRent = new sf::Text[3];
 
+
+    sf::Text* cardRent = new sf::Text[3];
     for (int i = 0; i < 3; i++) {
 
         cardRent[i].setFillColor(sf::Color(52, 152, 219));
@@ -790,20 +790,189 @@ int main()
     cardRent[2].setPosition(1070.0f, cardTitle[0].getPosition().y + 40.0f);
 
 
-    sf::Text* cardOwner = new sf::Text[3];
+
+    // Text for commercial properties
+
+    sf::Text* commercialCardTitle = new sf::Text[3];
+    for (int i = 0; i < 3; i++) {
+        commercialCardTitle[i].setFillColor(sf::Color::Black);
+        commercialCardTitle[i].setFont(cardFont);
+        commercialCardTitle[i].setCharacterSize(12);
+        commercialCardTitle[i].setString(commercialPropertyNames[i]);
+    }
+
+    commercialCardTitle[0].setPosition(785.0f, 400.0f);
+    commercialCardTitle[1].setPosition(925.0f, 400.0f);
+    commercialCardTitle[2].setPosition(1070.0f, 400.0f);
+
+
+    sf::Text* commercialCardPrice = new sf::Text[3];
+
     for (int i = 0; i < 3; i++) {
 
-        cardOwner[i].setFillColor(sf::Color(52, 152, 219));
-        cardOwner[i].setFont(stdFont);
-        cardOwner[i].setCharacterSize(10);
+        commercialCardPrice[i].setFillColor(sf::Color(230, 126, 34));
+        commercialCardPrice[i].setFont(stdFont);
+        commercialCardPrice[i].setCharacterSize(12);
+        commercialCardPrice[i].setString(commercialPropertyPrices[i]);
 
-        cardOwner[i].setString(privatePropertyRents[i]);
+    }
+
+    commercialCardPrice[0].setPosition(785.0f, commercialCardTitle[0].getPosition().y + 20.0f);
+    commercialCardPrice[1].setPosition(925.0f, commercialCardTitle[0].getPosition().y + 20.0f);
+    commercialCardPrice[2].setPosition(1070.0f, commercialCardTitle[0].getPosition().y + 20.0f);
+
+
+    sf::Text* commercialCardRent = new sf::Text[3];
+    for (int i = 0; i < 3; i++) {
+
+        commercialCardRent[i].setFillColor(sf::Color(211, 84, 0));
+        commercialCardRent[i].setFont(stdFont);
+        commercialCardRent[i].setCharacterSize(10);
+        commercialCardRent[i].setString(commercialPropertyRents[i]);
+
+    }
+
+    commercialCardRent[0].setPosition(785.0f, commercialCardTitle[0].getPosition().y + 40.0f);
+    commercialCardRent[1].setPosition(925.0f, commercialCardTitle[0].getPosition().y + 40.0f);
+    commercialCardRent[2].setPosition(1070.0f, commercialCardTitle[0].getPosition().y + 40.0f);
+
+
+    // Player Cash Text setup
+
+
+    sf::Text* playerCash = new sf::Text[totalPlayers];
+    for (int i = 0; i < totalPlayers; i++) {
+
+        playerCash[i].setFillColor(sf::Color(26, 188, 156));
+        playerCash[i].setFont(stdFont);
+        playerCash[i].setCharacterSize(11);
+
+        float playerMoney = (float)game.getBoard().getPlayers()[i]->getCash();
+        char* playerMoneyChar = new char[10];
+
+
+        if (playerMoney >= 1000) {
+
+            float flPointPart = (playerMoney / 1000) - (int)(playerMoney / 1000);
+            flPointPart *= 100;
+
+
+            char* flPointPartChar = new char[10];
+
+
+
+            _itoa((int)(playerMoney / 1000), playerMoneyChar, 10);
+            _itoa((int)(flPointPart), flPointPartChar, 10);
+
+            strcat(playerMoneyChar, ".");
+            strcat(playerMoneyChar, flPointPartChar);
+            strcat(playerMoneyChar, "K");
+
+            //_itoa_s(playerMoney, playerMoneyChar, 10);
+
+            playerCash[i].setString(playerMoneyChar);
+
+        }
+        else {
+
+            _itoa((int)playerMoney, playerMoneyChar, 10);
+
+            playerCash[i].setString(playerMoneyChar);
+
+        }
+
+        playerCash[i].setPosition(735.f + (i * 100.0f), 125.0f);
 
     }
 
 
-    while (window.isOpen()) {
+    // Turn Display Assets
+
+    sf::Text turnText;
+    turnText.setFont(stdFont);
+    turnText.setFillColor(sf::Color::Black);
+    turnText.setCharacterSize(10);
+    turnText.setString("TURN");
+    turnText.setPosition(141.0f, 460.0f);
+
+    sf::Texture turnDisplayTexture;
+    turnDisplayTexture.loadFromFile("assets/turn_display.png");
+
+    sf::RectangleShape turnDisplay(sf::Vector2f(80.0f, 80.f));
+    turnDisplay.setPosition(120.0f, 450.0f);
+    turnDisplay.setTexture(&turnDisplayTexture);
+
+    sf::Texture turnDisplayPieceTexture;
+    turnDisplayPieceTexture.loadFromFile("assets/player1.png");
+
+    sf::RectangleShape turnDisplayPiece(sf::Vector2f(30.0f, 30.0f));
+    turnDisplayPiece.setTexture(&turnDisplayPieceTexture);
+    turnDisplayPiece.setPosition(142.0f, 480.0f);
+    turnDisplayPieceTexture.setSmooth(true);
+
+
+
+    // Card Upgrades Assets
+
+    sf::Texture** upgradeIconTexture = new sf::Texture * [3];
+    for (int i = 0; i < 3; i++)
+        upgradeIconTexture[i] = new sf::Texture[2];
+
+    const char* upgradeIconImg[6] = {
+
+        "assets/wifi.png", "assets/wifi_en.png",
+        "assets/elec.png", "assets/elec_en.png",
+        "assets/gas.png", "assets/gas_en.png"
+
+    };
+
+    for (int i = 0; i < 3; i++) {
+
+        for (int j = 0; j < 2; j++) {
+
+            upgradeIconTexture[i][j].loadFromFile(upgradeIconImg[(2 * i) + j]);
+
+        }
+
+    }
+
+    sf::RectangleShape** upgradeIcon = new sf::RectangleShape*[3];
     
+    for (int i = 0; i < 3; i++) {
+
+        upgradeIcon[i] = new sf::RectangleShape[3];
+
+        for (int j = 0; j < 3; j++) {
+
+            upgradeIcon[i][j].setTexture(&upgradeIconTexture[j][0]);
+            
+            
+            upgradeIcon[i][j].setSize(sf::Vector2f(13.0f, 15.0f));
+
+        }
+
+    }
+
+    for (int i = 0; i < 3; i++)
+        upgradeIcon[0][i].setPosition(785.f + (i * 20), 315.0f);
+
+    for (int i = 0; i < 3; i++)
+        upgradeIcon[1][i].setPosition(785.f + (i * 20) + 140, 315.0f);
+    
+    for (int i = 0; i < 3; i++)
+        upgradeIcon[2][i].setPosition(785.f + (i * 20) + 285, 315.0f);
+
+
+    {
+        PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[privatePropertySpaces[5]];
+
+        propertyCell->setHasGas(true);
+        propertyCell->setHasElectricity(true);
+        propertyCell->setHasWifi(true);
+
+    }
+
+    while (window.isOpen()) {
 
         sf::Event evt;
         while (window.pollEvent(evt)) {
@@ -827,6 +996,10 @@ int main()
 
                 sf::FloatRect navBtnLeftBounds = navButton[0].getGlobalBounds();
                 sf::FloatRect navBtnRightBounds = navButton[1].getGlobalBounds();
+
+                sf::FloatRect commercialNavBtnLeftBounds = commercialNavButton[0].getGlobalBounds();
+                sf::FloatRect commercialNavBtnRightBounds = commercialNavButton[1].getGlobalBounds();
+
 
                 // Screenshot function
 
@@ -873,10 +1046,77 @@ int main()
 
                 }
 
+                if (commercialNavBtnLeftBounds.contains(mousePos)) {
+
+                    if (commercialPropertyCardScroll) {
+
+                        commercialPropertyCardScroll--;
+
+                    }
+
+                }
+
+                if (commercialNavBtnRightBounds.contains(mousePos)) {
+
+                    if (commercialPropertyCardScroll < 5) {
+
+                        commercialPropertyCardScroll++;
+
+                    }
+
+
+                }
+
+
+                int currTurnOnBoard = game.getBoard().getTurn();
+                turnDisplayPieceTexture.loadFromFile(playerPieceFileName[currTurnOnBoard]);
+
 
 
                 // game.updatePositions();
 
+
+            }
+
+            if (evt.type == sf::Event::MouseWheelScrolled) {
+
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                sf::FloatRect cardBound = cardPanel.getGlobalBounds();
+                sf::FloatRect commercialCardBound = commercialCardPanel.getGlobalBounds();
+
+                if (evt.mouseWheelScroll.delta > 0) // moving up
+                {
+                    if (privatePropertyCardScroll && cardBound.contains(mousePos)) {
+
+                        privatePropertyCardScroll--;
+
+                    }
+
+                    if (commercialPropertyCardScroll && commercialCardBound.contains(mousePos)) {
+
+                        commercialPropertyCardScroll--;
+
+                    }
+
+                }
+                else if (evt.mouseWheelScroll.delta < 0) // moving down
+                {
+
+                    if (privatePropertyCardScroll < 17 && cardBound.contains(mousePos)) {
+
+                        privatePropertyCardScroll++;
+
+                    }
+
+                    if (commercialPropertyCardScroll < 5 && commercialCardBound.contains(mousePos)) {
+
+                        commercialPropertyCardScroll++;
+
+                    }
+
+
+                }
 
             }
 
@@ -888,7 +1128,9 @@ int main()
         window.draw(diceButton);
         window.draw(cardPanel);
         window.draw(commercialCardPanel);
-
+        window.draw(turnDisplay);
+        window.draw(turnText);
+        window.draw(turnDisplayPiece);
         
 
 
@@ -901,16 +1143,41 @@ int main()
             cardPrice[i].setString(privatePropertyPrices[i + privatePropertyCardScroll]);
             cardRent[i].setString(privatePropertyRents[i + privatePropertyCardScroll]);
 
+            commercialCardTitle[i].setString(commercialPropertyNames[i + commercialPropertyCardScroll]);
+            commercialCardPrice[i].setString(commercialPropertyPrices[i + commercialPropertyCardScroll]);
+            commercialCardRent[i].setString(commercialPropertyRents[i + commercialPropertyCardScroll]);
+
             window.draw(cardTitle[i]);
             window.draw(cardPrice[i]);
             window.draw(cardRent[i]);
+            
+
+            window.draw(commercialCardTitle[i]);
+            window.draw(commercialCardPrice[i]);
+            window.draw(commercialCardRent[i]);
+
+
+            // enable switching based on connection
+            for (int j = 0; j < 3; j++) {
+
+                PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[privatePropertySpaces[i + privatePropertyCardScroll]];
+
+                upgradeIcon[i][0].setTexture(&upgradeIconTexture[j][propertyCell->getHasWifi()]);
+                upgradeIcon[i][1].setTexture(&upgradeIconTexture[j][propertyCell->getHasElectricity()]);
+                upgradeIcon[i][2].setTexture(&upgradeIconTexture[j][propertyCell->getHasGas()]);
+
+                window.draw(upgradeIcon[i][j]);
+            
+            }
 
         }
 
 
         // Prints all the player icons on the screen
-        for (int i = 0; i < totalPlayers; i++)
+        for (int i = 0; i < totalPlayers; i++) {
             window.draw(playerIcon[i]);
+            window.draw(playerCash[i]);
+        }
 
         // Prints the dices on the board
 
