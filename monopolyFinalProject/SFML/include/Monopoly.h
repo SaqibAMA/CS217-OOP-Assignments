@@ -70,6 +70,13 @@ public:
 
 	void updateDiceTextures(sf::Texture*);
 
+	// REVIEW
+
+
+	int convertFromCellToPropertyID(int);
+	bool canBuildHouse(int, int);
+	bool sameupgradedlevel(int, int);
+
 	~Monopoly();
 
 private:

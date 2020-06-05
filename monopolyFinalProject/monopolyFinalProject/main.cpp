@@ -791,6 +791,110 @@ int main()
 
 
 
+
+    // Property Upgrade options assets
+
+    bool showPropertyUpgradePanel = false;
+
+    sf::Texture cardUpgradeIconTexture;
+    cardUpgradeIconTexture.loadFromFile("assets/upgrade_btn.png");
+
+    sf::RectangleShape* cardUpgradeIcon = new sf::RectangleShape[3];
+    for (int i = 0; i < 3; i++) {
+        cardUpgradeIcon[i].setTexture(&cardUpgradeIconTexture);
+        cardUpgradeIcon[i].setSize(sf::Vector2f(13.0f, 13.0f));
+        
+    }
+
+    cardUpgradeIcon[0].setPosition(870.0f, 315.0f);
+    cardUpgradeIcon[1].setPosition(1015.0f, 315.0f);
+    cardUpgradeIcon[2].setPosition(1015.0f + 143.0f, 315.0f);
+
+
+
+    // Property Upgrade Prompt
+
+    sf::Texture propertyUpgradePromptTexture;
+    propertyUpgradePromptTexture.loadFromFile("assets/upgrade_prompt.png");
+
+    sf::Texture upgradePromptCloseTexture;
+    upgradePromptCloseTexture.loadFromFile("assets/upgrade_prompt_close.png");
+
+    sf::RectangleShape propertyUpgradePrompt(sf::Vector2f(1280.0f, 720.0f));
+    propertyUpgradePrompt.setTexture(&propertyUpgradePromptTexture);
+    propertyUpgradePrompt.setPosition(0.0f, 0.0f);
+
+    sf::RectangleShape upgradePromptClose(sf::Vector2f(41.0f, 41.0f));
+    upgradePromptClose.setTexture(&upgradePromptCloseTexture);
+    upgradePromptClose.setPosition(900.0f, 200.0f);
+
+
+    sf::Texture addButtonTexture;
+    addButtonTexture.loadFromFile("assets/upgrade_prompt_add.png");
+
+    sf::RectangleShape** addButton = new sf::RectangleShape*[3];
+    for (int i = 0; i < 3; i++) {
+
+        addButton[i] = new sf::RectangleShape[2];
+
+        for (int j = 0; j < 2; j++) {
+
+            addButton[i][j].setTexture(&addButtonTexture);
+            addButton[i][j].setSize(sf::Vector2f(70.0f, 70.0f));
+            addButton[i][j].setPosition(500.0f + (j * 300.0f), 220.0f + (i * 120.0f));
+
+        }
+
+    }
+
+    const char* upgradePromptIconsImg[6] = {
+
+        "assets/upgrade_prompt_house.png",
+        "assets/upgrade_prompt_wifi.png",
+
+        
+        "assets/upgrade_prompt_shop.png",
+        "assets/upgrade_prompt_elec.png",
+
+
+
+        "assets/upgrade_prompt_hotel.png",
+        "assets/upgrade_prompt_gas.png",
+
+    };
+
+    sf::Texture** upgradePromptIconsTexture = new sf::Texture * [3];
+    for (int i = 0; i < 3; i++) {
+
+        upgradePromptIconsTexture[i] = new sf::Texture[2];
+
+        for (int j = 0; j < 2; j++) {
+
+            upgradePromptIconsTexture[i][j].loadFromFile(upgradePromptIconsImg[(2 * i) + j]);
+            upgradePromptIconsTexture[i][j].setSmooth(true);
+
+        }
+
+    }
+
+
+    sf::RectangleShape** upgradePromptIcons = new sf::RectangleShape * [3];
+    for (int i = 0; i < 3; i++) {
+
+        upgradePromptIcons[i] = new sf::RectangleShape[2];
+
+        for (int j = 0; j < 2; j++) {
+
+            upgradePromptIcons[i][j].setTexture(&upgradePromptIconsTexture[i][j]);
+            upgradePromptIcons[i][j].setSize(sf::Vector2f(80.0f, 80.0f));
+            upgradePromptIcons[i][j].setPosition(350.0f + (j * 300.0f), 200.0f + (i * 120.0f));
+
+        }
+
+    }
+
+
+
     // Text for commercial properties
 
     sf::Text* commercialCardTitle = new sf::Text[3];
@@ -867,8 +971,6 @@ int main()
             strcat(playerMoneyChar, ".");
             strcat(playerMoneyChar, flPointPartChar);
             strcat(playerMoneyChar, "K");
-
-            //_itoa_s(playerMoney, playerMoneyChar, 10);
 
             playerCash[i].setString(playerMoneyChar);
 
@@ -953,16 +1055,63 @@ int main()
 
     }
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++) {
         upgradeIcon[0][i].setPosition(785.f + (i * 20), 315.0f);
-
-    for (int i = 0; i < 3; i++)
         upgradeIcon[1][i].setPosition(785.f + (i * 20) + 140, 315.0f);
-    
-    for (int i = 0; i < 3; i++)
         upgradeIcon[2][i].setPosition(785.f + (i * 20) + 285, 315.0f);
+    }
 
 
+    // Card Building Upgrade Assets
+    sf::Texture* buildingIconTextures = new sf::Texture[3];
+    
+    buildingIconTextures[0].loadFromFile("assets/house.png");
+    buildingIconTextures[1].loadFromFile("assets/shop.png");
+    buildingIconTextures[2].loadFromFile("assets/hotel.png");
+
+    sf::RectangleShape** buildingIcon = new sf::RectangleShape*[3];
+
+    for (int i = 0; i < 3; i++) {
+
+        buildingIcon[i] = new sf::RectangleShape[3];
+
+        for (int j = 0; j < 3; j++) {
+
+            buildingIcon[i][j].setTexture(&buildingIconTextures[j]);
+            buildingIcon[i][j].setSize(sf::Vector2f(13.0f, 13.0f));
+
+        }
+
+    }
+
+
+    for (int i = 0; i < 3; i++) {
+
+        buildingIcon[0][i].setPosition(785.f + (i * 42), 225.0f);
+        buildingIcon[1][i].setPosition(785.f + (i * 42) + 140, 225.0f);
+        buildingIcon[2][i].setPosition(785.f + (i * 42) + 285, 225.0f);
+
+    }
+
+
+    // Tooltip
+
+    bool tooltipIsVisible = false;
+    int iClickedX = 0, iClickedY = 0;
+
+    sf::Texture tooltipTexture;
+    tooltipTexture.loadFromFile("assets/tooltip.png");
+
+    sf::RectangleShape tooltip(sf::Vector2f(77.25f, 69.75f));
+    tooltip.setTexture(&tooltipTexture);
+
+    sf::Text tooltipText;
+    tooltipText.setFillColor(sf::Color::White);
+    tooltipText.setCharacterSize(14);
+    tooltipText.setFont(stdFont);
+
+
+    // Placebo
     {
         PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[privatePropertySpaces[5]];
 
@@ -973,6 +1122,7 @@ int main()
     }
 
     while (window.isOpen()) {
+
 
         sf::Event evt;
         while (window.pollEvent(evt)) {
@@ -999,6 +1149,77 @@ int main()
 
                 sf::FloatRect commercialNavBtnLeftBounds = commercialNavButton[0].getGlobalBounds();
                 sf::FloatRect commercialNavBtnRightBounds = commercialNavButton[1].getGlobalBounds();
+
+                sf::FloatRect** buildingIconBounds = new sf::FloatRect*[3];
+                for (int i = 0; i < 3; i++) {
+
+                    buildingIconBounds[i] = new sf::FloatRect[3];
+
+                    for (int j = 0; j < 3; j++) {
+
+                        buildingIconBounds[i][j] = buildingIcon[i][j].getGlobalBounds();
+
+                        
+                        if (buildingIconBounds[i][j].contains(mousePos) && !tooltipIsVisible) {
+
+                            tooltipIsVisible = true;
+
+                            iClickedX = i;
+                            iClickedY = j;
+
+                        }
+                        else if (buildingIconBounds[i][j].contains(mousePos) && tooltipIsVisible) {
+
+                            tooltipIsVisible = false;
+
+                        }
+
+
+
+                    }
+
+                }
+
+
+
+                for (int i = 0; i < 3; i++)
+                    delete[] buildingIconBounds[i];
+                delete[] buildingIconBounds;
+
+
+
+                // Property Upgrade function tracking
+
+                sf::FloatRect* cardUpgradeIconBounds = new sf::FloatRect[3];
+                for (int i = 0; i < 3; i++) {
+                    cardUpgradeIconBounds[i] = cardUpgradeIcon[i].getGlobalBounds();
+
+                    if (cardUpgradeIconBounds[i].contains(mousePos) && !showPropertyUpgradePanel) {
+
+                        showPropertyUpgradePanel = true;
+
+                    }
+                    else if (cardUpgradeIconBounds[i].contains(mousePos) && showPropertyUpgradePanel){
+
+                        showPropertyUpgradePanel = false;
+                    
+                    }
+
+                }
+
+                delete[] cardUpgradeIconBounds;
+
+                
+
+                // Upgrade Prompt Close Button
+
+                sf::FloatRect upgradePromptCloseBounds = upgradePromptClose.getGlobalBounds();
+
+                if (upgradePromptCloseBounds.contains(mousePos)) {
+
+                    showPropertyUpgradePanel = false;
+
+                }
 
 
                 // Screenshot function
@@ -1150,6 +1371,7 @@ int main()
             window.draw(cardTitle[i]);
             window.draw(cardPrice[i]);
             window.draw(cardRent[i]);
+            window.draw(cardUpgradeIcon[i]);
             
 
             window.draw(commercialCardTitle[i]);
@@ -1168,6 +1390,8 @@ int main()
 
                 window.draw(upgradeIcon[i][j]);
             
+                window.draw(buildingIcon[i][j]);
+
             }
 
         }
@@ -1178,6 +1402,49 @@ int main()
             window.draw(playerIcon[i]);
             window.draw(playerCash[i]);
         }
+
+
+
+        // Tooltip
+        if (tooltipIsVisible) {
+
+            PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[privatePropertySpaces[iClickedX + privatePropertyCardScroll]];
+
+            char* count = new char[10];
+
+            if (iClickedY == 0) {
+
+                _itoa(propertyCell->getHouseCount(), count, 10);
+
+            }
+            else if (iClickedY == 1) {
+
+                _itoa(propertyCell->getShopCount(), count, 10);
+
+            }
+            else if (iClickedY == 2) {
+
+                _itoa(propertyCell->getHotelCount(), count, 10);
+
+            }
+
+
+            tooltip.setPosition(sf::Mouse::getPosition(window).x - 40.0f, sf::Mouse::getPosition(window).y - 60.0f);
+
+
+
+            tooltipText.setPosition(sf::Mouse::getPosition(window).x - (8.0f + (2.0f * (strlen(count) > 1.0f))), sf::Mouse::getPosition(window).y - 40.0f);
+            
+            
+            
+            tooltipText.setString(count);
+            window.draw(tooltip);
+            window.draw(tooltipText);
+
+            delete[] count;
+
+        }
+
 
         // Prints the dices on the board
 
@@ -1223,6 +1490,28 @@ int main()
             playerPrevPos[i] = game.getPlayerPosition(i);
 
         }
+
+
+
+        if (showPropertyUpgradePanel) {
+
+            window.draw(propertyUpgradePrompt);
+            window.draw(upgradePromptClose);
+
+            for (int i = 0; i < 3; i++) {
+
+                for (int j = 0; j < 2; j++) {
+
+                    window.draw(addButton[i][j]);
+                    window.draw(upgradePromptIcons[i][j]);
+
+                }
+
+            }
+
+
+        }
+
 
         window.display();
 

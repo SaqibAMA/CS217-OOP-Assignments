@@ -213,6 +213,97 @@ Bank Monopoly::getBank() {
 }
 
 
+
+
+// REVIEW
+
+/***
+bool Monopoly::canBuildHouse(int group, int playerid)
+{
+	bool canbuild = true;
+	if (group == 0)
+	{
+		if (Playersarray[playerid].searchInProperty(0) &&
+			Playersarray[playerid].searchInProperty(1) &&
+			Playersarray[playerid].searchInProperty(2))
+		{
+			return true;
+		}
+		else return false;
+
+	}
+	if (group == 1)
+	{
+		if (Playersarray[playerid].searchInProperty(3) &&
+			Playersarray[playerid].searchInProperty(4))
+		{
+			return true;
+		}
+		else return false;
+
+	}
+	if (group == 2)
+	{
+		if (Playersarray[playerid].searchInProperty(5) &&
+			Playersarray[playerid].searchInProperty(6) &&
+			Playersarray[playerid].searchInProperty(7))
+		{
+			return true;
+		}
+		else return false;
+
+	}
+	if (group == 3)
+	{
+		if (Playersarray[playerid].searchInProperty(8) &&
+			Playersarray[playerid].searchInProperty(9) &&
+			Playersarray[playerid].searchInProperty(10))
+		{
+			return true;
+		}
+		else return false;
+
+	}
+	if (group == 4)
+	{
+		if (Playersarray[playerid].searchInProperty(11) &&
+			Playersarray[playerid].searchInProperty(12) &&
+			Playersarray[playerid].searchInProperty(13))
+		{
+			return true;
+		}
+		else return false;
+
+	}
+	if (group == 5)
+	{
+		if (Playersarray[playerid].searchInProperty(14) &&
+			Playersarray[playerid].searchInProperty(15) &&
+			Playersarray[playerid].searchInProperty(16))
+		{
+			return true;
+		}
+		else return false;
+
+	}
+	if (group == 6)
+	{
+		if (Playersarray[playerid].searchInProperty(17) &&
+			Playersarray[playerid].searchInProperty(18) &&
+			Playersarray[playerid].searchInProperty(19))
+		{
+			return true;
+		}
+		else return false;
+
+	}
+}
+**/
+
+
+
+
+
 // Destructor
 
 Monopoly::~Monopoly() {
