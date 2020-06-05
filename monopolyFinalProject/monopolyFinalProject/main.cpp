@@ -739,6 +739,13 @@ int main()
 
     };
 
+    int commercialPropertySpaces[8] = {
+
+        5, 12, 15, 25,
+        28, 35, 37, 39
+
+    };
+
     // Text for Private Properties
 
     sf::Font cardFont;
@@ -790,6 +797,25 @@ int main()
     cardRent[2].setPosition(1070.0f, cardTitle[0].getPosition().y + 40.0f);
 
 
+    // Colors for Card Owners
+
+    sf::Color** cardOwnerColors = new sf::Color*[6];
+    cardOwnerColors[0] = new sf::Color(231, 76, 60);
+    cardOwnerColors[1] = new sf::Color(39, 174, 96);
+    cardOwnerColors[2] = new sf::Color(52, 152, 219);
+    cardOwnerColors[3] = new sf::Color(242, 205, 20);
+    cardOwnerColors[4] = new sf::Color(230, 126, 34);
+    cardOwnerColors[5] = new sf::Color(52, 73, 94);
+
+    sf::CircleShape* cardOwnerIcon = new sf::CircleShape[3];
+    for (int i = 0; i < 3; i++) {
+
+        cardOwnerIcon[i].setRadius(10.0f);
+        cardOwnerIcon[i].setPosition(865.0f + (i * 145), 280.0f);
+        cardOwnerIcon[i].setFillColor(cardOwnerColors[0][0]);
+        cardOwnerIcon[i].setPointCount(50);
+
+    }
 
 
     // Property Upgrade options assets
@@ -888,7 +914,7 @@ int main()
 
             upgradePromptIcons[i][j].setTexture(&upgradePromptIconsTexture[i][j]);
             upgradePromptIcons[i][j].setSize(sf::Vector2f(80.0f, 80.0f));
-            upgradePromptIcons[i][j].setPosition(350.0f + (j * 300.0f), 200.0f + (i * 120.0f));
+            upgradePromptIcons[i][j].setPosition(400.0f + (j * 300.0f), 200.0f + (i * 120.0f));
 
         }
 
@@ -940,6 +966,16 @@ int main()
     commercialCardRent[0].setPosition(785.0f, commercialCardTitle[0].getPosition().y + 40.0f);
     commercialCardRent[1].setPosition(925.0f, commercialCardTitle[0].getPosition().y + 40.0f);
     commercialCardRent[2].setPosition(1070.0f, commercialCardTitle[0].getPosition().y + 40.0f);
+
+    sf::CircleShape* commercialCardOwnerIcon = new sf::CircleShape[3];
+    for (int i = 0; i < 3; i++) {
+
+        commercialCardOwnerIcon[i].setRadius(10.0f);
+        commercialCardOwnerIcon[i].setPosition(865.0f + (i * 145), 430.0f);
+        commercialCardOwnerIcon[i].setFillColor(cardOwnerColors[0][0]);
+        commercialCardOwnerIcon[i].setPointCount(50);
+
+    }
 
 
     // Player Cash Text setup
@@ -1422,6 +1458,33 @@ int main()
             window.draw(cardPrice[i]);
             window.draw(cardRent[i]);
             window.draw(cardUpgradeIcon[i]);
+
+
+            PrivateProperty* p = (PrivateProperty*)game.getBoard().getCells()[privatePropertySpaces[i + privatePropertyCardScroll]];
+
+            if (p->getOwnerID() == -1) {
+                cardOwnerIcon[i].setFillColor(cardOwnerColors[5][0]);
+            }
+            else {
+
+                cardOwnerIcon[i].setFillColor(cardOwnerColors[p->getOwnerID()][0]);
+                
+            }
+
+            CommercialProperty* c = (CommercialProperty*)game.getBoard().getCells()[commercialPropertySpaces[i + commercialPropertyCardScroll]];
+
+            if (c->getOwnerID() == -1) {
+                commercialCardOwnerIcon[i].setFillColor(cardOwnerColors[5][0]);
+            }
+            else {
+
+                commercialCardOwnerIcon[i].setFillColor(cardOwnerColors[c->getOwnerID()][0]);
+
+            }
+
+
+            window.draw(cardOwnerIcon[i]);
+            window.draw(commercialCardOwnerIcon[i]);
             
 
             window.draw(commercialCardTitle[i]);
