@@ -64,6 +64,10 @@ public:
 
 	Space** getCells();
 
+	Player* getPlayerByID(int id);
+
+	void upgradeProperty(int, int, int);
+
 
 	void executeCard(Card&);
 	void shufflecards();

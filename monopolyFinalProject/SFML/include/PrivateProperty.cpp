@@ -23,9 +23,9 @@ PrivateProperty::PrivateProperty(char* spaceType, int* playersOnSpace, int playe
 	Property::setOwnerID(ownnerID);
 	Property::setPropertyID(propertyID);
 	Property::setOwnerID(ownnerID);
-	//Property::setPurchasePrice(purchasePrice);
-	//Property::setRentPrice(rentPrice);
-	//Property::setMortgagePrice(mortgagedPrice);
+	Property::setPurchasePrice(purchasePrice);
+	Property::setRentPrice(rentPrice);
+	Property::setMortgagePrice(mortgagedPrice);
 	this->houseCount = houseCount;
 	this->hotelCount = hotelCount;
 	this->shopCount = shopCount;
@@ -112,18 +112,18 @@ void PrivateProperty::addElectricity() {
 	hasElectricity = true;
 }
 int PrivateProperty::calculateRent() {
-	int newRentPrice = 0;
-	newRentPrice = (((getRentPrice() * 0.3) * houseCount) + ((getRentPrice() * 0.8) * hotelCount) + ((getRentPrice() * 0.6) * shopCount) + getRentPrice());
+	float newRentPrice = 0;
+	newRentPrice = (float) (((getRentPrice() * 0.3) * houseCount) + ((getRentPrice() * 0.8) * hotelCount) + ((getRentPrice() * 0.6) * shopCount) + getRentPrice());
 	if (hasWifi == true) {
-		newRentPrice = newRentPrice + ((getRentPrice() * 0.1));
+		newRentPrice = (float) (newRentPrice + ((getRentPrice() * 0.1)));
 	}
 	if (hasGas == true) {
-		newRentPrice = newRentPrice + ((getRentPrice() * 0.2));
+		newRentPrice = (float) (newRentPrice + ((getRentPrice() * 0.2)));
 	}
 	if (hasElectricity == true) {
-		newRentPrice = newRentPrice + ((getRentPrice() * 0.2));
+		newRentPrice = (float) (newRentPrice + ((getRentPrice() * 0.2)));
 	}
-	return newRentPrice;
+	return (int) newRentPrice;
 }
 //DESTRUCTOR
 PrivateProperty::~PrivateProperty() {

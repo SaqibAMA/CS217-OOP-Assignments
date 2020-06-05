@@ -1,4 +1,69 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "Board.h"
+
+int privatePropertySpaces[20] = {
+
+		1, 3, 6, 8,
+		9, 11, 13, 14,
+		16, 18, 19, 21,
+		23, 24, 26, 27,
+		29, 31, 32, 34,
+
+};
+
+int commercialPropertySpaces[8] = {
+
+		5, 12, 15, 25,
+		28, 35, 37, 39
+
+};
+
+int specialSpaces[12] = {
+		0, 2, 4, 7,
+		10, 17, 20, 22,
+		30, 33, 36, 38
+};
+
+
+struct Map {
+
+public:
+	char* key;
+	int value;
+	int* list;
+
+	Map() {
+		key = nullptr;
+		value = 0;
+		list = nullptr;
+	}
+
+	Map(const char* key, int value, int a, int b, int c = 0) {
+	
+		this->value = value;
+
+		this->key = new char[strlen(key) + 1];
+		strcpy(this->key, key);
+
+		list = new int[value];
+
+
+		if (c == 0) {
+			list[0] = a;
+			list[1] = b;
+		}
+		else {
+
+			list[0] = a;
+			list[1] = b;
+			list[2] = c;
+
+		}
+
+	}
+
+};
 
 
 Board::Board() {
@@ -25,41 +90,105 @@ Board::Board() {
 
 	cells = new Space * [40];
 
+	ifstream fin("files/cellDetails.txt");
 
 	// Special Spaces
 
-	int specialSpaces[12] = {
-		0, 2, 4, 7,
-		10, 17, 20, 22,
-		30, 33, 36, 38
-	};
-
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < 12; i++) {
+	
 		cells[specialSpaces[i]] = new Space;
 
-	int privatePropertySpaces[20] = {
+		char temp[100];
+
+		fin.getline(temp, 100);
+
+
+		cells[specialSpaces[i]]->setSpaceType(temp);
+
 	
-		1, 3, 6, 8,
-		9, 11, 13, 14,
-		16, 18, 19, 21,
-		23, 24, 26, 27,
-		29, 31, 32, 34,
+	}
+	
 
-	};
+	for (int i = 0; i < 20; i++) {
+	
 
-	for (int i = 0; i < 20; i++)
 		cells[privatePropertySpaces[i]] = new PrivateProperty;
 
-	
-	int commercialPropertySpaces[8] = {
-	
-		5, 12, 15, 25,
-		28, 35, 37, 39
-	
-	};
+		PrivateProperty* p = (PrivateProperty *) cells[privatePropertySpaces[i]];
 
-	for (int i = 0; i < 8; i++)
+		char temp[100];
+
+		fin.getline(temp, 100);
+
+		p->setPropertyName(temp);
+
+		fin >> temp;
+
+		p->setPropertyGroup(temp);
+
+		int tempNum;
+
+		fin >> tempNum;
+
+		p->setPropertyID(tempNum);
+
+		fin >> tempNum;
+
+		p->setOwnerID(tempNum);
+
+		fin >> tempNum;
+
+		p->setMortgaged((bool) tempNum);
+
+		fin >> tempNum;
+
+		p->setPurchasePrice(tempNum);
+
+		fin >> tempNum;
+
+		p->setRentPrice(tempNum);
+
+		fin.ignore();
+	
+	
+	}
+
+
+	for (int i = 0; i < 8; i++) {
+
 		cells[commercialPropertySpaces[i]] = new CommercialProperty;
+
+		CommercialProperty* c = (CommercialProperty* ) cells[commercialPropertySpaces[i]];
+
+		char temp[100];
+
+		fin.getline(temp, 100);
+
+		c->setPropertyName(temp);
+
+		fin >> temp;
+
+		c->setPropertyGroup(temp);
+
+		c->setPropertyID(i + 20);
+
+		int tempNum;
+
+		fin >> tempNum;
+
+		c->setPurchasePrice(tempNum);
+
+		fin >> tempNum;
+
+		c->setRentPrice(tempNum);
+
+		fin.ignore();
+
+
+	}
+
+
+	fin.close();
 
 
 
@@ -242,6 +371,149 @@ Space** Board::getCells() {
 }
 
 
+Player* Board::getPlayerByID(int id) {
+
+	for (int i = 0; i < playerCount; i++) {
+
+
+		if (players[i]->getPlayerID() == id) {
+		
+			return players[i];
+		
+		}
+	
+	
+	}
+
+	return nullptr;
+
+}
+
+
+
+void Board::upgradeProperty(int index, int i, int j) {
+
+	// Property Map
+	Map** propertyMap = new Map * [7];
+
+	propertyMap[0] = new Map("IQBAL", 3, 1, 3, 6);
+	propertyMap[1] = new Map("JOHAR", 2, 8, 9);
+	propertyMap[2] = new Map("FAISAL", 3, 11, 13, 14);
+	propertyMap[3] = new Map("MODEL", 3, 16, 18, 19);
+	propertyMap[4] = new Map("GULBERG", 3, 21, 23, 24);
+	propertyMap[5] = new Map("DHA", 3, 26, 27, 29);
+	propertyMap[6] = new Map("BAHRIA", 3, 31, 32, 34);
+
+
+
+	//Player* owner = getPlayerByID(3);
+	PrivateProperty* p = (PrivateProperty*)getCells()[index];
+	
+	if (p->getOwnerID() != -1) {
+
+		Player* owner = getPlayerByID(p->getOwnerID());
+
+
+
+		bool canUpgrade = true;
+		int groupInd = 0;
+
+		char* pGroup = p->getPropertyGroup();
+
+		for (int i = 0; i < 7; i++) {
+
+			if (strcmp(pGroup, propertyMap[i]->key) == 0) groupInd = i;
+
+		}
+
+		for (int i = 0; i < propertyMap[groupInd]->value && canUpgrade; i++) {
+
+			PrivateProperty* p = (PrivateProperty*)cells[propertyMap[groupInd]->list[i]];
+			if (p->getOwnerID() != owner->getPlayerID()) {
+
+				canUpgrade = false;
+
+			}
+
+		}
+
+
+		if (canUpgrade) {
+
+			if (i == 0 && j == 0) {
+
+				if (owner->getCash() >= 100) {
+					p->addHouse();
+					owner->deductCash(100);
+				}
+
+			}
+			else if (i == 0 && j == 1) {
+
+				if (owner->getCash() >= 30 && !p->getHasWifi()) {
+					p->addWifi();
+					owner->deductCash(30);
+				}
+
+			}
+			else if (i == 1 && j == 0) {
+
+				if (owner->getCash() >= 300 || p->getHouseCount() >= 3) {
+
+					p->addShop();
+
+					(owner->getCash() >= 300) ?
+						owner->deductCash(300) :
+						p->setHouseCount(p->getHouseCount() - 3);
+
+				}
+
+			}
+			else if (i == 1 && j == 1) {
+
+				if (owner->getCash() >= 50 && !p->getHasElectricity()) {
+				
+					p->addElectricity();
+					owner->deductCash(50);
+
+				}
+
+			}
+			else if (i == 2 && j == 0) {
+
+				if (p->getHouseCount() >= 4 && p->getShopCount() >= 2) {
+				
+					p->setHouseCount(p->getHouseCount() - 4);
+					p->setShopCount(p->getShopCount() - 2);
+					p->addHotel();
+
+				}
+
+			}
+			else if (i == 2 && j == 1) {
+
+				if (owner->getCash() >= 50 && !p->getHasGas()) {
+
+					p->addGas();
+					owner->deductCash(50);
+
+				}
+
+			}
+
+		}
+
+
+	}
+
+
+	for (int i = 0; i < 7; i++)
+		delete[] propertyMap[i];
+
+	delete[] propertyMap;
+
+
+}
 
 
 // 6th June

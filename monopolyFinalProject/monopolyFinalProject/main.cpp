@@ -609,7 +609,7 @@ int main()
 
         navButton[i].setSize(sf::Vector2f(88.0f, 88.0f));
         navButton[i].setTexture(&navButtonTexture[i]);
-        navButton[i].setPosition(725.0f + (i * 425.0f), 240.0f);
+        navButton[i].setPosition(725.0f + (i * 425.0f), 235.0f);
 
     }
 
@@ -795,6 +795,7 @@ int main()
     // Property Upgrade options assets
 
     bool showPropertyUpgradePanel = false;
+    int propertySelected = 0;
 
     sf::Texture cardUpgradeIconTexture;
     cardUpgradeIconTexture.loadFromFile("assets/upgrade_btn.png");
@@ -1113,11 +1114,18 @@ int main()
 
     // Placebo
     {
-        PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[privatePropertySpaces[5]];
+        PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
 
-        propertyCell->setHasGas(true);
-        propertyCell->setHasElectricity(true);
-        propertyCell->setHasWifi(true);
+        propertyCell->setOwnerID(1);
+
+        propertyCell = (PrivateProperty*)game.getBoard().getCells()[3];
+
+        propertyCell->setOwnerID(1);
+
+
+        propertyCell = (PrivateProperty*)game.getBoard().getCells()[6];
+
+        propertyCell->setOwnerID(1);
 
     }
 
@@ -1198,16 +1206,58 @@ int main()
 
                         showPropertyUpgradePanel = true;
 
+                        propertySelected = i + privatePropertyCardScroll;
+
+
                     }
                     else if (cardUpgradeIconBounds[i].contains(mousePos) && showPropertyUpgradePanel){
 
                         showPropertyUpgradePanel = false;
+
+                        propertySelected = 0;
                     
                     }
 
                 }
 
                 delete[] cardUpgradeIconBounds;
+
+
+
+                // Add button functionality
+
+                if (showPropertyUpgradePanel) {
+                    sf::FloatRect** addButtonBounds = new sf::FloatRect * [3];
+                    for (int i = 0; i < 3; i++) {
+
+                        addButtonBounds[i] = new sf::FloatRect[2];
+
+                        for (int j = 0; j < 2; j++) {
+
+                            addButtonBounds[i][j] = addButton[i][j].getGlobalBounds();
+
+
+                            if (addButtonBounds[i][j].contains(mousePos)) {
+
+                                int ind = privatePropertySpaces[propertySelected];
+
+                                game.getBoard().upgradeProperty(ind, i, j);
+
+
+                            }
+
+
+                        }
+
+                    }
+
+                    for (int i = 0; i < 3; i++)
+                        delete[] addButtonBounds[i];
+                    delete[] addButtonBounds;
+                
+                
+                }
+
 
                 
 
@@ -1400,7 +1450,44 @@ int main()
         // Prints all the player icons on the screen
         for (int i = 0; i < totalPlayers; i++) {
             window.draw(playerIcon[i]);
+            
+
+            float playerMoney = (float)game.getBoard().getPlayers()[i]->getCash();
+            char* playerMoneyChar = new char[10];
+
+
+            if (playerMoney >= 1000) {
+
+                float flPointPart = (playerMoney / 1000) - (int)(playerMoney / 1000);
+                flPointPart *= 100;
+
+
+                char* flPointPartChar = new char[10];
+
+
+
+                _itoa((int)(playerMoney / 1000), playerMoneyChar, 10);
+                _itoa((int)(flPointPart), flPointPartChar, 10);
+
+                strcat(playerMoneyChar, ".");
+                strcat(playerMoneyChar, flPointPartChar);
+                strcat(playerMoneyChar, "K");
+
+                playerCash[i].setString(playerMoneyChar);
+
+            }
+            else {
+
+                _itoa((int)playerMoney, playerMoneyChar, 10);
+
+                playerCash[i].setString(playerMoneyChar);
+
+            }
+
+            
             window.draw(playerCash[i]);
+
+
         }
 
 
