@@ -72,49 +72,91 @@ Property** Bank::getPropertyList() {
 	return this->List;
 }
 
+
+
+Property** Bank::appendPropertyList(Property* id) {
+	Property** temp = new Property * [size + 1];
+	for (int i = 0; i < size + 1; i++) {
+		temp[i] = new Property;
+	}
+	for (int i = 0; i < size; i++) {
+		temp[i] = List[i];
+	}
+	temp[size] = id;
+	size++;
+	return temp;
+}
+
+
+// 6the June
+
+
+Property** Bank::removeProperty(Property* id) {
+	Property** temp = new Property * [size - 1];
+	for (int i = 0; i < size - 1; i++) {
+		temp[i] = new Property;
+	}
+	int j = 0;
+	for (int i = 0; i < size; i++) {
+		if (List[i]->getPropertyID() != id->getPropertyID()) {
+			temp[j] = List[i];
+			j++;
+		}
+	}
+	size--;
+	return temp;
+}
 //SELL PROPERTY FUNCTION
 void Bank::sellPropertyToPlayerByID(Property* Propertyid, Player player) {
-
-
 	// Faulty code
 	// It sells on basis of index, not on ID
-
 	player.addProperty(Propertyid);
-	player.deductCash(List[Propertyid->getPropertyID()][0].getPurchasePrice());
-	List[Propertyid->getPropertyID()][0].setOwnerID(player.getPlayerID());
+	int price = Propertyid->getPurchasePrice();
+	player.deductCash(price);
+	List = removeProperty(Propertyid);
+
 }
+
+
 
 //BUY PROPERTY FUNCTION
 void Bank::purchasePropertyFromPlayerByID(Property* Propertyid, Player player) {
-
-	// Faulty code
-	// It buys on basis of index, not ID
-
-	player.removeProperty(Propertyid);
-	player.addCash(List[Propertyid->getPropertyID()][0].getPurchasePrice());
-	List[Propertyid->getPropertyID()][0].setOwnerID(-1);
+	int id = 0;
+	id = Propertyid->getPropertyID();
+	if (player.searchProperty(id) == true) {
+		player.addCash(player.SoldPropertyPrice(id));
+		player.removeProperty(Propertyid);
+		List = appendPropertyList(Propertyid);
+	}
+	else {
+		cout << "PLAYER DOEST OWN THE GIVEN PROPERTY : " << endl;
+	}
 }
 
 //MORTAGE FUNCTION
 void Bank::payMortageToPlayerByID(int Propertyid, Player player) {
 	int mortage = 0;
-	mortage = int( List[Propertyid][0].getPurchasePrice() / 2.0 );
+	mortage = int(List[Propertyid][0].getPurchasePrice() / 2.0);
 	player.addCash(mortage);
 	List[Propertyid][0].setOwnerID(-1);
 }
 
 
 //CHECK BANKRUPT FUNCTION
-void Bank::declarePlayerBankruptByID(Player player) {
-	bool found = false;
-	if (player.getCash() == 0) {
-		for (int i = 0; i < size; i++) {
-			if (List[i][0].getOwnerID() == player.getPlayerID()) {
-				found = true;
-			}
-		}
-		if (found == false) {
-			player.setIsBankrupt(true);
+void Bank::declarePlayerBankruptByID(Player** player, int playerCount) {
+	for (int i = 0; i < playerCount; i++) {
+		if (player[i]->getCash() <= 0 && player[i]->getPropertyListSize() == 0) {
+			player[i]->setIsBankrupt(true);
 		}
 	}
+}
+
+Property* Bank::getProperty(int id) {
+	for (int i = 0; i < size; i++) {
+		if (List[i]->getPropertyID() == id) {
+			return List[i];
+		}
+	}
+
+	return nullptr;
 }

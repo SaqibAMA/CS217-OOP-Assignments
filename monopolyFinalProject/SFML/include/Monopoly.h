@@ -43,6 +43,7 @@ class Monopoly
 {
 
 public:
+
 	// Constructors
 	Monopoly();
 
@@ -63,12 +64,14 @@ public:
 	void initializePositions();
 	int getPlayerPosition(int);
 
-	void movePlayer(int, int, bool);
+	void movePlayer(int, int, sf::RenderWindow&, bool);
 
 	void playDice(sf::RenderWindow&, sf::RectangleShape*,
-		sf::Texture*);
+		sf::Texture*, bool);
 
 	void updateDiceTextures(sf::Texture*);
+
+	void setDealChoice(int);
 
 	// REVIEW
 
@@ -77,6 +80,13 @@ public:
 	bool canBuildHouse(int, int);
 	bool sameupgradedlevel(int, int);
 
+
+
+	// 6th June
+	void loadGame();
+	void saveGame();
+
+
 	~Monopoly();
 
 private:
@@ -84,6 +94,7 @@ private:
 	Board board;
 	Point* bCoord;
 	int* playerPosition;
+	int dealChoice;
 
 };
 

@@ -1148,32 +1148,105 @@ int main()
     tooltipText.setFont(stdFont);
 
 
-    // Placebo
-    {
-        PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
+    // Property Purchase or Rent Prompt
 
-        propertyCell->setOwnerID(1);
+    sf::Texture boardPromptTexture;
+    boardPromptTexture.loadFromFile("assets/property_prompt.png");
+    sf::RectangleShape boardPrompt(sf::Vector2f(265.0f, 166.0f));
+    boardPrompt.setTexture(&boardPromptTexture);
+    boardPrompt.setPosition(240.0f, 280.0f);
 
-        propertyCell = (PrivateProperty*)game.getBoard().getCells()[3];
+        //Buttons for Prompt
 
-        propertyCell->setOwnerID(1);
+    sf::Texture buyButtonTexture;
+    buyButtonTexture.loadFromFile("assets/property_prompt_rent.png");
+
+    sf::RectangleShape buyButton(sf::Vector2f(128.0f, 74.0f));
+    buyButton.setTexture(&buyButtonTexture);
+    buyButton.setPosition(255.0f, 360.0f);
+
+    sf::Texture rentButtonTexture;
+    rentButtonTexture.loadFromFile("assets/property_prompt_rent.png");
+
+    sf::RectangleShape rentButton(sf::Vector2f(128.0f, 74.0f));
+    rentButton.setTexture(&rentButtonTexture);
+    rentButton.setPosition(365.0f, 360.0f);
+
+        // 0 index -> propertyName
+        // 1 index -> propertyPrice
+        // 2 index -> propertyRent
+        // 3 index -> buy
+        // 4 index -> sell
+
+    int dealChoice = -1; // 0 for purchase, 1 for rent
+    bool showPurchasePrompt = false;
+    int onRent = -1;
+
+    sf::Text* promptText = new sf::Text[5];
 
 
-        propertyCell = (PrivateProperty*)game.getBoard().getCells()[6];
+    for (int i = 0; i < 5; i++) {
 
-        propertyCell->setOwnerID(1);
+        promptText[i].setFont(cardFont);
+        promptText[i].setCharacterSize(14);
+        promptText[i].setFillColor(sf::Color::Black);
 
     }
 
+    promptText[0].setString("IQBAL TOWN A");
+    promptText[0].setPosition(265.0f, 300.0f);
+
+    promptText[1].setString("PRICE: 30000");
+    promptText[1].setPosition(265.0f, 320.0f);
+    promptText[1].setFillColor(sf::Color(53, 73, 94));
+
+
+    promptText[2].setString("RENT: 10000");
+    promptText[2].setPosition(380.0f, 320.0f);
+    promptText[2].setFillColor(sf::Color(53, 73, 94));
+
+
+    promptText[3].setString("BUY");
+    promptText[3].setFont(stdFont);
+    promptText[3].setPosition(295.0f, 380.0f);
+    promptText[3].setFillColor(sf::Color(236, 240, 241));
+
+    promptText[4].setString("RENT");
+    promptText[4].setFont(stdFont);
+    promptText[4].setPosition(400.0f, 380.0f);
+    promptText[4].setFillColor(sf::Color(236, 240, 241));
+
+
+
+
+    //// Placebo
+    //{
+    //    PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
+
+    //    propertyCell->setOwnerID(1);
+
+    //    propertyCell = (PrivateProperty*)game.getBoard().getCells()[3];
+
+    //    propertyCell->setOwnerID(0);
+
+
+    //    propertyCell = (PrivateProperty*)game.getBoard().getCells()[6];
+
+    //    propertyCell->setOwnerID(1);
+
+    //}
+
+
     while (window.isOpen()) {
 
+        int currInd = game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getPlayerPosition();
 
         sf::Event evt;
         while (window.pollEvent(evt)) {
-        
+
 
             if (evt.type == evt.Closed) {
-            
+
                 // game.saveGame(0);
                 window.close();
 
@@ -1194,7 +1267,7 @@ int main()
                 sf::FloatRect commercialNavBtnLeftBounds = commercialNavButton[0].getGlobalBounds();
                 sf::FloatRect commercialNavBtnRightBounds = commercialNavButton[1].getGlobalBounds();
 
-                sf::FloatRect** buildingIconBounds = new sf::FloatRect*[3];
+                sf::FloatRect** buildingIconBounds = new sf::FloatRect * [3];
                 for (int i = 0; i < 3; i++) {
 
                     buildingIconBounds[i] = new sf::FloatRect[3];
@@ -1203,7 +1276,7 @@ int main()
 
                         buildingIconBounds[i][j] = buildingIcon[i][j].getGlobalBounds();
 
-                        
+
                         if (buildingIconBounds[i][j].contains(mousePos) && !tooltipIsVisible) {
 
                             tooltipIsVisible = true;
@@ -1246,12 +1319,12 @@ int main()
 
 
                     }
-                    else if (cardUpgradeIconBounds[i].contains(mousePos) && showPropertyUpgradePanel){
+                    else if (cardUpgradeIconBounds[i].contains(mousePos) && showPropertyUpgradePanel) {
 
                         showPropertyUpgradePanel = false;
 
                         propertySelected = 0;
-                    
+
                     }
 
                 }
@@ -1290,12 +1363,12 @@ int main()
                     for (int i = 0; i < 3; i++)
                         delete[] addButtonBounds[i];
                     delete[] addButtonBounds;
-                
-                
+
+
                 }
 
 
-                
+
 
                 // Upgrade Prompt Close Button
 
@@ -1304,6 +1377,43 @@ int main()
                 if (upgradePromptCloseBounds.contains(mousePos)) {
 
                     showPropertyUpgradePanel = false;
+
+                }
+
+
+                // Purchase prompt
+
+                sf::FloatRect buyButtonBounds = buyButton.getGlobalBounds();
+                sf::FloatRect rentButtonBounds = rentButton.getGlobalBounds();
+
+                bool isValidDeal = false;
+
+                if (buyButtonBounds.contains(mousePos) && showPurchasePrompt) {
+
+                    dealChoice = 0;
+                    showPurchasePrompt = false;
+                    isValidDeal = true;
+                    game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->setIsRenting(-1);
+
+                }
+                else if (rentButtonBounds.contains(mousePos) && showPurchasePrompt) {
+                
+                    dealChoice = 1;
+                    showPurchasePrompt = false;
+                    isValidDeal = true;
+                    game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->setIsRenting(currInd);
+
+                }
+
+                if (isValidDeal) {
+
+
+                    cout << "Valid Deal!" << endl;
+
+                    game.getBoard().putPlayerOnSpace(currInd, game.getBoard().getPreviousTurn(), window, dealChoice);
+
+                    dealChoice = -1;
+
 
                 }
 
@@ -1326,7 +1436,9 @@ int main()
                     clk.restart();
                     diceAnim = true;
 
-                    game.playDice(window, dice, diceTexture);
+                    game.playDice(window, dice, diceTexture, showPurchasePrompt);
+
+                    // onRent = -1;
 
 
                 }
@@ -1438,7 +1550,85 @@ int main()
         window.draw(turnDisplay);
         window.draw(turnText);
         window.draw(turnDisplayPiece);
+
+
+
+        // Purchase Prompt functionality
+
+
+
+        currInd = game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getPlayerPosition();
+
+        if (strcmp(game.getBoard().getCells()[currInd]->getSpaceType(), "PRIVATE") == 0) {
+
+            PrivateProperty* p = (PrivateProperty*)game.getBoard().getCells()[currInd];
+
+            promptText[0].setString(p->getPropertyName());
+
+            promptText[1].setString(to_string(p->getPurchasePrice()));
+
+            promptText[2].setString(to_string(p->getRentPrice()));
+
+            for (int i = 0; i < 20; i++) {
+
+
+                if (game.getBoard().getDRollCount() == 0 && currInd == privatePropertySpaces[i] && p->getOwnerID() != game.getBoard().getPreviousTurn()
+                    && game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getIsRenting() != currInd) {
+
+                    showPurchasePrompt = true;
+
+                }
+
+                if (game.getBoard().getDRollCount() > 0) {
+
+                    //currInd = game.getBoard().getPlayerByID(game.getBoard().getTurn())->getPlayerPosition();
+                    //p = (PrivateProperty*)game.getBoard().getCells()[currInd];
+
+                    promptText[0].setString(p->getPropertyName());
+
+                    promptText[1].setString(to_string(p->getPurchasePrice()));
+
+                    promptText[2].setString(to_string(p->getRentPrice()));
+
+
+
+
+
+                    bool c1 = currInd == privatePropertySpaces[i];
+                    bool c2 = p->getOwnerID() != game.getBoard().getPreviousTurn();
+                    bool c3 = game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getIsRenting() != currInd;
+
+
+
+
+                    if (currInd == privatePropertySpaces[i] && p->getOwnerID() != game.getBoard().getPreviousTurn()
+                        && game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getIsRenting() != currInd) {
+
+                        showPurchasePrompt = true;
+                    }
+
+                }
+
+
+            }
+
+        }
+
+
+        if (showPurchasePrompt && dealChoice == -1) {
         
+            window.draw(boardPrompt);
+            window.draw(buyButton);
+            window.draw(rentButton);
+
+
+            for (int i = 0; i < 5; i++) {
+
+                window.draw(promptText[i]);
+
+            }
+        
+        }
 
 
 

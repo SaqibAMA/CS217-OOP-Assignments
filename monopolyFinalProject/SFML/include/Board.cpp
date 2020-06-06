@@ -39,7 +39,7 @@ public:
 		list = nullptr;
 	}
 
-	Map(const char* key, int value, int a, int b, int c = 0) {
+	Map(const char* key, int value, int a, int b, int c = 0, int d = 0) {
 	
 		this->value = value;
 
@@ -53,11 +53,19 @@ public:
 			list[0] = a;
 			list[1] = b;
 		}
+		else if (d == 0){
+
+			list[0] = a;
+			list[1] = b;
+			list[2] = c;
+
+		}
 		else {
 
 			list[0] = a;
 			list[1] = b;
 			list[2] = c;
+			list[3] = d;
 
 		}
 
@@ -126,6 +134,8 @@ Board::Board() {
 
 		p->setPropertyGroup(temp);
 
+		p->setSpaceType("PRIVATE");
+
 		int tempNum;
 
 		fin >> tempNum;
@@ -169,6 +179,8 @@ Board::Board() {
 		fin >> temp;
 
 		c->setPropertyGroup(temp);
+
+		c->setSpaceType("COMMERCIAL");
 
 		c->setPropertyID(i + 20);
 
@@ -516,12 +528,85 @@ void Board::upgradeProperty(int index, int i, int j) {
 }
 
 
+void Board::putPlayerOnSpace(int index, int playerID, sf::RenderWindow& window, int dealChoice) {
+
+
+	Player* p = getPlayerByID(playerID);
+
+	cout << "dealChoice from Board --> " << dealChoice << endl;
+
+
+	if (strcmp(cells[index]->getSpaceType(), "PRIVATE") == 0 && dealChoice != -1) {
+	
+
+		cout << p->getCash() << endl;
+
+		PrivateProperty* k = (PrivateProperty *) cells[index];
+		
+		
+		if (p->getCash() >= k->getRentPrice()) {
+		
+
+
+			k->putsPlayersOnSpace(p->getCashRef(), dealChoice);
+			
+
+			if (dealChoice == 0) {
+			
+				k->setOwnerID(p->getPlayerID());
+
+			}
+
+		
+		
+		}
+		else if (p->getPropertyListSize()) {
+
+			int netWorth = 0;
+
+			for (int i = 0; i < p->getPropertyListSize(); i++) {
+			
+				netWorth += p->getPropertyList()[i]->getPurchasePrice();
+
+			}
+
+			if (netWorth >= k->getRentPrice()) {
+			
+
+				k->putsPlayersOnSpace(p->getCashRef(), dealChoice);
+
+
+			}
+
+
+			if (dealChoice == 0) {
+
+				k->setOwnerID(p->getPlayerID());
+
+			}
+
+
+		}
+		else {
+		
+			p->setIsBankrupt(true);
+
+		}
+
+
+
+
+	}
+
+
+}
+
+
+
 // 6th June
-
-
 // Review
 
-void Board::executeCard(Card& C) {
+void Board::executeCard(Card& C, sf::RenderWindow& window) {
 	int type = 0;
 	type = C.getCardType();
 	if (type == 0) {
@@ -955,4 +1040,49 @@ Board::~Board() {
 
 
 
+}
+
+
+
+// 6th June
+
+void Board::setPlayerData(int id, char* name, int cash, int size, Property** plot, bool IsinJail, int hasJailCard, bool isBankcorrupt, int PlayerPos, int JailCount) {
+	players[id]->setPlayerID(id);
+	players[id]->setName(name);
+	players[id]->setCash(cash);
+	players[id]->setPropertyListSize(size);
+	players[id]->setPropertyList(plot, size);
+	players[id]->setIsInJail(IsinJail);
+	players[id]->setHasJailRescueCard(hasJailCard);
+	players[id]->setIsBankrupt(isBankcorrupt);
+	players[id]->setPlayerPosition(PlayerPos);
+	players[id]->setIsInJailCount(JailCount);
+}
+char* Board::getPlayerName(int i) {
+	return players[i]->getName();
+}
+
+int Board::getPlayerListSize(int i) {
+	return players[i]->getPropertyListSize();
+}
+Property** Board::getPlayerList(int i) {
+	return players[i]->getPropertyList();
+}
+int Board::getPlayercash(int i) {
+	return players[i]->getCash();
+}
+bool Board::getPlayerisInJail(int i) {
+	return players[i]->getIsInJail();
+}
+int Board::getPlayerhasJailRescueCard(int i) {
+	return players[i]->getHasJailRescueCard();
+}
+bool Board::getPlayerisbankrupt(int i) {
+	return players[i]->getIsBankrupt();
+}
+int Board::getPlayerplayerPosition(int i) {
+	return players[i]->getPlayerPosition();
+}
+int Board::getPlayerinJailCount(int i) {
+	return players[i]->getIsInJailCount();
 }

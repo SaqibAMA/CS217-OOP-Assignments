@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
-#include <Space.h>
+
+
+#include "Space.h"
 #include "PrivateProperty.h"
 #include "CommercialProperty.h"
 #include "Player.h"
@@ -68,9 +70,27 @@ public:
 
 	void upgradeProperty(int, int, int);
 
+	void putPlayerOnSpace(int index, int playerID, sf::RenderWindow& window, int dealChoice);
 
-	void executeCard(Card&);
+
+	void executeCard(Card&, sf::RenderWindow& window);
 	void shufflecards();
+
+
+
+	// 6th June
+	void setPlayerData(int id, char* name, int cash, int size, Property** plot, bool IsinJail, int hasJailCard, bool isBankcorrupt, int PlayerPos, int JailCount);
+	char* getPlayerName(int);
+	int getPlayerListSize(int);
+	Property** getPlayerList(int);
+	int getPlayercash(int);
+	bool getPlayerisInJail(int);
+	int getPlayerhasJailRescueCard(int);
+	bool getPlayerisbankrupt(int);
+	int getPlayerplayerPosition(int);
+	int getPlayerinJailCount(int);
+
+
 
 
 	/// New

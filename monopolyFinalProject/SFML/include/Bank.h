@@ -17,8 +17,19 @@ public:
 	Bank(Bank&);
 	void setPropertyList(Property**);
 	Property** getPropertyList();
+	
+	
 	void sellPropertyToPlayerByID(Property*, Player);
+
+
 	void purchasePropertyFromPlayerByID(Property*, Player);
 	void payMortageToPlayerByID(int, Player);
-	void declarePlayerBankruptByID(Player player);
+	void declarePlayerBankruptByID(Player** player, int playerCount);
+
+
+	// 6th June
+	Property** appendPropertyList(Property*);
+	Property** removeProperty(Property*);
+	Property* getProperty(int);
+
 };

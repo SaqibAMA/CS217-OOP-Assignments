@@ -1,6 +1,6 @@
 #include "Space.h"
 #include <cstring>
-
+#include <iostream>
 
 using namespace std;
 
@@ -41,7 +41,7 @@ Space::Space(Space& cell) {
 	}
 }
 //SETTERS
-void Space::setSpaceType(char* spaceType) {
+void Space::setSpaceType(const char* spaceType) {
 	int size = strlen(spaceType);
 	this->spaceType = new char[size + 1];
 	for (int i = 0; i < size; i++) {
@@ -69,12 +69,8 @@ int Space::getPlayersOnSpaceCount() {
 	return playersOnSpaceCount;
 }
 //SPECIAL FUNCTIONS
-void Space::putsPlayersOnSpace(int id) {
+void Space::putsPlayersOnSpace(int playerID) {
 
-	// faulty code
-
-	playersOnSpace[playersOnSpaceCount] = id;
-	playersOnSpaceCount--;
 
 }
 void Space::removePlayerFromSpace(int id) {

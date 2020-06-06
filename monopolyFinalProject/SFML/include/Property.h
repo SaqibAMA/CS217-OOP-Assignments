@@ -45,6 +45,23 @@ public:
 	void setPurchasePrice(int);
 	void setRentPrice(int);
 	void setMortgagePrice(int);
+	virtual int upgradedPrice() { return 0; };
+
+	virtual void addHouse() {};
+	virtual	void addHotel() {};
+	virtual void addShop() {};
+	virtual void addWifi() {};
+	virtual void addGas() {};
+	virtual void addElectricity() {};
+
+	virtual int getHouseCount() { return 0; }
+	virtual int getHotelCount() { return 0; }
+	virtual int getShopCount() { return 0; }
+	virtual bool getHasWifi() { return 0; }
+	virtual bool getHasGas() { return 0; }
+	virtual bool getHasElectricity() { return 0; }
+
+	void putsPlayersOnSpace(int playerID);
 
 	//DESTRUCTOR
 	~Property();

@@ -1,6 +1,10 @@
 #pragma once
 
+
+#include <SFML/Graphics.hpp>
 #include <cstring>
+
+
 
 using namespace std;
 
@@ -16,7 +20,7 @@ public:
 	Space(char*, int*, int);
 	Space(Space&);
 	//SETTERS
-	void setSpaceType(char*);
+	void setSpaceType(const char*);
 	void setPlayersOnSpace(int*, int);
 	void setPlayersOnSpaceCount(int);
 	//GETTERS
@@ -26,7 +30,7 @@ public:
 	//SEPCIAL FUNCTIONS
 
 
-	virtual void putsPlayersOnSpace(int playerID);
+	void putsPlayersOnSpace(int playerID);
 
 	
 

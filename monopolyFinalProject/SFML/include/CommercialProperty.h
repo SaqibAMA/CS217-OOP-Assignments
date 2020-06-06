@@ -1,6 +1,5 @@
 #pragma once
 #include "Property.h"
-#include "Space.h"
 #include <cstring>
 
 
@@ -13,6 +12,7 @@ public:
 	CommercialProperty();
 	CommercialProperty(char* spaceType, int*, int, char*, char*, int, int, bool, int, int, int);
 	CommercialProperty(CommercialProperty&);
+
 	~CommercialProperty();
 };
 

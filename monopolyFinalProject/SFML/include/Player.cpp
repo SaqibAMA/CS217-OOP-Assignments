@@ -11,6 +11,7 @@ Player::Player()
 	hasJailRescueCard = 0;
 	isbankrupt = false;
 	playerPosition = 0;
+	isRenting = -1;
 
 }
 Player::Player(const char* Name, int Playerid)
@@ -35,6 +36,7 @@ Player::Player(const char* Name, int Playerid)
 	hasJailRescueCard = 0;
 	isbankrupt = false;
 	playerPosition = 0;
+	inJailCount = 0;
 
 }
 
@@ -60,6 +62,7 @@ Player::Player(const Player& p)
 	hasJailRescueCard = p.hasJailRescueCard;
 	isbankrupt = p.isbankrupt;
 	playerPosition = p.playerPosition;
+	inJailCount = p.inJailCount;
 }
 
 void Player::addCash(int amount)
@@ -153,9 +156,18 @@ void Player::setPropertyListSize(int size)
 	propertylistsize = size;
 }
 
-void Player::setPropertyList(Property* amount)
+void Player::setPropertyList(Property** amount, int size)
 {
-	propertylist[propertylistsize - 1] = amount;
+
+	propertylist = new Property * [size];
+	for (int i = 0; i < size; i++) {
+		propertylist[i] = new Property;
+	}
+	for (int i = 0; i < size; i++) {
+		propertylist[i] = amount[i];
+	}
+	propertylistsize = size;
+
 }
 
 void Player::setPlayerID(int id)
@@ -203,6 +215,76 @@ int Player::getPlayerPosition() {
 void Player::setPlayerPosition(int x) {
 	playerPosition = x;
 }
+
+int Player::getIsRenting() { return isRenting; }
+void Player::setIsRenting(int isRenting) { this->isRenting = isRenting; }
+
+
+
+
+
+int& Player::getCashRef() {
+
+	return cash;
+
+}
+
+
+
+// 6th June
+
+
+
+int Player::SoldPropertyPrice(int id) {
+	bool found = false;
+	int price = 0;
+	for (int i = 0; i < propertylistsize && found == false; i++) {
+		if (propertylist[i]->getPropertyID() == id) {
+			found = true;
+			price = propertylist[i]->getPurchasePrice();
+		}
+	}
+	return price;
+}
+void Player::PropertyMortgaged(int id) {
+	for (int i = 0; i < propertylistsize; i++) {
+		if (propertylist[i]->getPropertyID() == id) {
+			propertylist[i]->setMortgaged(true);
+		}
+	}
+}
+int Player::ReturnUpgradedPrice(int id) {
+	for (int i = 0; i < propertylistsize; i++) {
+		if (propertylist[i]->getPropertyID() == id) {
+			return propertylist[i]->upgradedPrice();
+		}
+	}
+}
+bool Player::searchProperty(int id) {
+	bool found = false;
+
+	for (int i = 0; i < propertylistsize && found == false; i++) {
+		if (propertylist[i]->getPropertyID() == id) {
+			found = true;
+		}
+	}
+	return found;
+}
+
+void Player::setIsInJailCount(int i) {
+	inJailCount = i;
+}
+int Player::getIsInJailCount() {
+	return inJailCount;
+}
+
+
+
+
+
+
+
+
 
 
 // Review

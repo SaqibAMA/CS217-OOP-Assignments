@@ -18,7 +18,7 @@ CommercialProperty::CommercialProperty(CommercialProperty& CommPro) {
 	this->setPropertyID(CommPro.getPropertyID());
 	this->setOwnerID(CommPro.getOwnerID());
 	this->setMortgaged(CommPro.getMortgaged());
-	//this->setPurchasePrice(CommPro.getPurchasePrice());
-	//this->setRentPrice(CommPro.getRentPrice());
-	//this->setMortgagePrice(CommPro.getMortgagePrice());
+	this->setPurchasePrice(CommPro.getPurchasePrice());
+	this->setRentPrice(CommPro.getRentPrice());
+	this->setMortgagePrice(CommPro.getMortgagePrice());
 }

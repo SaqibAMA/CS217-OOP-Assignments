@@ -1,7 +1,9 @@
 #pragma once
 #include <iostream>
 #include "Property.h"
+
 using namespace std;
+
 //UPDATED 4/6/2020
 class Player
 {
@@ -16,9 +18,10 @@ private:
 	int hasJailRescueCard;
 	int isbankrupt;
 	int playerPosition;
-
 	int inJailCount;
 
+
+	int isRenting;
 
 public:
 	Player();
@@ -35,7 +38,7 @@ public:
 	void setName(char* Name);
 	void setPlayerID(int id);
 	void setCash(int amount);
-	void setPropertyList(Property* list);
+	void setPropertyList(Property** list, int size);
 	void setPropertyListSize(int size);
 	void setIsInJail(bool);
 	void setHasJailRescueCard(int);
@@ -46,6 +49,11 @@ public:
 	void deductCash(int amount);
 	void setPlayerPosition(int);
 	int getPlayerPosition();
+
+
+	void setIsInJailCount(int);
+	int getIsInJailCount();
+
 	Player& operator = (const Player& p)
 	{
 		int i = 0, f = 0, j = 0;
@@ -68,6 +76,21 @@ public:
 		hasJailRescueCard = p.hasJailRescueCard;
 		isbankrupt = p.isbankrupt;
 	}
+
+
+
+	int getIsRenting();
+	void setIsRenting(int);
+
+	int& getCashRef();
+
+
+
+
+	void PropertyMortgaged(int);
+	int ReturnUpgradedPrice(int);
+	int SoldPropertyPrice(int);
+	bool searchProperty(int);
 
 
 	// Review

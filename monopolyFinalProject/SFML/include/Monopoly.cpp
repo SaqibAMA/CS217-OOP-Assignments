@@ -36,6 +36,8 @@ Monopoly::Monopoly() {
 
 	playerPosition = nullptr;
 
+	dealChoice = -1;
+
 
 	fin.close();
 
@@ -114,15 +116,18 @@ int Monopoly::getPlayerPosition(int playerID) {
 
 }
 
-void Monopoly::movePlayer(int playerID, int currRollCount, bool toJail = false) {
+void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& window, bool toJail = false) {
 
 
 	//cout << "\nMoving from " << playerPosition[playerID];
 
 	playerPosition[playerID] += currRollCount;
 	playerPosition[playerID] %= 40;
+	board.getPlayerByID(playerID)->setPlayerPosition(playerPosition[playerID]);
+	if (toJail || playerPosition[playerID] == 30) playerPosition[playerID] = 10;
 
-	if (toJail) playerPosition[playerID] = 10;
+	board.putPlayerOnSpace(playerPosition[playerID], playerID, window, dealChoice);
+
 
 	// Set that player to jail as well.
 
@@ -132,29 +137,32 @@ void Monopoly::movePlayer(int playerID, int currRollCount, bool toJail = false) 
 }
 
 void Monopoly::playDice(sf::RenderWindow& window,
-	sf::RectangleShape* dice, sf::Texture* diceTexture) {
-
+	sf::RectangleShape* dice, sf::Texture* diceTexture, bool existsInProp) {
 
 	int* diceNum = board.rollDice();
 
+	//if (existsInProp) {
+
+	board.getPlayerByID(board.getTurn())->setIsRenting(-1);
+
 	if (diceNum[0] > 0 && diceNum[1] > 0 && board.getDRollCount() < 3) {
-	
+
 
 		if (diceNum[0] == diceNum[1] && board.getDRollCount()) {
-		
-			movePlayer(board.getTurn(), diceNum[0] + diceNum[1]);
+
+			movePlayer(board.getTurn(), diceNum[0] + diceNum[1], window);
 
 		}
 		else if (diceNum[0] != diceNum[1] && !board.getDRollCount()) {
 
-			movePlayer(board.getPreviousTurn(), diceNum[0] + diceNum[1]);
+			movePlayer(board.getPreviousTurn(), diceNum[0] + diceNum[1], window);
 
 		}
 		else if (diceNum[0] != diceNum[1] && board.getDRollCount()) {
-		
+
 			board.setDRollCount(0);
 
-			movePlayer(board.getPreviousTurn(), diceNum[0] + diceNum[1]);
+			movePlayer(board.getPreviousTurn(), diceNum[0] + diceNum[1], window);
 
 			board.setTurn(
 
@@ -168,9 +176,9 @@ void Monopoly::playDice(sf::RenderWindow& window,
 
 		if (board.getDRollCount() == 3) {
 
-			movePlayer(board.getTurn(), 0, true);
+			movePlayer(board.getTurn(), 0, window, true);
 
-			
+
 			board.setTurn(
 
 				(board.getTurn() + 1)
@@ -183,6 +191,7 @@ void Monopoly::playDice(sf::RenderWindow& window,
 		}
 
 	}
+	//}
 
 	
 }
@@ -213,6 +222,11 @@ Bank Monopoly::getBank() {
 }
 
 
+void Monopoly::setDealChoice(int dealChoice) {
+
+	this->dealChoice = dealChoice;
+
+}
 
 
 // REVIEW
@@ -309,4 +323,105 @@ bool Monopoly::canBuildHouse(int group, int playerid)
 Monopoly::~Monopoly() {
 
 
+}
+
+
+
+void Monopoly::loadGame() {
+	ifstream SavedGame;
+	SavedGame.open("Saved.txt");
+	int count = 0;
+	int i = 0;
+	SavedGame >> count;
+	setTotalPlayers(count);
+	while (!SavedGame.eof()) {
+		Property** propertylist;
+		int id = i;
+		char* temp = new char[20];
+		int cash;
+		int propertySize = 0;
+		bool isInJail;
+		int hasJailRescueCard;
+		bool isbankrupt;
+		int playerPosition;
+		int inJailCount;
+		bool hasWifi;
+		bool hasGas;
+		bool hasElectricity;
+		SavedGame >> temp;
+		SavedGame >> cash;
+		SavedGame >> propertySize;
+		Property** plots = new  Property * [propertySize];
+		for (int i = 0; i < propertySize; i++) {
+			plots[i] = new Property;
+		}
+		int ProID;
+		int check = 0;
+		for (int i = 0; i < propertySize; i++) {
+			SavedGame >> ProID;
+			plots[i] = bank.getProperty(ProID);
+			bank.appendPropertyList(bank.getProperty(ProID));
+			SavedGame >> check;
+			for (int i = 0; i < check; i++) {
+				plots[i]->addHouse();
+			}
+			SavedGame >> check;
+			for (int i = 0; i < check; i++) {
+				plots[i]->addShop();
+			}
+			SavedGame >> check;
+			for (int i = 0; i < check; i++) {
+				plots[i]->addHotel();
+			}
+			SavedGame >> hasWifi;
+			if (hasWifi == true) {
+				plots[i]->addWifi();
+			}
+			SavedGame >> hasGas;
+			if (hasGas == true) {
+				plots[i]->addGas();
+			}
+			SavedGame >> hasElectricity;
+			if (hasElectricity == true) {
+				plots[i]->addElectricity();
+			}
+		}
+		SavedGame >> isInJail;
+		SavedGame >> hasJailRescueCard;
+		SavedGame >> isbankrupt;
+		SavedGame >> playerPosition;
+		SavedGame >> inJailCount;
+		board.setPlayerData(id, temp, cash, propertySize, plots, isInJail, hasJailRescueCard, isbankrupt, playerPosition, inJailCount);
+	}
+
+}
+
+void Monopoly::saveGame() {
+	ofstream save;
+	save.open("Save.txt");
+	save << getTotalPlayers();
+	for (int i = 0; i < getTotalPlayers(); i++) {
+		save << board.getPlayerName(i) << " ";
+		save << board.getPlayercash(i) << " ";
+		save << board.getPlayerListSize(i) << " ";
+		Property** temp = new Property * [board.getPlayerListSize(i)];
+		temp = board.getPlayerList(i);
+		for (int j = 0; j < board.getPlayerListSize(i); j++) {
+			save << temp[i]->getPropertyID() << " ";
+			save << temp[i]->getHouseCount() << " ";
+			save << temp[i]->getShopCount() << " ";
+			save << temp[i]->getHotelCount() << " ";
+			save << temp[i]->getHasWifi() << " ";
+			save << temp[i]->getHasGas() << " ";
+			save << temp[i]->getHasElectricity() << " ";
+		}
+		save << board.getPlayerisInJail(i) << " ";
+		save << board.getPlayerhasJailRescueCard(i) << " ";
+		save << board.getPlayerisbankrupt(i) << " ";
+		save << board.getPlayerplayerPosition(i) << " ";
+		save << board.getPlayerinJailCount(i);
+		if (i < getTotalPlayers() - 1) {
+			save << endl;
+		}
+	}
 }

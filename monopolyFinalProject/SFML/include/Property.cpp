@@ -151,6 +151,14 @@ Property::~Property() {
 	ownerID = 0;
 }
 
+
+void Property::putsPlayersOnSpace(int playerID) {
+
+
+
+}
+
+
 void Property::setPurchasePrice(int P) {
 	purchasePrice = P;
 }

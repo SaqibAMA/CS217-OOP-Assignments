@@ -125,6 +125,18 @@ int PrivateProperty::calculateRent() {
 	}
 	return (int) newRentPrice;
 }
+
+void PrivateProperty::putsPlayersOnSpace (int& playerCash, int dealChoice) {
+
+	
+	if (!dealChoice)
+		playerCash -= getPurchasePrice();
+	else
+		playerCash -= getRentPrice();
+
+
+}
+
 //DESTRUCTOR
 PrivateProperty::~PrivateProperty() {
 	houseCount = 0;

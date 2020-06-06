@@ -1,7 +1,11 @@
 #pragma once
 #include <cstring>
 #include "Property.h"
+
+#include <iostream>
+
 using namespace std;
+
 class PrivateProperty :public Property
 {
 	//DATA MEMBERS
@@ -38,6 +42,12 @@ public:
 	void addGas();
 	void addElectricity();
 	int calculateRent();
+
+
+
+	void putsPlayersOnSpace(int& playerCash, int dealChoice);
+
+
 	//DESTRUCTOR
 	~PrivateProperty();
 };
