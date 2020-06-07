@@ -107,7 +107,7 @@ Property** Bank::removeProperty(Property* id) {
 	return temp;
 }
 //SELL PROPERTY FUNCTION
-void Bank::sellPropertyToPlayerByID(Property* Propertyid, Player player) {
+void Bank::sellPropertyToPlayerByID(Property* Propertyid, Player& player) {
 	// Faulty code
 	// It sells on basis of index, not on ID
 	player.addProperty(Propertyid);

@@ -535,6 +535,27 @@ void Board::putPlayerOnSpace(int index, int playerID, sf::RenderWindow& window, 
 
 	cout << "dealChoice from Board --> " << dealChoice << endl;
 
+	int propertiesOwnedByPlayer = 0;
+
+	for (int i = 0; i < 40; i++) {
+	
+		if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0 || strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
+		
+
+			Property* property = (Property *) cells[i];
+
+			if (property->getOwnerID() == p->getPlayerID()) {
+			
+				propertiesOwnedByPlayer++;
+
+			}
+
+		
+
+		}
+
+	}
+
 
 	if (strcmp(cells[index]->getSpaceType(), "PRIVATE") == 0 && dealChoice != -1) {
 	
@@ -544,15 +565,23 @@ void Board::putPlayerOnSpace(int index, int playerID, sf::RenderWindow& window, 
 		PrivateProperty* k = (PrivateProperty *) cells[index];
 		
 		
-		if (p->getCash() >= k->getRentPrice()) {
+		if ( (p->getCash() >= k->getPurchasePrice() && dealChoice == 0) || (p->getCash() >= k->getRentPrice() && dealChoice == 1)) {
 		
 
+			int deltaPrice = p->getCash();
 
 			k->putsPlayersOnSpace(p->getCashRef(), dealChoice);
+
+			deltaPrice = deltaPrice - p->getCash();
 			
+			if (k->getOwnerID() != -1) {
+
+				getPlayerByID(k->getOwnerID())->addCash(deltaPrice);
+
+			}
 
 			if (dealChoice == 0) {
-			
+				
 				k->setOwnerID(p->getPlayerID());
 
 			}
@@ -560,31 +589,80 @@ void Board::putPlayerOnSpace(int index, int playerID, sf::RenderWindow& window, 
 		
 		
 		}
-		else if (p->getPropertyListSize()) {
+		else if (propertiesOwnedByPlayer) {
 
 			int netWorth = 0;
 
+			for (int i = 0; i < 40; i++) {
+			
+
+				if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0 || strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
+
+
+					Property* property = (Property*)cells[i];
+
+					if (property->getOwnerID() == p->getPlayerID()) {
+
+						netWorth += property->getPurchasePrice();
+
+					}
+
+
+
+				}
+				
+
+			}
+
+			cout << "Net Worth Is -> " << netWorth << endl;
+
+
+			int minimumWorthPropertyIndex = -1;
+
 			for (int i = 0; i < p->getPropertyListSize(); i++) {
 			
-				netWorth += p->getPropertyList()[i]->getPurchasePrice();
+				if (p->getPropertyList()[i]->getPurchasePrice() >= k->getPurchasePrice()) {
+				
+					minimumWorthPropertyIndex = i;
+
+				}
 
 			}
 
-			if (netWorth >= k->getRentPrice()) {
+			if (minimumWorthPropertyIndex == -1) {
+
+				p->setIsBankrupt(true); 
 			
+			}
+			else {
+				
+				int deltaPrice = p->getCash();
 
-				k->putsPlayersOnSpace(p->getCashRef(), dealChoice);
+				if (netWorth >= k->getPurchasePrice() && dealChoice == 0) {
 
+					k->putsPlayersOnSpace(p->getCashRef(), dealChoice);
+
+
+				}
+				else if (netWorth >= k->getRentPrice() && dealChoice == 1) {
+
+
+					k->putsPlayersOnSpace(p->getCashRef(), dealChoice);
+
+				}
+
+				deltaPrice = deltaPrice - p->getCash();
+
+				if (dealChoice == 0) {
+
+					k->setOwnerID(p->getPlayerID());
+
+				}
+
+				if (k->getOwnerID() != -1)
+					getPlayerByID(k->getOwnerID())->addCash(deltaPrice);
 
 			}
-
-
-			if (dealChoice == 0) {
-
-				k->setOwnerID(p->getPlayerID());
-
-			}
-
 
 		}
 		else {

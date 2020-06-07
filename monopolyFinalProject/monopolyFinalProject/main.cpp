@@ -672,7 +672,7 @@ int main()
         "300", "400", "400",
         "800", "850", "2000",
         "1000", "1200", "2500",
-        "2500", "3000", "3000",
+        "2000", "2000", "2500",
         "2500", "3000", "3000"
 
     };
@@ -1219,22 +1219,22 @@ int main()
 
 
 
-    //// Placebo
-    //{
-    //    PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
+   /*  Placebo
+    {
+        PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
 
-    //    propertyCell->setOwnerID(1);
+        propertyCell->setOwnerID(1);
 
-    //    propertyCell = (PrivateProperty*)game.getBoard().getCells()[3];
+        propertyCell = (PrivateProperty*)game.getBoard().getCells()[3];
 
-    //    propertyCell->setOwnerID(0);
+        propertyCell->setOwnerID(0);
 
 
-    //    propertyCell = (PrivateProperty*)game.getBoard().getCells()[6];
+        propertyCell = (PrivateProperty*)game.getBoard().getCells()[6];
 
-    //    propertyCell->setOwnerID(1);
+        propertyCell->setOwnerID(1);
 
-    //}
+    }*/
 
 
     while (window.isOpen()) {
@@ -1408,9 +1408,11 @@ int main()
                 if (isValidDeal) {
 
 
-                    cout << "Valid Deal!" << endl;
+                    // cout << "Valid Deal!" << endl;
 
                     game.getBoard().putPlayerOnSpace(currInd, game.getBoard().getPreviousTurn(), window, dealChoice);
+
+                    // game.playDice(window, dice, diceTexture, dealChoice);
 
                     dealChoice = -1;
 
@@ -1436,9 +1438,10 @@ int main()
                     clk.restart();
                     diceAnim = true;
 
-                    game.playDice(window, dice, diceTexture, showPurchasePrompt);
+                    game.playDice(window, dice, diceTexture, dealChoice);
 
-                    // onRent = -1;
+                    showPurchasePrompt = false;
+
 
 
                 }
@@ -1555,11 +1558,23 @@ int main()
 
         // Purchase Prompt functionality
 
+        /*Player* player;
 
+        if (game.getBoard().getDRollCount() == 0) {
+            
+            player = game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn());
+            currInd = player->getPlayerPosition();
 
-        currInd = game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getPlayerPosition();
+        }
+        else {
+            player = game.getBoard().getPlayerByID(game.getBoard().getTurn());
+            currInd = player->getPlayerPosition();
+        }
 
-        if (strcmp(game.getBoard().getCells()[currInd]->getSpaceType(), "PRIVATE") == 0) {
+        if (strcmp(game.getBoard().getCells()[currInd]->getSpaceType(), "PRIVATE") == 0 && !player->getIsBankrupt() &&
+            game.getBoard().getDRollCount() == 0) {
+
+            cout << "currInd ->" << currInd << endl;
 
             PrivateProperty* p = (PrivateProperty*)game.getBoard().getCells()[currInd];
 
@@ -1572,40 +1587,14 @@ int main()
             for (int i = 0; i < 20; i++) {
 
 
-                if (game.getBoard().getDRollCount() == 0 && currInd == privatePropertySpaces[i] && p->getOwnerID() != game.getBoard().getPreviousTurn()
+                bool c1 = currInd == privatePropertySpaces[i];
+                bool c2 = p->getOwnerID() != game.getBoard().getPreviousTurn();
+                bool c3 = game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getIsRenting() != currInd;
+
+                if (currInd == privatePropertySpaces[i] && p->getOwnerID() != game.getBoard().getPreviousTurn()
                     && game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getIsRenting() != currInd) {
 
                     showPurchasePrompt = true;
-
-                }
-
-                if (game.getBoard().getDRollCount() > 0) {
-
-                    //currInd = game.getBoard().getPlayerByID(game.getBoard().getTurn())->getPlayerPosition();
-                    //p = (PrivateProperty*)game.getBoard().getCells()[currInd];
-
-                    promptText[0].setString(p->getPropertyName());
-
-                    promptText[1].setString(to_string(p->getPurchasePrice()));
-
-                    promptText[2].setString(to_string(p->getRentPrice()));
-
-
-
-
-
-                    bool c1 = currInd == privatePropertySpaces[i];
-                    bool c2 = p->getOwnerID() != game.getBoard().getPreviousTurn();
-                    bool c3 = game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getIsRenting() != currInd;
-
-
-
-
-                    if (currInd == privatePropertySpaces[i] && p->getOwnerID() != game.getBoard().getPreviousTurn()
-                        && game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getIsRenting() != currInd) {
-
-                        showPurchasePrompt = true;
-                    }
 
                 }
 
@@ -1613,9 +1602,18 @@ int main()
             }
 
         }
+        else if (strcmp(game.getBoard().getCells()[currInd]->getSpaceType(), "PRIVATE") == 0 && !player->getIsBankrupt() &&
+            game.getBoard().getDRollCount() == 1) {
+        
 
 
-        if (showPurchasePrompt && dealChoice == -1) {
+
+        
+        
+        }*/
+
+
+        /*if (showPurchasePrompt && dealChoice == -1) {
         
             window.draw(boardPrompt);
             window.draw(buyButton);
@@ -1628,7 +1626,7 @@ int main()
 
             }
         
-        }
+        }*/
 
 
 

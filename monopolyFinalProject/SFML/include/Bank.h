@@ -19,7 +19,7 @@ public:
 	Property** getPropertyList();
 	
 	
-	void sellPropertyToPlayerByID(Property*, Player);
+	void sellPropertyToPlayerByID(Property*, Player&);
 
 
 	void purchasePropertyFromPlayerByID(Property*, Player);
