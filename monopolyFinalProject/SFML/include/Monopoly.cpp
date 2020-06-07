@@ -118,6 +118,14 @@ int Monopoly::getPlayerPosition(int playerID) {
 
 void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& window, int dealChoice = -1, bool toJail = false) {
 
+
+	sf::Font cardFont;
+	cardFont.loadFromFile("fonts/Nexa-Light.otf");
+
+	sf::Font stdFont;
+	stdFont.loadFromFile("fonts/Montserrat-Black.ttf");
+
+
 	Player* player = board.getPlayerByID(playerID);
 
 	int propertiesOwned = 0;
@@ -153,7 +161,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 		}
 
 		board.getPlayerByID(playerID)->setPlayerPosition(playerPosition[playerID]);
-
+		
 		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "PRIVATE") == 0) {
 		
 
@@ -162,11 +170,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 			sf::RenderWindow buyOrRentPrompt(sf::VideoMode(265, 166), "Buy or Rent", sf::Style::Titlebar);
 
-			sf::Font cardFont;
-			cardFont.loadFromFile("fonts/Nexa-Light.otf");
-
-			sf::Font stdFont;
-			stdFont.loadFromFile("fonts/Montserrat-Black.ttf");
+			
 
 			// Assets for the prompt
 
@@ -367,10 +371,535 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 
 		}
-
+		
 		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "GO") == 0) {
 
 			board.getPlayerByID(playerID)->addCash(500);
+
+		}
+
+		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "COMMUNITY") == 0) {
+
+
+			int randCard = rand() % 15;
+
+			CommunityCard* c = (CommunityCard*)board.getCommunityChest()[randCard];
+
+			sf::RenderWindow card(sf::VideoMode(500, 170), "Community Chest Card", sf::Style::Titlebar);
+
+
+			sf::Text cardTitle;
+			cardTitle.setString("Community\nChest.");
+			cardTitle.setCharacterSize(25);
+			cardTitle.setFont(stdFont);
+			cardTitle.setPosition(5.0f, 5.0f);
+			cardTitle.setFillColor(sf::Color::White);
+
+
+			char* _cardText = c->getCardAction();
+			char* modCardText = nullptr;
+
+			if (strlen(_cardText) >= 34) {
+
+				modCardText = new char[strlen(_cardText) + 2];
+
+
+				int spaceAt = 34;
+
+				while (_cardText[spaceAt] != ' ' && _cardText[spaceAt] != '\0') spaceAt++;
+
+				for (unsigned int i = 0; i < strlen(_cardText) + 2; i++)
+					modCardText[i] = _cardText[i];
+
+				modCardText[spaceAt] = '\n';
+
+			}
+
+			sf::Text cardText;
+			cardText.setFont(cardFont);
+			cardText.setString((modCardText) ? modCardText : _cardText);
+			cardText.setPosition(5.0f, 100.0f);
+			cardText.setCharacterSize(15);
+			cardText.setFillColor(sf::Color::White);
+
+			sf::Texture closeButtonTexture;
+			closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
+			sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
+			closeButton.setTexture(&closeButtonTexture);
+			closeButton.setPosition(470.0f, 10.0f);
+			closeButtonTexture.setSmooth(true);
+
+
+			while (card.isOpen()) {
+
+
+				sf::Event evt;
+				while (card.pollEvent(evt)) {
+
+
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+						sf::Vector2f mousePos = card.mapPixelToCoords(sf::Mouse::getPosition(card));
+						sf::FloatRect closeButtonBounds = closeButton.getGlobalBounds();
+
+						if (closeButtonBounds.contains(mousePos)) {
+
+							card.close();
+
+						}
+
+
+					}
+
+
+				}
+
+				card.clear(sf::Color(52, 152, 219));
+
+				card.draw(cardTitle);
+				card.draw(cardText);
+				card.draw(closeButton);
+				card.display();
+
+
+			}
+
+
+
+			// Functionality of All Cards
+
+			if (randCard == 0) {
+
+
+				playerPosition[playerID] = 0;
+				player->setPlayerPosition(0);
+				player->addCash(400);
+
+
+			}
+			else if (randCard == 1) {
+
+				player->addCash(200);
+
+			}
+			else if (randCard == 2) {
+			
+				player->deductCash(200);
+
+			}
+			else if (randCard == 3) {
+			
+				player->addCash(50);
+
+			}
+			else if (randCard == 4) {
+			
+				player->setHasJailRescueCard(player->getHasJailRescueCard() + 1);
+
+			}
+			else if (randCard == 5) {
+
+				player->addCash(150);
+
+			}
+			else if (randCard == 6) {
+
+				player->addCash(200);
+			
+			}
+			else if (randCard == 7) {
+			
+				player->deductCash(100);
+
+			}
+			else if (randCard == 8) {
+			
+				player->deductCash(200);
+
+			}
+			else if (randCard == 9) {
+
+				player->addCash(50);
+
+			}
+			else if (randCard == 10) {
+
+				Space** cells = board.getCells();
+
+				int totalCharges = 0;
+				
+				for (int i = 0; i < 40; i++) {
+				
+					if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0 ||
+						strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
+					
+						Property* temp = (Property*)cells[i];
+
+
+						if (temp->getOwnerID() == player->getPlayerID()) {
+						
+							totalCharges += ((temp->getHotelCount() * 125) +
+								(temp->getHouseCount() * 50));
+
+						}
+
+
+					
+					}
+
+				}
+
+				player->deductCash(totalCharges);
+
+
+			}
+			else if (randCard == 11) {
+			
+				player->addCash(300);
+
+			}
+			else if (randCard == 12) {
+
+				player->deductCash(50);
+
+			}
+			else if (randCard == 13) {
+			
+				player->deductCash(80);
+
+			}
+			else if (randCard == 14) {
+
+				player->deductCash(50);
+
+			}
+
+
+		}
+
+		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "CHANCE") == 0) {
+		
+
+			int randCard = rand() % 15;
+
+			ChanceCard* c = (ChanceCard*)board.getChance()[randCard];
+
+			sf::RenderWindow card(sf::VideoMode(500, 170), "Chance Card", sf::Style::Titlebar);
+
+
+			sf::Text cardTitle;
+			cardTitle.setString("Chance.");
+			cardTitle.setCharacterSize(25);
+			cardTitle.setFont(stdFont);
+			cardTitle.setPosition(5.0f, 5.0f);
+			cardTitle.setFillColor(sf::Color::White);
+
+
+			char* _cardText = c->getCardAction();
+			char* modCardText = nullptr;
+
+			if (strlen(_cardText) >= 34) {
+
+				modCardText = new char[strlen(_cardText) + 2];
+
+
+				int spaceAt = 34;
+
+				while (_cardText[spaceAt] != ' ' && _cardText[spaceAt] != '\0') spaceAt++;
+
+				for (unsigned int i = 0; i < strlen(_cardText) + 2; i++)
+					modCardText[i] = _cardText[i];
+
+				modCardText[spaceAt] = '\n';
+
+			}
+
+			sf::Text cardText;
+			cardText.setFont(cardFont);
+			cardText.setString((modCardText) ? modCardText : _cardText);
+			cardText.setPosition(5.0f, 100.0f);
+			cardText.setCharacterSize(15);
+			cardText.setFillColor(sf::Color::White);
+
+			sf::Texture closeButtonTexture;
+			closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
+			sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
+			closeButton.setTexture(&closeButtonTexture);
+			closeButton.setPosition(470.0f, 10.0f);
+			closeButtonTexture.setSmooth(true);
+
+
+			while (card.isOpen()) {
+
+
+				sf::Event evt;
+				while (card.pollEvent(evt)) {
+
+
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+						sf::Vector2f mousePos = card.mapPixelToCoords(sf::Mouse::getPosition(card));
+						sf::FloatRect closeButtonBounds = closeButton.getGlobalBounds();
+
+						if (closeButtonBounds.contains(mousePos)) {
+
+							card.close();
+
+						}
+
+
+					}
+
+
+				}
+
+				card.clear(sf::Color(230, 126, 34));
+
+				card.draw(cardTitle);
+				card.draw(cardText);
+				card.draw(closeButton);
+				card.display();
+
+
+			}
+
+
+
+			// card actions
+
+			if (randCard == 0) {
+			
+				playerPosition[playerID] = 0;
+				player->setPlayerPosition(0);
+				player->addCash(300);
+
+			}
+			else if (randCard == 1) {
+			
+				
+				int diff = abs(player->getPlayerPosition() - 26);
+				movePlayer(playerID, diff, window);
+
+
+			}
+			else if (randCard == 2) {
+
+				Space** cells = board.getCells();
+
+				int nearestIndex = 0;
+
+				for (int i = playerPosition[playerID]; i < playerPosition[playerID] + 40 && !nearestIndex; i++) {
+				
+					
+
+					if (strcmp(cells[i % 40]->getSpaceType(), "COMMERCIAL") == 0) {
+
+						Property* temp = (Property* )cells[i % 40];
+
+						if (strcmp(temp->getPropertyGroup(), "UTILITY") == 0) {
+						
+							nearestIndex = i % 40;
+
+						}
+
+					}
+
+				}
+
+				Property* nearestUtility = (Property* )cells[nearestIndex];
+
+				if (nearestUtility->getOwnerID() == -1) {
+				
+					int diff = abs(nearestIndex - playerPosition[playerID]);
+					
+					movePlayer(playerID, diff, window);
+
+
+				}
+				else {
+
+					int diceRolled = board.getPrevTurns()[board.getPlayerCount()][0] + 
+						board.getPrevTurns()[board.getPlayerCount()][1];
+
+					board.getPlayerByID(nearestUtility->getOwnerID())->addCash(diceRolled * 5);
+					player->deductCash(diceRolled * 5);
+
+					playerPosition[playerID] = nearestIndex;
+					player->setPlayerPosition(nearestIndex);
+
+				}
+
+
+
+			}
+			else if (randCard == 3 || randCard == 4) {
+			
+
+
+
+				Space** cells = board.getCells();
+
+				int nearestIndex = 0;
+
+				for (int i = playerPosition[playerID]; i < playerPosition[playerID] + 40 && !nearestIndex; i++) {
+
+
+
+					if (strcmp(cells[i % 40]->getSpaceType(), "COMMERCIAL") == 0) {
+
+						Property* temp = (Property*)cells[i % 40];
+
+						if (strcmp(temp->getPropertyGroup(), "STATION") == 0) {
+
+							nearestIndex = i % 40;
+
+						}
+
+					}
+
+				}
+
+				Property* nearestUtility = (Property*)cells[nearestIndex];
+
+				if (nearestUtility->getOwnerID() == -1) {
+
+					int diff = abs(nearestIndex - playerPosition[playerID]);
+
+					movePlayer(playerID, diff, window);
+
+
+				}
+				else {
+
+					board.getPlayerByID(nearestUtility->getOwnerID())->addCash(nearestUtility->getPurchasePrice() * 2);
+					player->deductCash(nearestUtility->getPurchasePrice() * 2);
+
+					playerPosition[playerID] = nearestIndex;
+					player->setPlayerPosition(nearestIndex);
+
+				}
+
+
+
+
+			}
+			else if (randCard == 5) {
+
+			
+				int diff = 16 - player->getPlayerPosition();
+
+				if (diff <= 0) {
+
+					player->deductCash(200);
+					movePlayer(playerID, abs(diff), window);
+
+				}
+				else {
+
+					movePlayer(playerID, diff, window);
+
+				}
+
+
+			}
+			else if (randCard == 6) {
+
+				player->addCash(100);
+
+			}
+			else if (randCard == 7) {
+
+				player->setHasJailRescueCard(player->getHasJailRescueCard() + 1);
+
+			}
+			else if (randCard == 8) {
+
+
+				if (player->getPlayerPosition() >= 4) {
+				
+					movePlayer(playerID, 36, window);
+					player->deductCash(500);
+
+				}
+
+
+			}
+			else if (randCard == 9) {
+
+			
+				Space** cells = board.getCells();
+
+				int totalCharges = 0;
+
+				for (int i = 0; i < 40; i++) {
+
+					if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0 ||
+						strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
+
+						Property* temp = (Property*)cells[i];
+
+
+						if (temp->getOwnerID() == player->getPlayerID()) {
+
+							totalCharges += ((temp->getHotelCount() * 100) +
+								(temp->getHouseCount() * 50));
+
+						}
+
+
+					}
+					
+				}
+
+			
+
+				player->deductCash(totalCharges);
+
+
+			}
+			else if (randCard == 10) {
+
+
+				player->deductCash(25);
+
+
+			}
+			else if (randCard == 11) {
+				
+				Player** allPlayers = board.getPlayers();
+
+				for (int i = 0; i < board.getPlayerCount(); i++) {
+
+					if (!allPlayers[i]->getIsBankrupt()) {
+
+						player->deductCash(25);
+						allPlayers[i]->addCash(25);
+
+					}
+
+				}
+
+
+			}
+			else if (randCard == 12) {
+
+				player->addCash(150);
+
+			}
+			else if (randCard == 13) {
+
+				playerPosition[playerID] = 35;
+				player->setPlayerPosition(35);
+
+			}
+			else if (randCard == 14) {
+
+				int diff = abs(player->getPlayerPosition() - 5);
+				movePlayer(playerID, diff, window);
+
+			}
+
+
 
 		}
 
@@ -604,7 +1133,7 @@ void Monopoly::loadGame() {
 	SavedGame >> count;
 	setTotalPlayers(count);
 	while (!SavedGame.eof()) {
-		Property** propertylist;
+		Property** propertylist = nullptr;
 		int id = i;
 		char* temp = new char[20];
 		int cash;

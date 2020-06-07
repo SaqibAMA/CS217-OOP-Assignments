@@ -69,8 +69,11 @@ public:
 	Player* getPlayerByID(int id);
 
 	void upgradeProperty(int, int, int);
-
 	void putPlayerOnSpace(int index, int playerID, sf::RenderWindow& window, int dealChoice);
+
+
+	Card** getChance();
+	Card** getCommunityChest();
 
 
 	void executeCard(Card&, sf::RenderWindow& window);

@@ -210,8 +210,8 @@ Board::Board() {
 
 	ifstream chanceCardsFile;
 	ifstream communityChestFile;
-	chanceCardsFile.open("Chance.txt");
-	communityChestFile.open("CommunityChest.txt");
+	chanceCardsFile.open("files/Chance.txt");
+	communityChestFile.open("files/CommunityChest.txt");
 
 	Chance = new Card * [15];
 	CommunityChest = new Card * [15];
@@ -232,8 +232,6 @@ Board::Board() {
 
 	chanceCardsFile.close();
 	communityChestFile.close();
-
-	shufflecards();
 
 
 
@@ -276,6 +274,8 @@ int* Board::rollDice() {
 	diceNum[0] = rand() % 6 + 1;
 	diceNum[1] = rand() % 6 + 1;
 
+	//diceNum[0] = 4;
+	//diceNum[1] = 3;
 
 	for (int i = 0; i < playerCount - 1; i++) {
 	
@@ -677,6 +677,15 @@ void Board::putPlayerOnSpace(int index, int playerID, sf::RenderWindow& window, 
 	}
 
 
+}
+
+
+Card** Board::getChance() {
+	return Chance;
+}
+
+Card** Board::getCommunityChest() {
+	return CommunityChest;
 }
 
 
@@ -1084,13 +1093,13 @@ void Board::shufflecards() {
 			swap(CommunityChest[i], CommunityChest[i + 1]);
 		}
 	}
-	for (int i = 0; i < 15; i++) {
+	/*for (int i = 0; i < 15; i++) {
 		cout << CommunityChest[i]->getCardAction() << " " << CommunityChest[i]->getCardID() << endl;
 	}
 	cout << endl;
 	for (int i = 0; i < 15; i++) {
 		cout << Chance[i]->getCardAction() << " " << Chance[i]->getCardID() << endl;
-	}
+	}*/
 }
 
 

@@ -1,3 +1,5 @@
-﻿  Monopoly.cpp
-D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Monopoly.cpp(612,14): warning C4101: 'propertylist': unreferenced local variable
+﻿  Board.cpp
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Board.cpp(87,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Monopoly.cpp
+  Generating Code...
   monopolyFinalProject.vcxproj -> D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\Debug\monopolyFinalProject.exe

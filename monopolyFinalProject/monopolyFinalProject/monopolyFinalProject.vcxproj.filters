@@ -88,6 +88,12 @@
     <Text Include="files\cellDetails.txt">
       <Filter>Source Files\files</Filter>
     </Text>
+    <Text Include="files\Chance.txt">
+      <Filter>Source Files\files</Filter>
+    </Text>
+    <Text Include="files\CommunityChest.txt">
+      <Filter>Source Files\files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\SFML\include\Monopoly.h">

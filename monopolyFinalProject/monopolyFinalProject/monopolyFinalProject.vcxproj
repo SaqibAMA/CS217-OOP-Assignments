@@ -167,6 +167,8 @@
   <ItemGroup>
     <Text Include="files\bCoord.txt" />
     <Text Include="files\cellDetails.txt" />
+    <Text Include="files\Chance.txt" />
+    <Text Include="files\CommunityChest.txt" />
     <Text Include="savedGames\savedGamesList.txt" />
   </ItemGroup>
   <ItemGroup>
