@@ -274,7 +274,7 @@ int* Board::rollDice() {
 	diceNum[0] = rand() % 6 + 1;
 	diceNum[1] = rand() % 6 + 1;
 
-	//diceNum[0] = 4;
+	//diceNum[0] = 3;
 	//diceNum[1] = 3;
 
 	for (int i = 0; i < playerCount - 1; i++) {

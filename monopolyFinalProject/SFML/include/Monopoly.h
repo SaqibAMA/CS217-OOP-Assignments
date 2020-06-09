@@ -73,6 +73,11 @@ public:
 
 	void setDealChoice(int);
 
+
+	void checkBankruptcy();
+
+
+
 	// REVIEW
 
 
@@ -95,6 +100,8 @@ private:
 	Point* bCoord;
 	int* playerPosition;
 	int dealChoice;
+	bool* bankruptPlayers;
+
 
 };
 
