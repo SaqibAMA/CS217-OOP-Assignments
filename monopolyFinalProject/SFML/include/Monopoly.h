@@ -101,6 +101,7 @@ private:
 	int* playerPosition;
 	int dealChoice;
 	bool* bankruptPlayers;
+	bool gameWon;
 
 
 };

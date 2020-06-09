@@ -1219,6 +1219,7 @@ int main()
 
 
 
+    /*
    //  Placebo
     {
         PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
@@ -1235,6 +1236,7 @@ int main()
         propertyCell->setOwnerID(0);
 
     }
+    */
 
 
     while (window.isOpen()) {

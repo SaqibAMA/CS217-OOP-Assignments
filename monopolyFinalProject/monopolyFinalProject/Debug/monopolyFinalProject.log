@@ -1,3 +1,5 @@
 ﻿  Monopoly.cpp
-D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Monopoly.cpp(940,49): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Monopoly.cpp(339,23): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Monopoly.cpp(1440,23): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Monopoly.cpp(1714,7): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   monopolyFinalProject.vcxproj -> D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\Debug\monopolyFinalProject.exe

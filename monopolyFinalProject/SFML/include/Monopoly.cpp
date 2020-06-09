@@ -40,6 +40,8 @@ Monopoly::Monopoly() {
 
 	bankruptPlayers = nullptr;
 
+	gameWon = false;
+
 
 	fin.close();
 
@@ -245,6 +247,13 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 				promptText[4].setPosition(175.0f, 120.0f);
 				promptText[4].setFillColor(sf::Color(236, 240, 241));
 
+				
+				sf::Texture closeBtnTexture;
+				closeBtnTexture.loadFromFile("assets/upgrade_prompt_close.png");
+
+				sf::RectangleShape closeBtn(sf::Vector2f(20.0f, 20.f));
+				closeBtn.setTexture(&closeBtnTexture);
+				closeBtn.setPosition(220.0f, 15.0f);
 
 
 
@@ -263,6 +272,8 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 							sf::Vector2f mousePos = buyOrRentPrompt.mapPixelToCoords(sf::Mouse::getPosition(buyOrRentPrompt));
 							sf::FloatRect buyButtonBounds = buyButton.getGlobalBounds();
 							sf::FloatRect rentButtonBounds = rentButton.getGlobalBounds();
+
+							sf::FloatRect closeBtnBounds = closeBtn.getGlobalBounds();
 
 
 
@@ -286,6 +297,66 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 							}
 
+							if (closeBtnBounds.contains(mousePos)) {
+							
+
+								// buyOrRentPrompt.close();
+
+								sf::RenderWindow bid(sf::VideoMode(265, 166), "BIDDING", sf::Style::Titlebar);
+
+								sf::Clock clk;
+
+								sf::Text timeDisplay;
+								timeDisplay.setFont(stdFont);
+								timeDisplay.setCharacterSize(25);
+								timeDisplay.setPosition(230.f, 15.0f);
+								timeDisplay.setFillColor(sf::Color(52, 73, 94));
+
+								while (bid.isOpen()) {
+								
+
+									// Implement the bidding system
+									// Clock has been setup.
+									// Check turn management.
+
+									sf::Event bEvt;
+									while (bid.pollEvent(bEvt)) {
+
+
+										if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+
+											clk.restart();
+
+
+										}
+
+
+									}
+
+									bid.clear(sf::Color::White);
+
+									int currTime = abs(10 - clk.getElapsedTime().asSeconds());
+
+									if (currTime == 0) {
+
+										clk.restart();
+
+									}
+
+									timeDisplay.setString(to_string(currTime));
+									bid.draw(timeDisplay);
+
+									bid.display();
+
+
+								}
+
+
+
+
+							}
+
 
 
 
@@ -300,6 +371,8 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 					buyOrRentPrompt.draw(rentButton);
 					for (int i = 0; i < 5; i++)
 						buyOrRentPrompt.draw(promptText[i]);
+
+					buyOrRentPrompt.draw(closeBtn);
 
 					buyOrRentPrompt.display();
 
@@ -330,7 +403,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 					player->deductCash(property->getRentPrice());
 
 				}
-				else if (propertiesOwned) {
+				else if (propertiesOwned && (dealChoice == 1 || dealChoice == 0)) {
 
 					Property* barter = nullptr;
 
@@ -384,7 +457,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 
 		}
-		
+
 		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "GO") == 0) {
 
 			board.getPlayerByID(playerID)->addCash(500);
@@ -937,7 +1010,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 					if (temp->getOwnerID() == player->getPlayerID()) {
 					
-						totalTax += temp->getPurchasePrice() * 0.2;
+						totalTax += (int)(temp->getPurchasePrice() * 0.2);
 
 					}
 				
@@ -1312,6 +1385,64 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 		}
 
+		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "PROPERTYTAX") == 0) {
+		
+			/*
+			
+			Pay 10% tax on land, 20% tax on houses and 30% on hotels
+			and shops on each visit of this cell
+
+			*/
+
+
+			Space** cells = board.getCells();
+
+			float totalTax = 0;
+
+
+			for (int i = 0; i < 40; i++) {
+
+
+				if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0) {
+				
+					PrivateProperty* p = (PrivateProperty*) cells[i];
+
+
+					totalTax += (
+						
+						(p->getPurchasePrice() * 0.10f) +
+						(p->getHouseCount() * 20.0f) +
+						(p->getHotelCount() * 210.0f) +
+						(p->getShopCount() * 90.0f)
+
+						);
+
+
+
+				}
+				else if (strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
+				
+					CommercialProperty* p = (CommercialProperty*)cells[i];
+
+					totalTax += (
+
+						(p->getPurchasePrice() * 0.10f)
+
+						);
+
+
+				}
+
+
+			}
+
+
+			player->deductCash(totalTax);
+
+
+
+		}
+
 
 
 	}
@@ -1370,67 +1501,84 @@ void Monopoly::playDice(sf::RenderWindow& window,
 	sf::RectangleShape* dice, sf::Texture* diceTexture, int dealChoice) {
 
 
+	if (!gameWon) {
 
-	if (board.getTurn() == 0) {
-	
-
-		checkBankruptcy();
+		if (board.getTurn() == 0) {
 
 
-	}
+			checkBankruptcy();
 
-
-
-	int* diceNum = board.rollDice();
-
-	//if (existsInProp) {
-
-	board.getPlayerByID(board.getTurn())->setIsRenting(-1);
-
-	if (diceNum[0] > 0 && diceNum[1] > 0 && board.getDRollCount() < 3) {
-
-
-		if (diceNum[0] == diceNum[1] && board.getDRollCount()) {
-
-			movePlayer(board.getTurn(), diceNum[0] + diceNum[1], window, dealChoice);
 
 		}
-		else if (diceNum[0] != diceNum[1] && !board.getDRollCount()) {
-
-			movePlayer(board.getPreviousTurn(), diceNum[0] + diceNum[1], window, dealChoice);
-
-		}
-		else if (diceNum[0] != diceNum[1] && board.getDRollCount()) {
-
-			board.setDRollCount(0);
-
-			movePlayer(board.getPreviousTurn(), diceNum[0] + diceNum[1], window, dealChoice);
-
-			board.setTurn(
-
-				(board.getTurn() + 1) % board.getPlayerCount()
-
-			);
-
-		}
-	}
-	else {
-
-		if (board.getDRollCount() == 3) {
-
-			movePlayer(board.getTurn(), 0, window, dealChoice, true);
 
 
-			board.setTurn(
 
-				(board.getTurn() + 1)
-				% board.getPlayerCount()
+		int* diceNum = board.rollDice();
 
-			);
+		//if (existsInProp) {
 
-			board.setDRollCount(0);
+		//if (!bankruptPlayers[board.getTurn()]) {
 
-		}
+			board.getPlayerByID(board.getTurn())->setIsRenting(-1);
+
+			if (diceNum[0] > 0 && diceNum[1] > 0 && board.getDRollCount() < 3) {
+
+
+				if (diceNum[0] == diceNum[1] && board.getDRollCount()) {
+
+					movePlayer(board.getTurn(), diceNum[0] + diceNum[1], window, dealChoice);
+
+				}
+				else if (diceNum[0] != diceNum[1] && !board.getDRollCount()) {
+
+					movePlayer(board.getPreviousTurn(), diceNum[0] + diceNum[1], window, dealChoice);
+
+				}
+				else if (diceNum[0] != diceNum[1] && board.getDRollCount()) {
+
+					board.setDRollCount(0);
+
+					movePlayer(board.getPreviousTurn(), diceNum[0] + diceNum[1], window, dealChoice);
+
+					board.setTurn(
+
+						(board.getTurn() + 1) % board.getPlayerCount()
+
+					);
+
+				}
+			}
+			else {
+
+				if (board.getDRollCount() == 3) {
+
+					movePlayer(board.getTurn(), 0, window, dealChoice, true);
+
+
+					board.setTurn(
+
+						(board.getTurn() + 1)
+						% board.getPlayerCount()
+
+					);
+
+					board.setDRollCount(0);
+
+				}
+
+			}
+
+		//}
+		//else {
+
+		//	board.setTurn(
+
+		//		(board.getTurn() + 1)
+		//		% board.getPlayerCount()
+
+		//	);
+
+		//}
 
 	}
 	//}
@@ -1482,7 +1630,6 @@ void Monopoly::checkBankruptcy() {
 		bool isBankrupt = false;
 
 		if (player[i]->getCash() <= 0) {
-		
 
 			Space** cells = board.getCells();
 
@@ -1490,17 +1637,19 @@ void Monopoly::checkBankruptcy() {
 			int propertiesOwned = 0;
 
 
-			for (int j = 0; j < 40; i++) {
+			for (int j = 0; j < 40; j++) {
 
 
-				if (strcmp(cells[j]->getSpaceType(), "PRIVATE") == 0 && strcmp(cells[j]->getSpaceType(), "COMMERCIAL")) {
+				if (strcmp(cells[j]->getSpaceType(), "PRIVATE") == 0 && strcmp(cells[j]->getSpaceType(), "COMMERCIAL") == 0) {
 				
 
 					Property* p = (Property*) cells[j];
 
+
 					if (p->getOwnerID() == player[i]->getPlayerID()) {
 					
 						propertiesOwned++;
+
 
 					}
 
@@ -1510,21 +1659,74 @@ void Monopoly::checkBankruptcy() {
 
 			}
 
+
+			// cout << "Properties owned by " << i << propertiesOwned << endl;
+
+
 			isBankrupt = (propertiesOwned <= 0);
 
 
 			if (isBankrupt) {
 				
 				player[i]->setIsBankrupt(true);
-				player[i]->setCash(0);
 				bankruptPlayers[player[i]->getPlayerID()] = true;
 			
 			}
 			else {
 
-				if (player) {}
+
+				int deficit = abs(player[i]->getCash());
+				int minDiff = INT_MAX;
+				int propertyInd = -1;
+
+
+				for (int j = 0; j < 40; j++) {
+
+
+					if (strcmp(cells[j]->getSpaceType(), "PRIVATE") == 0 && strcmp(cells[j]->getSpaceType(), "COMMERCIAL")) {
+
+
+						Property* p = (Property*)cells[j];
+
+						if (p->getOwnerID() == player[i]->getPlayerID() && abs(deficit - p->getPurchasePrice()) < minDiff && !p->getMortgaged()) {
+
+							propertyInd = j;
+
+						}
+						else if (p->getOwnerID() == player[i]->getPlayerID() && abs(deficit - (p->getPurchasePrice() / 2)) < minDiff && p->getMortgaged()) {
+
+							propertyInd = j;
+
+						}
+
+
+					}
+
+
+				}
+
+
+
+				Property* p = (Property*)cells[propertyInd];
+
+				player[i]->addCash(
+
+					(!p->getMortgaged()) ?
+					p->getPurchasePrice() :
+					(p->getPurchasePrice() / 2) - (0.2f * p->getPurchasePrice())
+
+				);
+
+				p->setOwnerID(-1);
+
 
 			}
+
+		}
+		else {
+
+			player[i]->setIsBankrupt(false);
+			bankruptPlayers[player[i]->getPlayerID()] = false;
 
 		}
 
@@ -1532,6 +1734,18 @@ void Monopoly::checkBankruptcy() {
 
 	}
 
+
+	int playersLeft = 0;
+
+	for (int i = 0; i < board.getPlayerCount(); i++) {
+
+		playersLeft += !bankruptPlayers[i];
+
+	}
+
+	gameWon = (playersLeft == 1);
+
+	if (gameWon) cout << "Game Won!" << endl;
 
 
 }
