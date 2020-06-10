@@ -274,7 +274,14 @@ int* Board::rollDice() {
 	diceNum[0] = rand() % 6 + 1;
 	diceNum[1] = rand() % 6 + 1;
 
-	//diceNum[0] = 3;
+	while (diceNum[0] == prevTurns[playerCount - 3][0] && diceNum[1] == prevTurns[playerCount - 3][1]) {
+
+		diceNum[0] = rand() % 6 + 1;
+		diceNum[1] = rand() % 6 + 1;
+
+	}
+
+	//diceNum[0] = 4;
 	//diceNum[1] = 3;
 
 	for (int i = 0; i < playerCount - 1; i++) {

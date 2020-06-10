@@ -29,7 +29,7 @@ Player::Player(const char* Name, int Playerid)
 	}
 	name[j] = '\0';
 	playerid = Playerid;
-	cash = 5000;
+	cash = 500;
 	propertylist = nullptr;
 	propertylistsize = 0;
 	isInJail = false;
@@ -67,12 +67,14 @@ Player::Player(const Player& p)
 
 void Player::addCash(int amount)
 {
-	cash += amount;
+	if (!isbankrupt)
+		cash += amount;
 }
 void Player::deductCash(int amount)
 {
 
-	cash -= amount;
+	if (!isbankrupt)
+		cash -= amount;
 
 }
 void Player::addProperty(Property* id)

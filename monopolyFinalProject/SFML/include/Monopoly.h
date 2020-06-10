@@ -76,6 +76,8 @@ public:
 
 	void checkBankruptcy();
 
+	bool getGameWon();
+
 
 
 	// REVIEW

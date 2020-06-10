@@ -129,225 +129,370 @@ int Monopoly::getPlayerPosition(int playerID) {
 
 void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& window, int dealChoice = -1, bool toJail = false) {
 
+	if (!board.getPlayerByID(playerID)->getIsBankrupt()){
+		sf::Font cardFont;
+		cardFont.loadFromFile("fonts/Nexa-Light.otf");
 
-	sf::Font cardFont;
-	cardFont.loadFromFile("fonts/Nexa-Light.otf");
-
-	sf::Font stdFont;
-	stdFont.loadFromFile("fonts/Montserrat-Black.ttf");
-
-
-	Player* player = board.getPlayerByID(playerID);
-
-	int propertiesOwned = 0;
-
-	for (int i = 0; i < 40; i++) {
-
-		if (strcmp(board.getCells()[i]->getSpaceType(), "PRIVATE") == 0 || strcmp(board.getCells()[i]->getSpaceType(), "COMMERCIAL") == 0) {
+		sf::Font stdFont;
+		stdFont.loadFromFile("fonts/Montserrat-Black.ttf");
 
 
-			Property* property = (Property*)board.getCells()[i];
+		Player* player = board.getPlayerByID(playerID);
 
-			if (property->getOwnerID() == player->getPlayerID()) {
+		int propertiesOwned = 0;
 
-				propertiesOwned++;
+		for (int i = 0; i < 40; i++) {
 
-			}
-
-
-
-		}
-
-	}
-
-	if (!player->getIsInJail()) {
-
-		playerPosition[playerID] += currRollCount;
-		playerPosition[playerID] %= 40;
-
-		if (playerPosition[playerID] <= player->getPlayerPosition()) {
-
-			player->addCash(500);
-
-		}
-
-		board.getPlayerByID(playerID)->setPlayerPosition(playerPosition[playerID]);
-
-		
-		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "PRIVATE") == 0) {
-		
-
-			PrivateProperty* property = (PrivateProperty*)board.getCells()[playerPosition[playerID]];
-
-			if (player->getPlayerID() != property->getOwnerID()) {
-
-				sf::RenderWindow buyOrRentPrompt(sf::VideoMode(265, 166), "Buy or Rent", sf::Style::Titlebar);
+			if (strcmp(board.getCells()[i]->getSpaceType(), "PRIVATE") == 0 || strcmp(board.getCells()[i]->getSpaceType(), "COMMERCIAL") == 0) {
 
 
+				Property* property = (Property*)board.getCells()[i];
 
-				// Assets for the prompt
+				if (property->getOwnerID() == player->getPlayerID()) {
 
-				//Buttons for Prompt
-
-				sf::Texture buyButtonTexture;
-				buyButtonTexture.loadFromFile("assets/property_prompt_rent.png");
-
-				sf::RectangleShape buyButton(sf::Vector2f(128.0f, 74.0f));
-				buyButton.setTexture(&buyButtonTexture);
-				buyButton.setPosition(15.0f, 100.0f);
-
-				sf::Texture rentButtonTexture;
-				rentButtonTexture.loadFromFile("assets/property_prompt_rent.png");
-
-				sf::RectangleShape rentButton(sf::Vector2f(128.0f, 74.0f));
-				rentButton.setTexture(&rentButtonTexture);
-				rentButton.setPosition(140.0f, 100.0f);
-
-				// 0 index -> propertyName
-				// 1 index -> propertyPrice
-				// 2 index -> propertyRent
-				// 3 index -> buy
-				// 4 index -> sell
-
-				int dealChoice = -1; // 0 for purchase, 1 for rent
-				bool showPurchasePrompt = false;
-				int onRent = -1;
-
-				sf::Text* promptText = new sf::Text[5];
-
-
-				for (int i = 0; i < 5; i++) {
-
-					promptText[i].setFont(cardFont);
-					promptText[i].setCharacterSize(14);
-					promptText[i].setFillColor(sf::Color::Black);
+					propertiesOwned++;
 
 				}
 
-				promptText[0].setString(property->getPropertyName());
-				promptText[0].setPosition(25.0f, 5.0f);
-
-				promptText[1].setString(to_string(property->getPurchasePrice()));
-				promptText[1].setPosition(25.0f, 45.0f);
-				promptText[1].setFillColor(sf::Color(53, 73, 94));
 
 
-				promptText[2].setString(to_string(property->getRentPrice()));
-				promptText[2].setPosition(25.0f, 70.0f);
-				promptText[2].setFillColor(sf::Color(53, 73, 94));
+			}
+
+		}
+
+		if (!player->getIsInJail()) {
+
+			playerPosition[playerID] += currRollCount;
+			playerPosition[playerID] %= 40;
+
+			if (playerPosition[playerID] <= player->getPlayerPosition()) {
+
+				player->addCash(500);
+
+			}
+
+			board.getPlayerByID(playerID)->setPlayerPosition(playerPosition[playerID]);
+		
+			if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "PRIVATE") == 0) {
+		
+
+				PrivateProperty* property = (PrivateProperty*)board.getCells()[playerPosition[playerID]];
+
+				if (player->getPlayerID() != property->getOwnerID()) {
+
+					sf::RenderWindow buyOrRentPrompt(sf::VideoMode(265, 166), "Buy or Rent", sf::Style::Titlebar);
 
 
-				promptText[3].setString("BUY");
-				promptText[3].setFont(stdFont);
-				promptText[3].setPosition(55.0f, 120.0f);
-				promptText[3].setFillColor(sf::Color(236, 240, 241));
 
-				promptText[4].setString("RENT");
-				promptText[4].setFont(stdFont);
-				promptText[4].setPosition(175.0f, 120.0f);
-				promptText[4].setFillColor(sf::Color(236, 240, 241));
+					// Assets for the prompt
+
+					//Buttons for Prompt
+
+					sf::Texture buyButtonTexture;
+					buyButtonTexture.loadFromFile("assets/property_prompt_rent.png");
+
+					sf::RectangleShape buyButton(sf::Vector2f(128.0f, 74.0f));
+					buyButton.setTexture(&buyButtonTexture);
+					buyButton.setPosition(15.0f, 100.0f);
+
+					sf::Texture rentButtonTexture;
+					rentButtonTexture.loadFromFile("assets/property_prompt_rent.png");
+
+					sf::RectangleShape rentButton(sf::Vector2f(128.0f, 74.0f));
+					rentButton.setTexture(&rentButtonTexture);
+					rentButton.setPosition(140.0f, 100.0f);
+
+					// 0 index -> propertyName
+					// 1 index -> propertyPrice
+					// 2 index -> propertyRent
+					// 3 index -> buy
+					// 4 index -> sell
+
+					int dealChoice = -1; // 0 for purchase, 1 for rent
+					bool showPurchasePrompt = false;
+					int onRent = -1;
+
+					sf::Text* promptText = new sf::Text[5];
+
+
+					for (int i = 0; i < 5; i++) {
+
+						promptText[i].setFont(cardFont);
+						promptText[i].setCharacterSize(14);
+						promptText[i].setFillColor(sf::Color::Black);
+
+					}
+
+					promptText[0].setString(property->getPropertyName());
+					promptText[0].setPosition(25.0f, 5.0f);
+
+					promptText[1].setString(to_string(property->getPurchasePrice()));
+					promptText[1].setPosition(25.0f, 45.0f);
+					promptText[1].setFillColor(sf::Color(53, 73, 94));
+
+
+					promptText[2].setString(to_string(property->getRentPrice()));
+					promptText[2].setPosition(25.0f, 70.0f);
+					promptText[2].setFillColor(sf::Color(53, 73, 94));
+
+
+					promptText[3].setString("BUY");
+					promptText[3].setFont(stdFont);
+					promptText[3].setPosition(55.0f, 120.0f);
+					promptText[3].setFillColor(sf::Color(236, 240, 241));
+
+					promptText[4].setString("RENT");
+					promptText[4].setFont(stdFont);
+					promptText[4].setPosition(175.0f, 120.0f);
+					promptText[4].setFillColor(sf::Color(236, 240, 241));
 
 				
-				sf::Texture closeBtnTexture;
-				closeBtnTexture.loadFromFile("assets/upgrade_prompt_close.png");
+					sf::Texture closeBtnTexture;
+					closeBtnTexture.loadFromFile("assets/upgrade_prompt_close.png");
 
-				sf::RectangleShape closeBtn(sf::Vector2f(20.0f, 20.f));
-				closeBtn.setTexture(&closeBtnTexture);
-				closeBtn.setPosition(220.0f, 15.0f);
+					sf::RectangleShape closeBtn(sf::Vector2f(20.0f, 20.f));
+					closeBtn.setTexture(&closeBtnTexture);
+					closeBtn.setPosition(220.0f, 15.0f);
 
+					while (buyOrRentPrompt.isOpen()) {
 
+						sf::Event evt;
 
-				while (buyOrRentPrompt.isOpen()) {
-
-					sf::Event evt;
-
-					while (buyOrRentPrompt.pollEvent(evt)) {
+						while (buyOrRentPrompt.pollEvent(evt)) {
 
 
-						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+							if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 
 
 
 
-							sf::Vector2f mousePos = buyOrRentPrompt.mapPixelToCoords(sf::Mouse::getPosition(buyOrRentPrompt));
-							sf::FloatRect buyButtonBounds = buyButton.getGlobalBounds();
-							sf::FloatRect rentButtonBounds = rentButton.getGlobalBounds();
+								sf::Vector2f mousePos = buyOrRentPrompt.mapPixelToCoords(sf::Mouse::getPosition(buyOrRentPrompt));
+								sf::FloatRect buyButtonBounds = buyButton.getGlobalBounds();
+								sf::FloatRect rentButtonBounds = rentButton.getGlobalBounds();
 
-							sf::FloatRect closeBtnBounds = closeBtn.getGlobalBounds();
-
-
-
-							if (buyButtonBounds.contains(mousePos)) {
+								sf::FloatRect closeBtnBounds = closeBtn.getGlobalBounds();
 
 
-								dealChoice = 0;
 
-								buyOrRentPrompt.close();
-
-
-							}
-
-							if (rentButtonBounds.contains(mousePos)) {
+								if (buyButtonBounds.contains(mousePos)) {
 
 
-								dealChoice = 1;
+									dealChoice = 0;
 
-								buyOrRentPrompt.close();
+									buyOrRentPrompt.close();
 
 
-							}
+								}
 
-							if (closeBtnBounds.contains(mousePos)) {
-							
+								if (rentButtonBounds.contains(mousePos)) {
 
-								// buyOrRentPrompt.close();
 
-								sf::RenderWindow bid(sf::VideoMode(265, 166), "BIDDING", sf::Style::Titlebar);
+									dealChoice = 1;
 
-								sf::Clock clk;
+									buyOrRentPrompt.close();
 
-								sf::Text timeDisplay;
-								timeDisplay.setFont(stdFont);
-								timeDisplay.setCharacterSize(25);
-								timeDisplay.setPosition(230.f, 15.0f);
-								timeDisplay.setFillColor(sf::Color(52, 73, 94));
 
-								while (bid.isOpen()) {
+								}
+
+								if (closeBtnBounds.contains(mousePos)) {
+
+
+									int currTime = -1;
+
+
+									int* bidAmount = new int[board.getPlayerCount()];
+									bool* bidMade = new bool[board.getPlayerCount()];
+
+									for (int i = 0; i < board.getPlayerCount(); i++) {
+
+										bidAmount[i] = 0;
+										bidMade[i] = true;
+
+										if (board.getPlayerByID(i)->getIsBankrupt()) bidMade[i] = false;
+
+									}
+
+									int bidTurn = 0;
+									int currBidAmount = 0;
+									int bidsMade = 0;
+
+									// buyOrRentPrompt.close();
+
+									sf::RenderWindow bid(sf::VideoMode(265, 166), "BIDDING", sf::Style::Titlebar);
+
+									sf::Clock clk;
+
+									sf::Text currBidTitle;
+									currBidTitle.setFont(stdFont);
+									currBidTitle.setCharacterSize(12);
+									currBidTitle.setPosition(25.0f, 15.0f);
+									currBidTitle.setFillColor(sf::Color(52, 73, 94));
+									currBidTitle.setString("CURRENT\nBID:");
+
+									sf::Text currBidAmountDisplay;
+									currBidAmountDisplay.setFont(stdFont);
+									currBidAmountDisplay.setCharacterSize(25);
+									currBidAmountDisplay.setPosition(25.0f, 45.0f);
+									currBidAmountDisplay.setFillColor(sf::Color(46, 204, 113));
+
+									sf::Text btnText[2];
+								
+									for (int i = 0; i < 2; i++) {
+										btnText[i].setFont(stdFont);
+										btnText[i].setCharacterSize(15);
+										btnText[i].setPosition(32.0f + (i * 145.0f), 120.0f);
+										btnText[i].setFillColor(sf::Color::White);
+									}
+
+									btnText[0].setString("BID (+10)");
+									btnText[1].setString("QUIT");
+
+
+									sf::Texture aucBtnTexture;
+									aucBtnTexture.loadFromFile("assets/property_prompt_rent.png");
+
+									sf::RectangleShape aucBtn[2];
+									for (int i = 0; i < 2; i++) {
+
+										aucBtn[i].setTexture(&aucBtnTexture);
+										aucBtn[i].setSize(sf::Vector2f(128.0f, 74.0f));
+										aucBtn[i].setPosition(15.0f + (i * 125), 100.0f);
+
+									}
+
+
+									sf::Text currTurnDisplay;
+									currTurnDisplay.setFont(stdFont);
+									currTurnDisplay.setString("TURN: ");
+									currTurnDisplay.setCharacterSize(15);
+									currTurnDisplay.setPosition(160.0f, 25.0f);
+									currTurnDisplay.setFillColor(sf::Color(52, 73, 94));
+
+
+									int bidWon = 0;
+
+									while (bid.isOpen()) {
 								
 
-									// Implement the bidding system
-									// Clock has been setup.
-									// Check turn management.
+										// Implement the bidding system
+										// Clock has been setup.
+										// Check turn management.
 
-									sf::Event bEvt;
-									while (bid.pollEvent(bEvt)) {
-
-
-										if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+										sf::Event bEvt;
+										while (bid.pollEvent(bEvt)) {
 
 
-											clk.restart();
+											if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+												mousePos = buyOrRentPrompt.mapPixelToCoords(sf::Mouse::getPosition(bid));
+												sf::FloatRect bidButtonBounds = aucBtn[0].getGlobalBounds();
+												sf::FloatRect quitButtonBounds = aucBtn[1].getGlobalBounds();
+
+												if (bidButtonBounds.contains(mousePos) && bidMade[bidTurn]) {
+
+													bidMade[bidTurn] = true;
+													bidAmount[bidTurn] = currBidAmount + 10;
+													currBidAmount += 10;
+
+
+													bidTurn = (bidTurn + 1) % board.getPlayerCount();
+													bidsMade++;
+
+													cout << "bidTurn -> " << bidTurn << endl;
+
+
+												}
+												else if (bidButtonBounds.contains(mousePos)){
+
+
+													while (!bidMade[bidTurn])
+														bidTurn = (bidTurn + 1) % board.getPlayerCount();
+
+													bidMade[bidTurn] = true;
+													bidAmount[bidTurn] = currBidAmount + 10;
+													currBidAmount += 10;
+
+
+													bidTurn = (bidTurn + 1) % board.getPlayerCount();
+													bidsMade++;
+
+													cout << "bidTurn -> " << bidTurn << endl;
+												
+
+												}
+
+
+												if (quitButtonBounds.contains(mousePos)) {
+											
+
+													if (bidTurn == 0) {
+														bidMade[board.getPlayerCount() - 1] = false;
+													}
+													else {
+														bidMade[bidTurn - 1] = false;
+													}
+
+												}
+
+												bidWon = 0;
+												int bidWonInd = -1;
+
+												for (int i = 0; i < board.getPlayerCount(); i++) {
+
+													bidWon += bidMade[i];
+													bidWonInd = i;
+
+												}
+
+												if (bidWon == 1) {
+
+													board.getPlayerByID(bidWonInd)->deductCash(currBidAmount);
+
+													property->setOwnerID(bidWonInd);
+
+
+													if (bidWonInd != player->getPlayerID()) {
+
+														player->deductCash(property->getRentPrice());
+														board.getPlayerByID(bidWonInd)->addCash(property->getRentPrice());
+
+													}
+
+													bid.close();
+
+												}
+
+
+											}
 
 
 										}
 
+										bid.clear(sf::Color::White);
+
+										currBidAmountDisplay.setString(to_string(currBidAmount));
+									
+										bid.draw(currBidTitle);
+										bid.draw(currBidAmountDisplay);
+									
+
+										currTurnDisplay.setString("TURN: " + to_string(bidTurn + 1));
+
+										bid.draw(currTurnDisplay);
+
+										for (int i = 0; i < 2; i++) {
+
+											bid.draw(aucBtn[i]);
+											bid.draw(btnText[i]);
+
+										}
+
+										bid.display();
+
 
 									}
 
-									bid.clear(sf::Color::White);
 
-									int currTime = abs(10 - clk.getElapsedTime().asSeconds());
-
-									if (currTime == 0) {
-
-										clk.restart();
-
-									}
-
-									timeDisplay.setString(to_string(currTime));
-									bid.draw(timeDisplay);
-
-									bid.display();
 
 
 								}
@@ -359,989 +504,1404 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 
 
-
 						}
+
+						buyOrRentPrompt.clear(sf::Color::White);
+						buyOrRentPrompt.draw(buyButton);
+						buyOrRentPrompt.draw(rentButton);
+						for (int i = 0; i < 5; i++)
+							buyOrRentPrompt.draw(promptText[i]);
+
+						buyOrRentPrompt.draw(closeBtn);
+
+						buyOrRentPrompt.display();
+
 
 
 
 					}
 
-					buyOrRentPrompt.clear(sf::Color::White);
-					buyOrRentPrompt.draw(buyButton);
-					buyOrRentPrompt.draw(rentButton);
-					for (int i = 0; i < 5; i++)
-						buyOrRentPrompt.draw(promptText[i]);
-
-					buyOrRentPrompt.draw(closeBtn);
-
-					buyOrRentPrompt.display();
 
 
+					if (player->getCash() >= property->getPurchasePrice() && dealChoice == 0) {
 
 
-				}
+						if (property->getOwnerID() != -1)
+							board.getPlayerByID(property->getOwnerID())->addCash(property->getPurchasePrice());
+
+						property->setOwnerID(player->getPlayerID());
+						player->deductCash(property->getPurchasePrice());
 
 
+					}
+					else if (player->getCash() >= property->getRentPrice() && dealChoice == 1) {
 
-				if (player->getCash() >= property->getPurchasePrice() && dealChoice == 0) {
+						if (property->getOwnerID() != -1)
+							board.getPlayerByID(property->getOwnerID())->addCash(property->getRentPrice());
 
+						player->setIsRenting(property->getPropertyID());
+						player->deductCash(property->getRentPrice());
 
-					if (property->getOwnerID() != -1)
-						board.getPlayerByID(property->getOwnerID())->addCash(property->getPurchasePrice());
+					}
+					else if (propertiesOwned && (dealChoice == 1 || dealChoice == 0)) {
 
-					property->setOwnerID(player->getPlayerID());
-					player->deductCash(property->getPurchasePrice());
+						Property* barter = nullptr;
 
-
-				}
-				else if (player->getCash() >= property->getRentPrice() && dealChoice == 1) {
-
-					if (property->getOwnerID() != -1)
-						board.getPlayerByID(property->getOwnerID())->addCash(property->getRentPrice());
-
-					player->setIsRenting(property->getPropertyID());
-					player->deductCash(property->getRentPrice());
-
-				}
-				else if (propertiesOwned && (dealChoice == 1 || dealChoice == 0)) {
-
-					Property* barter = nullptr;
-
-					for (int i = 0; i < 40 && !barter; i++) {
+						for (int i = 0; i < 40 && !barter; i++) {
 
 
-						if (strcmp(board.getCells()[i]->getSpaceType(), "PRIVATE") == 0
-							|| strcmp(board.getCells()[i]->getSpaceType(), "COMMERCIAL") == 0) {
+							if (strcmp(board.getCells()[i]->getSpaceType(), "PRIVATE") == 0
+								|| strcmp(board.getCells()[i]->getSpaceType(), "COMMERCIAL") == 0) {
 
-							Property* temp = (Property*)board.getCells()[i];
+								Property* temp = (Property*)board.getCells()[i];
 
-							if (temp->getPurchasePrice() >= property->getPurchasePrice()
-								&& temp->getOwnerID() == player->getPlayerID()) {
+								if (temp->getPurchasePrice() >= property->getPurchasePrice()
+									&& temp->getOwnerID() == player->getPlayerID()) {
 
-								barter = (Property*)board.getCells()[i];
+									barter = (Property*)board.getCells()[i];
+
+								}
+
 
 							}
 
 
 						}
 
+						if (!barter) {
+
+							player->setIsBankrupt(true);
+							player->setCash(0);
+
+						}
+						else {
+
+							player->addCash(barter->getPurchasePrice());
+							barter->setOwnerID(-1);
+							player->deductCash(property->getPurchasePrice());
+							property->setOwnerID(player->getPlayerID());
+
+						}
+
 
 					}
-
-					if (!barter) {
+					else if (propertiesOwned == 0) {
 
 						player->setIsBankrupt(true);
 						player->setCash(0);
 
 					}
-					else {
-
-						player->addCash(barter->getPurchasePrice());
-						barter->setOwnerID(-1);
-						player->deductCash(property->getPurchasePrice());
-						property->setOwnerID(player->getPlayerID());
-
-					}
-
-
-				}
-				else if (propertiesOwned == 0) {
-
-					player->setIsBankrupt(true);
-					player->setCash(0);
 
 				}
 
-			}
-
-
-
-		}
-
-		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "GO") == 0) {
-
-			board.getPlayerByID(playerID)->addCash(500);
-
-		}
-
-		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "COMMUNITY") == 0) {
-
-
-			int randCard = rand() % 15;
-
-			CommunityCard* c = (CommunityCard*)board.getCommunityChest()[randCard];
-
-			sf::RenderWindow card(sf::VideoMode(500, 170), "Community Chest Card", sf::Style::Titlebar);
-
-
-			sf::Text cardTitle;
-			cardTitle.setString("Community\nChest.");
-			cardTitle.setCharacterSize(25);
-			cardTitle.setFont(stdFont);
-			cardTitle.setPosition(5.0f, 5.0f);
-			cardTitle.setFillColor(sf::Color::White);
-
-
-			char* _cardText = c->getCardAction();
-			char* modCardText = nullptr;
-
-			if (strlen(_cardText) >= 34) {
-
-				modCardText = new char[strlen(_cardText) + 2];
-
-
-				int spaceAt = 34;
-
-				while (_cardText[spaceAt] != ' ' && _cardText[spaceAt] != '\0') spaceAt++;
-
-				for (unsigned int i = 0; i < strlen(_cardText) + 2; i++)
-					modCardText[i] = _cardText[i];
-
-				modCardText[spaceAt] = '\n';
-
-			}
-
-			sf::Text cardText;
-			cardText.setFont(cardFont);
-			cardText.setString((modCardText) ? modCardText : _cardText);
-			cardText.setPosition(5.0f, 100.0f);
-			cardText.setCharacterSize(15);
-			cardText.setFillColor(sf::Color::White);
-
-			sf::Texture closeButtonTexture;
-			closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
-			sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
-			closeButton.setTexture(&closeButtonTexture);
-			closeButton.setPosition(470.0f, 10.0f);
-			closeButtonTexture.setSmooth(true);
-
-
-			while (card.isOpen()) {
-
-
-				sf::Event evt;
-				while (card.pollEvent(evt)) {
-
-
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-
-						sf::Vector2f mousePos = card.mapPixelToCoords(sf::Mouse::getPosition(card));
-						sf::FloatRect closeButtonBounds = closeButton.getGlobalBounds();
-
-						if (closeButtonBounds.contains(mousePos)) {
-
-							card.close();
-
-						}
-
-
-					}
-
-
-				}
-
-				card.clear(sf::Color(52, 152, 219));
-
-				card.draw(cardTitle);
-				card.draw(cardText);
-				card.draw(closeButton);
-				card.display();
 
 
 			}
 
-
-
-			// Functionality of All Cards
-
-			if (randCard == 0) {
-
-
-				playerPosition[playerID] = 0;
-				player->setPlayerPosition(0);
-				player->addCash(400);
-
-
-			}
-			else if (randCard == 1) {
-
-				player->addCash(200);
-
-			}
-			else if (randCard == 2) {
-			
-				player->deductCash(200);
-
-			}
-			else if (randCard == 3) {
-			
-				player->addCash(50);
-
-			}
-			else if (randCard == 4) {
-			
-				player->setHasJailRescueCard(player->getHasJailRescueCard() + 1);
-
-			}
-			else if (randCard == 5) {
-
-				player->addCash(150);
-
-			}
-			else if (randCard == 6) {
-
-				player->addCash(200);
-			
-			}
-			else if (randCard == 7) {
-			
-				player->deductCash(100);
-
-			}
-			else if (randCard == 8) {
-			
-				player->deductCash(200);
-
-			}
-			else if (randCard == 9) {
-
-				player->addCash(50);
-
-			}
-			else if (randCard == 10) {
-
-				Space** cells = board.getCells();
-
-				int totalCharges = 0;
-				
-				for (int i = 0; i < 40; i++) {
-				
-					if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0 ||
-						strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
-					
-						Property* temp = (Property*)cells[i];
-
-
-						if (temp->getOwnerID() == player->getPlayerID()) {
-						
-							totalCharges += ((temp->getHotelCount() * 125) +
-								(temp->getHouseCount() * 50));
-
-						}
-
-
-					
-					}
-
-				}
-
-				player->deductCash(totalCharges);
-
-
-			}
-			else if (randCard == 11) {
-			
-				player->addCash(300);
-
-			}
-			else if (randCard == 12) {
-
-				player->deductCash(50);
-
-			}
-			else if (randCard == 13) {
-			
-				player->deductCash(80);
-
-			}
-			else if (randCard == 14) {
-
-				player->deductCash(50);
-
-			}
-
-
-		}
-
-		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "CHANCE") == 0) {
+			if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "COMMERCIAL") == 0) {
 		
 
-			int randCard = rand() % 15;
+				CommercialProperty* property = (CommercialProperty*)board.getCells()[playerPosition[playerID]];
 
-			ChanceCard* c = (ChanceCard*)board.getChance()[randCard];
+				if (player->getPlayerID() != property->getOwnerID()) {
 
-			sf::RenderWindow card(sf::VideoMode(500, 170), "Chance Card", sf::Style::Titlebar);
-
-
-			sf::Text cardTitle;
-			cardTitle.setString("Chance.");
-			cardTitle.setCharacterSize(25);
-			cardTitle.setFont(stdFont);
-			cardTitle.setPosition(5.0f, 5.0f);
-			cardTitle.setFillColor(sf::Color::White);
+					sf::RenderWindow buyOrRentPrompt(sf::VideoMode(265, 166), "Buy or Rent", sf::Style::Titlebar);
 
 
-			char* _cardText = c->getCardAction();
-			char* modCardText = nullptr;
 
-			if (strlen(_cardText) >= 34) {
+					// Assets for the prompt
 
-				modCardText = new char[strlen(_cardText) + 2];
+					//Buttons for Prompt
 
+					sf::Texture buyButtonTexture;
+					buyButtonTexture.loadFromFile("assets/property_prompt_rent.png");
 
-				int spaceAt = 34;
+					sf::RectangleShape buyButton(sf::Vector2f(128.0f, 74.0f));
+					buyButton.setTexture(&buyButtonTexture);
+					buyButton.setPosition(15.0f, 100.0f);
 
-				while (_cardText[spaceAt] != ' ' && _cardText[spaceAt] != '\0') spaceAt++;
+					sf::Texture rentButtonTexture;
+					rentButtonTexture.loadFromFile("assets/property_prompt_rent.png");
 
-				for (unsigned int i = 0; i < strlen(_cardText) + 2; i++)
-					modCardText[i] = _cardText[i];
+					sf::RectangleShape rentButton(sf::Vector2f(128.0f, 74.0f));
+					rentButton.setTexture(&rentButtonTexture);
+					rentButton.setPosition(140.0f, 100.0f);
 
-				modCardText[spaceAt] = '\n';
+					// 0 index -> propertyName
+					// 1 index -> propertyPrice
+					// 2 index -> propertyRent
+					// 3 index -> buy
+					// 4 index -> sell
 
-			}
+					int dealChoice = -1; // 0 for purchase, 1 for rent
+					bool showPurchasePrompt = false;
+					int onRent = -1;
 
-			sf::Text cardText;
-			cardText.setFont(cardFont);
-			cardText.setString((modCardText) ? modCardText : _cardText);
-			cardText.setPosition(5.0f, 100.0f);
-			cardText.setCharacterSize(15);
-			cardText.setFillColor(sf::Color::White);
-
-			sf::Texture closeButtonTexture;
-			closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
-			sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
-			closeButton.setTexture(&closeButtonTexture);
-			closeButton.setPosition(470.0f, 10.0f);
-			closeButtonTexture.setSmooth(true);
+					sf::Text* promptText = new sf::Text[5];
 
 
-			while (card.isOpen()) {
+					for (int i = 0; i < 5; i++) {
 
-
-				sf::Event evt;
-				while (card.pollEvent(evt)) {
-
-
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-
-						sf::Vector2f mousePos = card.mapPixelToCoords(sf::Mouse::getPosition(card));
-						sf::FloatRect closeButtonBounds = closeButton.getGlobalBounds();
-
-						if (closeButtonBounds.contains(mousePos)) {
-
-							card.close();
-
-						}
-
+						promptText[i].setFont(cardFont);
+						promptText[i].setCharacterSize(14);
+						promptText[i].setFillColor(sf::Color::Black);
 
 					}
 
+					promptText[0].setString(property->getPropertyName());
+					promptText[0].setPosition(25.0f, 5.0f);
 
-				}
+					promptText[1].setString(to_string(property->getPurchasePrice()));
+					promptText[1].setPosition(25.0f, 45.0f);
+					promptText[1].setFillColor(sf::Color(53, 73, 94));
 
-				card.clear(sf::Color(230, 126, 34));
 
-				card.draw(cardTitle);
-				card.draw(cardText);
-				card.draw(closeButton);
-				card.display();
+					promptText[2].setString(to_string(property->getRentPrice()));
+					promptText[2].setPosition(25.0f, 70.0f);
+					promptText[2].setFillColor(sf::Color(53, 73, 94));
 
 
-			}
+					promptText[3].setString("BUY");
+					promptText[3].setFont(stdFont);
+					promptText[3].setPosition(55.0f, 120.0f);
+					promptText[3].setFillColor(sf::Color(236, 240, 241));
 
+					promptText[4].setString("RENT");
+					promptText[4].setFont(stdFont);
+					promptText[4].setPosition(175.0f, 120.0f);
+					promptText[4].setFillColor(sf::Color(236, 240, 241));
 
 
-			// card actions
+					sf::Texture closeBtnTexture;
+					closeBtnTexture.loadFromFile("assets/upgrade_prompt_close.png");
 
-			if (randCard == 0) {
-			
-				playerPosition[playerID] = 0;
-				player->setPlayerPosition(0);
-				player->addCash(300);
+					sf::RectangleShape closeBtn(sf::Vector2f(20.0f, 20.f));
+					closeBtn.setTexture(&closeBtnTexture);
+					closeBtn.setPosition(220.0f, 15.0f);
 
-			}
-			else if (randCard == 1) {
-			
-				
-				int diff = abs(player->getPlayerPosition() - 26);
-				movePlayer(playerID, diff, window);
+					while (buyOrRentPrompt.isOpen()) {
 
+						sf::Event evt;
 
-			}
-			else if (randCard == 2) {
+						while (buyOrRentPrompt.pollEvent(evt)) {
 
-				Space** cells = board.getCells();
 
-				int nearestIndex = 0;
+							if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 
-				for (int i = playerPosition[playerID]; i < playerPosition[playerID] + 40 && !nearestIndex; i++) {
-				
-					
 
-					if (strcmp(cells[i % 40]->getSpaceType(), "COMMERCIAL") == 0) {
 
-						Property* temp = (Property* )cells[i % 40];
 
-						if (strcmp(temp->getPropertyGroup(), "UTILITY") == 0) {
-						
-							nearestIndex = i % 40;
+								sf::Vector2f mousePos = buyOrRentPrompt.mapPixelToCoords(sf::Mouse::getPosition(buyOrRentPrompt));
+								sf::FloatRect buyButtonBounds = buyButton.getGlobalBounds();
+								sf::FloatRect rentButtonBounds = rentButton.getGlobalBounds();
 
-						}
+								sf::FloatRect closeBtnBounds = closeBtn.getGlobalBounds();
 
-					}
 
-				}
 
-				Property* nearestUtility = (Property* )cells[nearestIndex];
+								if (buyButtonBounds.contains(mousePos)) {
 
-				if (nearestUtility->getOwnerID() == -1) {
-				
-					int diff = abs(nearestIndex - playerPosition[playerID]);
-					
-					movePlayer(playerID, diff, window);
 
+									dealChoice = 0;
 
-				}
-				else {
+									buyOrRentPrompt.close();
 
-					int diceRolled = board.getPrevTurns()[board.getPlayerCount()][0] + 
-						board.getPrevTurns()[board.getPlayerCount()][1];
-
-					board.getPlayerByID(nearestUtility->getOwnerID())->addCash(diceRolled * 5);
-					player->deductCash(diceRolled * 5);
-
-					playerPosition[playerID] = nearestIndex;
-					player->setPlayerPosition(nearestIndex);
-
-				}
-
-
-
-			}
-			else if (randCard == 3 || randCard == 4) {
-			
-
-
-
-				Space** cells = board.getCells();
-
-				int nearestIndex = 0;
-
-				for (int i = playerPosition[playerID]; i < playerPosition[playerID] + 40 && !nearestIndex; i++) {
-
-
-
-					if (strcmp(cells[i % 40]->getSpaceType(), "COMMERCIAL") == 0) {
-
-						Property* temp = (Property*)cells[i % 40];
-
-						if (strcmp(temp->getPropertyGroup(), "STATION") == 0) {
-
-							nearestIndex = i % 40;
-
-						}
-
-					}
-
-				}
-
-				Property* nearestUtility = (Property*)cells[nearestIndex];
-
-				if (nearestUtility->getOwnerID() == -1) {
-
-					int diff = abs(nearestIndex - playerPosition[playerID]);
-
-					movePlayer(playerID, diff, window);
-
-
-				}
-				else {
-
-					board.getPlayerByID(nearestUtility->getOwnerID())->addCash(nearestUtility->getPurchasePrice() * 2);
-					player->deductCash(nearestUtility->getPurchasePrice() * 2);
-
-					playerPosition[playerID] = nearestIndex;
-					player->setPlayerPosition(nearestIndex);
-
-				}
-
-
-
-
-			}
-			else if (randCard == 5) {
-
-			
-				int diff = 16 - player->getPlayerPosition();
-
-				if (diff <= 0) {
-
-					player->deductCash(200);
-					movePlayer(playerID, abs(diff), window);
-
-				}
-				else {
-
-					movePlayer(playerID, diff, window);
-
-				}
-
-
-			}
-			else if (randCard == 6) {
-
-				player->addCash(100);
-
-			}
-			else if (randCard == 7) {
-
-				player->setHasJailRescueCard(player->getHasJailRescueCard() + 1);
-
-			}
-			else if (randCard == 8) {
-
-
-				if (player->getPlayerPosition() >= 4) {
-				
-					movePlayer(playerID, 36, window);
-					player->deductCash(500);
-
-				}
-
-
-			}
-			else if (randCard == 9) {
-
-			
-				Space** cells = board.getCells();
-
-				int totalCharges = 0;
-
-				for (int i = 0; i < 40; i++) {
-
-					if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0 ||
-						strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
-
-						Property* temp = (Property*)cells[i];
-
-
-						if (temp->getOwnerID() == player->getPlayerID()) {
-
-							totalCharges += ((temp->getHotelCount() * 100) +
-								(temp->getHouseCount() * 50));
-
-						}
-
-
-					}
-					
-				}
-
-			
-
-				player->deductCash(totalCharges);
-
-
-			}
-			else if (randCard == 10) {
-
-
-				player->deductCash(25);
-
-
-			}
-			else if (randCard == 11) {
-				
-				Player** allPlayers = board.getPlayers();
-
-				for (int i = 0; i < board.getPlayerCount(); i++) {
-
-					if (!allPlayers[i]->getIsBankrupt()) {
-
-						player->deductCash(25);
-						allPlayers[i]->addCash(25);
-
-					}
-
-				}
-
-
-			}
-			else if (randCard == 12) {
-
-				player->addCash(150);
-
-			}
-			else if (randCard == 13) {
-
-				playerPosition[playerID] = 35;
-				player->setPlayerPosition(35);
-
-			}
-			else if (randCard == 14) {
-
-				int diff = abs(player->getPlayerPosition() - 5);
-				movePlayer(playerID, diff, window);
-
-			}
-
-
-
-		}
-
-		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "PARKING") == 0) {
-		
-			player->addCash(10);
-
-		}
-
-		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "LANDTAX") == 0) {
-
-			float totalTax = 0;
-
-			Space** cells = board.getCells();
-
-			for (int i = 0; i < 40; i++) {
-			
-				if (strcmp(board.getCells()[i]->getSpaceType(), "PRIVATE") == 0 || strcmp(board.getCells()[i]->getSpaceType(), "COMMERCIAL") == 0) {
-				
-
-					Property* temp = (Property* ) cells[i];
-
-					if (temp->getOwnerID() == player->getPlayerID()) {
-					
-						totalTax += (int)(temp->getPurchasePrice() * 0.2);
-
-					}
-				
-
-				}
-
-			}
-
-			sf::RenderWindow taxPrompt(sf::VideoMode(300, 160), "Land Tax", sf::Style::Titlebar);
-
-
-			sf::Text cardTitle;
-			cardTitle.setString("Land Tax.");
-			cardTitle.setCharacterSize(25);
-			cardTitle.setFont(stdFont);
-			cardTitle.setPosition(15.0f, 15.0f);
-			cardTitle.setFillColor(sf::Color::White);
-
-			sf::Text cardText;
-			cardText.setFont(cardFont);
-			cardText.setString("20% Land Tax has been deducted!");
-			cardText.setPosition(15.0f, 100.0f);
-			cardText.setCharacterSize(15);
-			cardText.setFillColor(sf::Color::White);
-
-			sf::Texture closeButtonTexture;
-			closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
-			sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
-			closeButton.setTexture(&closeButtonTexture);
-			closeButton.setPosition(270.0f, 10.0f);
-			closeButtonTexture.setSmooth(true);
-
-
-
-
-
-			while (taxPrompt.isOpen()) {
-			
-
-				sf::Event evt;
-				while (taxPrompt.pollEvent(evt)) {
-				
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-					
-						sf::Vector2f mousePos = taxPrompt.mapPixelToCoords(sf::Mouse::getPosition(taxPrompt));
-						sf::FloatRect closeButtonBounds = closeButton.getGlobalBounds();
-
-
-						if (closeButtonBounds.contains(mousePos)) {
-						
-
-							taxPrompt.close();
-							player->deductCash((int)totalTax);
-
-						}
-
-
-
-
-					}
-
-				
-				}
-
-
-				taxPrompt.clear(sf::Color(26, 188, 156));
-				taxPrompt.draw(cardTitle);
-				taxPrompt.draw(cardText);
-				taxPrompt.draw(closeButton);
-
-				taxPrompt.display();
-
-
-			}
-
-
-
-
-
-
-
-		}
-		
-		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "GOTOJAIL") == 0) {
-		
-
-
-			sf::RenderWindow jail(sf::VideoMode(500, 200), " ", sf::Style::Titlebar);
-
-			sf::Text cardTitle;
-			cardTitle.setString("JAIL OPTIONS");
-			cardTitle.setCharacterSize(25);
-			cardTitle.setFont(stdFont);
-			cardTitle.setPosition(15.0f, 15.0f);
-			cardTitle.setFillColor(sf::Color(52, 73, 94));
-
-			sf::Text cardText;
-			cardText.setFont(cardFont);
-			cardText.setString("You have been jailed.\nSelect the option that you would like\nto use.");
-			cardText.setPosition(15.0f, 60.0f);
-			cardText.setCharacterSize(15);
-			cardText.setFillColor(sf::Color(52, 73, 94));
-
-			sf::RectangleShape* btn = new sf::RectangleShape[4];
-			for (int i = 0; i < 4; i++) {
-			
-				btn[i].setFillColor(sf::Color(52, 73, 94));
-				btn[i].setSize(sf::Vector2f(100.f, 50.0f));
-				btn[i].setPosition(15.0f + (i * 120.0f), 130.0f);
-
-			}
-
-			sf::Text* btnText = new sf::Text[4];
-			for (int i = 0; i < 4; i++) {
-
-				btnText[i].setCharacterSize(12);
-				btnText[i].setFont(stdFont);
-				btnText[i].setFillColor(sf::Color(236, 240, 241));
-
-			}
-
-			btnText[0].setString("\t TRY\nDOUBLES");
-			btnText[1].setString("USE CARD");
-			btnText[2].setString("PAY FINE");
-			btnText[3].setString("BUY CARD");
-
-			btnText[0].setPosition(30.0f , 140.0f);
-			btnText[1].setPosition(150.0f, 148.0f);
-			btnText[2].setPosition(275.0f, 148.0f);
-			btnText[3].setPosition(390.0f, 148.0f);
-
-			sf::Text err;
-			//err.setString("fine");
-			err.setCharacterSize(12);
-			err.setPosition(15.0f, 110.0f);
-			err.setFillColor(sf::Color(231, 76, 60));
-			err.setFont(stdFont);
-
-
-			while (jail.isOpen()) {
-			
-
-				sf::Event evt;
-				while (jail.pollEvent(evt)) {
-
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-
-						sf::Vector2f mousePos = jail.mapPixelToCoords(sf::Mouse::getPosition(jail));
-
-						sf::FloatRect btnBound[4];
-						for (int i = 0; i < 4; i++) {
-
-							btnBound[i] = btn[i].getGlobalBounds();
-
-
-							if (btnBound[i].contains(mousePos)) {
-
-
-								// options
-								// try to roll doubles
-								// use "get out of jail card"
-								// pay fine
-								// buy "get out of jail card"
-
-
-
-								if (i == 0) {
-
-									player->setIsInJail(true);
-									player->setIsInJailCount(2);
-
-									jail.close();
 
 								}
-								else if (i == 1) {
 
-									if (player->getHasJailRescueCard()) {
+								if (rentButtonBounds.contains(mousePos)) {
 
-										player->setHasJailRescueCard(player->getHasJailRescueCard() - 1);
-										player->setIsInJail(false);
-										player->setIsInJailCount(0);
+
+									dealChoice = 1;
+
+									buyOrRentPrompt.close();
+
+
+								}
+
+								if (closeBtnBounds.contains(mousePos)) {
+
+
+									int currTime = -1;
+
+
+									int* bidAmount = new int[board.getPlayerCount()];
+									bool* bidMade = new bool[board.getPlayerCount()];
+
+									for (int i = 0; i < board.getPlayerCount(); i++) {
+
+										bidAmount[i] = 0;
+										bidMade[i] = true;
+
+										if (board.getPlayerByID(i)->getIsBankrupt()) bidMade[i] = false;
 
 									}
 
-									err.setString("You do not have a jail rescue card!");
+									int bidTurn = 0;
+									int currBidAmount = 0;
+									int bidsMade = 0;
+
+									// buyOrRentPrompt.close();
+
+									sf::RenderWindow bid(sf::VideoMode(265, 166), "BIDDING", sf::Style::Titlebar);
+
+									sf::Clock clk;
+
+									sf::Text currBidTitle;
+									currBidTitle.setFont(stdFont);
+									currBidTitle.setCharacterSize(12);
+									currBidTitle.setPosition(25.0f, 15.0f);
+									currBidTitle.setFillColor(sf::Color(52, 73, 94));
+									currBidTitle.setString("CURRENT\nBID:");
+
+									sf::Text currBidAmountDisplay;
+									currBidAmountDisplay.setFont(stdFont);
+									currBidAmountDisplay.setCharacterSize(25);
+									currBidAmountDisplay.setPosition(25.0f, 45.0f);
+									currBidAmountDisplay.setFillColor(sf::Color(46, 204, 113));
+
+									sf::Text btnText[2];
+
+									for (int i = 0; i < 2; i++) {
+										btnText[i].setFont(stdFont);
+										btnText[i].setCharacterSize(15);
+										btnText[i].setPosition(32.0f + (i * 145.0f), 120.0f);
+										btnText[i].setFillColor(sf::Color::White);
+									}
+
+									btnText[0].setString("BID (+10)");
+									btnText[1].setString("QUIT");
+
+
+									sf::Texture aucBtnTexture;
+									aucBtnTexture.loadFromFile("assets/property_prompt_rent.png");
+
+									sf::RectangleShape aucBtn[2];
+									for (int i = 0; i < 2; i++) {
+
+										aucBtn[i].setTexture(&aucBtnTexture);
+										aucBtn[i].setSize(sf::Vector2f(128.0f, 74.0f));
+										aucBtn[i].setPosition(15.0f + (i * 125), 100.0f);
+
+									}
+
+
+									sf::Text currTurnDisplay;
+									currTurnDisplay.setFont(stdFont);
+									currTurnDisplay.setString("TURN: ");
+									currTurnDisplay.setCharacterSize(15);
+									currTurnDisplay.setPosition(160.0f, 25.0f);
+									currTurnDisplay.setFillColor(sf::Color(52, 73, 94));
+
+
+									int bidWon = 0;
+
+									while (bid.isOpen()) {
+
+
+										// Implement the bidding system
+										// Clock has been setup.
+										// Check turn management.
+
+										sf::Event bEvt;
+										while (bid.pollEvent(bEvt)) {
+
+
+											if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+												mousePos = buyOrRentPrompt.mapPixelToCoords(sf::Mouse::getPosition(bid));
+												sf::FloatRect bidButtonBounds = aucBtn[0].getGlobalBounds();
+												sf::FloatRect quitButtonBounds = aucBtn[1].getGlobalBounds();
+
+												if (bidButtonBounds.contains(mousePos) && bidMade[bidTurn]) {
+
+													bidMade[bidTurn] = true;
+													bidAmount[bidTurn] = currBidAmount + 10;
+													currBidAmount += 10;
+
+
+													bidTurn = (bidTurn + 1) % board.getPlayerCount();
+													bidsMade++;
+
+													cout << "bidTurn -> " << bidTurn << endl;
+
+
+												}
+												else if (bidButtonBounds.contains(mousePos)) {
+
+
+													while (!bidMade[bidTurn])
+														bidTurn = (bidTurn + 1) % board.getPlayerCount();
+
+													bidMade[bidTurn] = true;
+													bidAmount[bidTurn] = currBidAmount + 10;
+													currBidAmount += 10;
+
+
+													bidTurn = (bidTurn + 1) % board.getPlayerCount();
+													bidsMade++;
+
+													cout << "bidTurn -> " << bidTurn << endl;
+
+
+												}
+
+
+												if (quitButtonBounds.contains(mousePos)) {
+
+
+													if (bidTurn == 0) {
+														bidMade[board.getPlayerCount() - 1] = false;
+													}
+													else {
+														bidMade[bidTurn - 1] = false;
+													}
+
+												}
+
+												bidWon = 0;
+												int bidWonInd = -1;
+
+												for (int i = 0; i < board.getPlayerCount(); i++) {
+
+													bidWon += bidMade[i];
+													bidWonInd = i;
+
+												}
+
+												if (bidWon == 1) {
+
+													board.getPlayerByID(bidWonInd)->deductCash(currBidAmount);
+
+													property->setOwnerID(bidWonInd);
+
+
+													if (bidWonInd != player->getPlayerID()) {
+
+														player->deductCash(property->getRentPrice());
+														board.getPlayerByID(bidWonInd)->addCash(property->getRentPrice());
+
+													}
+
+													bid.close();
+
+												}
+
+
+											}
+
+
+										}
+
+										bid.clear(sf::Color::White);
+
+										currBidAmountDisplay.setString(to_string(currBidAmount));
+
+										bid.draw(currBidTitle);
+										bid.draw(currBidAmountDisplay);
+
+
+										currTurnDisplay.setString("TURN: " + to_string(bidTurn + 1));
+
+										bid.draw(currTurnDisplay);
+
+										for (int i = 0; i < 2; i++) {
+
+											bid.draw(aucBtn[i]);
+											bid.draw(btnText[i]);
+
+										}
+
+										bid.display();
+
+
+									}
+
+
+
 
 								}
-								else if (i == 2) {
 
-									if (player->getCash() >= 400) {
 
-										player->deductCash(400);
-										player->setIsInJail(false);
-										player->setIsInJailCount(0);
-										playerPosition[playerID] = 30;
-										player->setPlayerPosition(30);
+
+
+							}
+
+
+
+						}
+
+						buyOrRentPrompt.clear(sf::Color::White);
+						buyOrRentPrompt.draw(buyButton);
+						buyOrRentPrompt.draw(rentButton);
+						for (int i = 0; i < 5; i++)
+							buyOrRentPrompt.draw(promptText[i]);
+
+						buyOrRentPrompt.draw(closeBtn);
+
+						buyOrRentPrompt.display();
+
+
+
+
+					}
+
+
+
+					if (player->getCash() >= property->getPurchasePrice() && dealChoice == 0) {
+
+
+						if (property->getOwnerID() != -1)
+							board.getPlayerByID(property->getOwnerID())->addCash(property->getPurchasePrice());
+
+						property->setOwnerID(player->getPlayerID());
+						player->deductCash(property->getPurchasePrice());
+
+
+					}
+					else if (player->getCash() >= property->getRentPrice() && dealChoice == 1) {
+
+						if (property->getOwnerID() != -1)
+							board.getPlayerByID(property->getOwnerID())->addCash(property->getRentPrice());
+
+						player->setIsRenting(property->getPropertyID());
+						player->deductCash(property->getRentPrice());
+
+					}
+					else if (propertiesOwned && (dealChoice == 1 || dealChoice == 0)) {
+
+						Property* barter = nullptr;
+
+						for (int i = 0; i < 40 && !barter; i++) {
+
+
+							if (strcmp(board.getCells()[i]->getSpaceType(), "PRIVATE") == 0
+								|| strcmp(board.getCells()[i]->getSpaceType(), "COMMERCIAL") == 0) {
+
+								Property* temp = (Property*)board.getCells()[i];
+
+								if (temp->getPurchasePrice() >= property->getPurchasePrice()
+									&& temp->getOwnerID() == player->getPlayerID()) {
+
+									barter = (Property*)board.getCells()[i];
+
+								}
+
+
+							}
+
+
+						}
+
+						if (!barter) {
+
+							player->setIsBankrupt(true);
+							player->setCash(0);
+
+						}
+						else {
+
+							player->addCash(barter->getPurchasePrice());
+							barter->setOwnerID(-1);
+							player->deductCash(property->getPurchasePrice());
+							property->setOwnerID(player->getPlayerID());
+
+						}
+
+
+					}
+					else if (propertiesOwned == 0) {
+
+						player->setIsBankrupt(true);
+						player->setCash(0);
+
+					}
+
+				}
+
+
+			}
+
+			if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "GO") == 0) {
+
+				board.getPlayerByID(playerID)->addCash(500);
+
+			}
+
+			if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "COMMUNITY") == 0) {
+
+
+				int randCard = rand() % 15;
+
+				CommunityCard* c = (CommunityCard*)board.getCommunityChest()[randCard];
+
+				sf::RenderWindow card(sf::VideoMode(500, 170), "Community Chest Card", sf::Style::Titlebar);
+
+
+				sf::Text cardTitle;
+				cardTitle.setString("Community\nChest.");
+				cardTitle.setCharacterSize(25);
+				cardTitle.setFont(stdFont);
+				cardTitle.setPosition(5.0f, 5.0f);
+				cardTitle.setFillColor(sf::Color::White);
+
+
+				char* _cardText = c->getCardAction();
+				char* modCardText = nullptr;
+
+				if (strlen(_cardText) >= 34) {
+
+					modCardText = new char[strlen(_cardText) + 2];
+
+
+					int spaceAt = 34;
+
+					while (_cardText[spaceAt] != ' ' && _cardText[spaceAt] != '\0') spaceAt++;
+
+					for (unsigned int i = 0; i < strlen(_cardText) + 2; i++)
+						modCardText[i] = _cardText[i];
+
+					modCardText[spaceAt] = '\n';
+
+				}
+
+				sf::Text cardText;
+				cardText.setFont(cardFont);
+				cardText.setString((modCardText) ? modCardText : _cardText);
+				cardText.setPosition(5.0f, 100.0f);
+				cardText.setCharacterSize(15);
+				cardText.setFillColor(sf::Color::White);
+
+				sf::Texture closeButtonTexture;
+				closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
+				sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
+				closeButton.setTexture(&closeButtonTexture);
+				closeButton.setPosition(470.0f, 10.0f);
+				closeButtonTexture.setSmooth(true);
+
+
+				while (card.isOpen()) {
+
+
+					sf::Event evt;
+					while (card.pollEvent(evt)) {
+
+
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+							sf::Vector2f mousePos = card.mapPixelToCoords(sf::Mouse::getPosition(card));
+							sf::FloatRect closeButtonBounds = closeButton.getGlobalBounds();
+
+							if (closeButtonBounds.contains(mousePos)) {
+
+								card.close();
+
+							}
+
+
+						}
+
+
+					}
+
+					card.clear(sf::Color(52, 152, 219));
+
+					card.draw(cardTitle);
+					card.draw(cardText);
+					card.draw(closeButton);
+					card.display();
+
+
+				}
+
+
+
+				// Functionality of All Cards
+
+				if (randCard == 0) {
+
+
+					playerPosition[playerID] = 0;
+					player->setPlayerPosition(0);
+					player->addCash(400);
+
+
+				}
+				else if (randCard == 1) {
+
+					player->addCash(200);
+
+				}
+				else if (randCard == 2) {
+			
+					player->deductCash(200);
+
+				}
+				else if (randCard == 3) {
+			
+					player->addCash(50);
+
+				}
+				else if (randCard == 4) {
+			
+					player->setHasJailRescueCard(player->getHasJailRescueCard() + 1);
+
+				}
+				else if (randCard == 5) {
+
+					player->addCash(150);
+
+				}
+				else if (randCard == 6) {
+
+					player->addCash(200);
+			
+				}
+				else if (randCard == 7) {
+			
+					player->deductCash(100);
+
+				}
+				else if (randCard == 8) {
+			
+					player->deductCash(200);
+
+				}
+				else if (randCard == 9) {
+
+					player->addCash(50);
+
+				}
+				else if (randCard == 10) {
+
+					Space** cells = board.getCells();
+
+					int totalCharges = 0;
+				
+					for (int i = 0; i < 40; i++) {
+				
+						if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0 ||
+							strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
+					
+							Property* temp = (Property*)cells[i];
+
+
+							if (temp->getOwnerID() == player->getPlayerID()) {
+						
+								totalCharges += ((temp->getHotelCount() * 125) +
+									(temp->getHouseCount() * 50));
+
+							}
+
+
+					
+						}
+
+					}
+
+					player->deductCash(totalCharges);
+
+
+				}
+				else if (randCard == 11) {
+			
+					player->addCash(300);
+
+				}
+				else if (randCard == 12) {
+
+					player->deductCash(50);
+
+				}
+				else if (randCard == 13) {
+			
+					player->deductCash(80);
+
+				}
+				else if (randCard == 14) {
+
+					player->deductCash(50);
+
+				}
+
+
+			}
+
+			if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "CHANCE") == 0) {
+		
+				int randCard = rand() % 15;
+
+				ChanceCard* c = (ChanceCard*)board.getChance()[randCard];
+
+				sf::RenderWindow card(sf::VideoMode(500, 170), "Chance Card", sf::Style::Titlebar);
+
+
+				sf::Text cardTitle;
+				cardTitle.setString("Chance.");
+				cardTitle.setCharacterSize(25);
+				cardTitle.setFont(stdFont);
+				cardTitle.setPosition(5.0f, 5.0f);
+				cardTitle.setFillColor(sf::Color::White);
+
+
+				char* _cardText = c->getCardAction();
+				char* modCardText = nullptr;
+
+				if (strlen(_cardText) >= 34) {
+
+					modCardText = new char[strlen(_cardText) + 2];
+
+
+					int spaceAt = 34;
+
+					while (_cardText[spaceAt] != ' ' && _cardText[spaceAt] != '\0') spaceAt++;
+
+					for (unsigned int i = 0; i < strlen(_cardText) + 2; i++)
+						modCardText[i] = _cardText[i];
+
+					modCardText[spaceAt] = '\n';
+
+				}
+
+				sf::Text cardText;
+				cardText.setFont(cardFont);
+				cardText.setString((modCardText) ? modCardText : _cardText);
+				cardText.setPosition(5.0f, 100.0f);
+				cardText.setCharacterSize(15);
+				cardText.setFillColor(sf::Color::White);
+
+				sf::Texture closeButtonTexture;
+				closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
+				sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
+				closeButton.setTexture(&closeButtonTexture);
+				closeButton.setPosition(470.0f, 10.0f);
+				closeButtonTexture.setSmooth(true);
+
+
+				while (card.isOpen()) {
+
+
+					sf::Event evt;
+					while (card.pollEvent(evt)) {
+
+
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+							sf::Vector2f mousePos = card.mapPixelToCoords(sf::Mouse::getPosition(card));
+							sf::FloatRect closeButtonBounds = closeButton.getGlobalBounds();
+
+							if (closeButtonBounds.contains(mousePos)) {
+
+								card.close();
+
+							}
+
+
+						}
+
+
+					}
+
+					card.clear(sf::Color(230, 126, 34));
+
+					card.draw(cardTitle);
+					card.draw(cardText);
+					card.draw(closeButton);
+					card.display();
+
+
+				}
+
+
+
+				// card actions
+
+				if (randCard == 0) {
+			
+					playerPosition[playerID] = 0;
+					player->setPlayerPosition(0);
+					player->addCash(300);
+
+				}
+				else if (randCard == 1) {
+			
+				
+					int diff = abs(player->getPlayerPosition() - 26);
+					movePlayer(playerID, diff, window);
+
+
+				}
+				else if (randCard == 2) {
+
+					Space** cells = board.getCells();
+
+					int nearestIndex = 0;
+
+					for (int i = playerPosition[playerID]; i < playerPosition[playerID] + 40 && !nearestIndex; i++) {
+				
+					
+
+						if (strcmp(cells[i % 40]->getSpaceType(), "COMMERCIAL") == 0) {
+
+							Property* temp = (Property* )cells[i % 40];
+
+							if (strcmp(temp->getPropertyGroup(), "UTILITY") == 0) {
+						
+								nearestIndex = i % 40;
+
+							}
+
+						}
+
+					}
+
+					Property* nearestUtility = (Property* )cells[nearestIndex];
+
+					if (nearestUtility->getOwnerID() == -1) {
+				
+						int diff = abs(nearestIndex - playerPosition[playerID]);
+					
+						movePlayer(playerID, diff, window);
+
+
+					}
+					else {
+
+						int diceRolled = board.getPrevTurns()[board.getPlayerCount()][0] + 
+							board.getPrevTurns()[board.getPlayerCount()][1];
+
+						board.getPlayerByID(nearestUtility->getOwnerID())->addCash(diceRolled * 5);
+						player->deductCash(diceRolled * 5);
+
+						playerPosition[playerID] = nearestIndex;
+						player->setPlayerPosition(nearestIndex);
+
+					}
+
+
+
+				}
+				else if (randCard == 3 || randCard == 4) {
+			
+
+
+
+					Space** cells = board.getCells();
+
+					int nearestIndex = 0;
+
+					for (int i = playerPosition[playerID]; i < playerPosition[playerID] + 40 && !nearestIndex; i++) {
+
+
+
+						if (strcmp(cells[i % 40]->getSpaceType(), "COMMERCIAL") == 0) {
+
+							Property* temp = (Property*)cells[i % 40];
+
+							if (strcmp(temp->getPropertyGroup(), "STATION") == 0) {
+
+								nearestIndex = i % 40;
+
+							}
+
+						}
+
+					}
+
+					Property* nearestUtility = (Property*)cells[nearestIndex];
+
+					if (nearestUtility->getOwnerID() == -1) {
+
+						int diff = abs(nearestIndex - playerPosition[playerID]);
+
+						movePlayer(playerID, diff, window);
+
+
+					}
+					else {
+
+						board.getPlayerByID(nearestUtility->getOwnerID())->addCash(nearestUtility->getPurchasePrice() * 2);
+						player->deductCash(nearestUtility->getPurchasePrice() * 2);
+
+						playerPosition[playerID] = nearestIndex;
+						player->setPlayerPosition(nearestIndex);
+
+					}
+
+
+
+
+				}
+				else if (randCard == 5) {
+
+			
+					int diff = 16 - player->getPlayerPosition();
+
+					if (diff <= 0) {
+
+						player->deductCash(200);
+						movePlayer(playerID, abs(diff), window);
+
+					}
+					else {
+
+						movePlayer(playerID, diff, window);
+
+					}
+
+
+				}
+				else if (randCard == 6) {
+
+					player->addCash(100);
+
+				}
+				else if (randCard == 7) {
+
+					player->setHasJailRescueCard(player->getHasJailRescueCard() + 1);
+
+				}
+				else if (randCard == 8) {
+
+					movePlayer(player->getPlayerID(), 36, window);
+					player->deductCash(500);
+
+				}
+				else if (randCard == 9) {
+
+			
+					Space** cells = board.getCells();
+
+					int totalCharges = 0;
+
+					for (int i = 0; i < 40; i++) {
+
+						if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0 ||
+							strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
+
+							Property* temp = (Property*)cells[i];
+
+
+							if (temp->getOwnerID() == player->getPlayerID()) {
+
+								totalCharges += ((temp->getHotelCount() * 100) +
+									(temp->getHouseCount() * 50));
+
+							}
+
+
+						}
+					
+					}
+
+			
+
+					player->deductCash(totalCharges);
+
+
+				}
+				else if (randCard == 10) {
+
+
+					player->deductCash(25);
+
+
+				}
+				else if (randCard == 11) {
+				
+					Player** allPlayers = board.getPlayers();
+
+					for (int i = 0; i < board.getPlayerCount(); i++) {
+
+						if (!allPlayers[i]->getIsBankrupt()) {
+
+							player->deductCash(25);
+							allPlayers[i]->addCash(25);
+
+						}
+
+					}
+
+
+				}
+				else if (randCard == 12) {
+
+					player->addCash(150);
+
+				}
+				else if (randCard == 13) {
+
+					playerPosition[playerID] = 35;
+					player->setPlayerPosition(35);
+
+				}
+				else if (randCard == 14) {
+
+					int diff = abs(player->getPlayerPosition() - 5);
+					movePlayer(playerID, diff, window);
+
+				}
+
+
+
+			}
+
+			if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "PARKING") == 0) {
+		
+				player->addCash(10);
+
+			}
+
+			if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "LANDTAX") == 0) {
+
+				float totalTax = 0;
+
+				Space** cells = board.getCells();
+
+				for (int i = 0; i < 40; i++) {
+			
+					if (strcmp(board.getCells()[i]->getSpaceType(), "PRIVATE") == 0 || strcmp(board.getCells()[i]->getSpaceType(), "COMMERCIAL") == 0) {
+				
+
+						Property* temp = (Property* ) cells[i];
+
+						if (temp->getOwnerID() == player->getPlayerID()) {
+					
+							totalTax += (int)(temp->getPurchasePrice() * 0.2);
+
+						}
+				
+
+					}
+
+				}
+
+				sf::RenderWindow taxPrompt(sf::VideoMode(300, 160), "Land Tax", sf::Style::Titlebar);
+
+
+				sf::Text cardTitle;
+				cardTitle.setString("Land Tax.");
+				cardTitle.setCharacterSize(25);
+				cardTitle.setFont(stdFont);
+				cardTitle.setPosition(15.0f, 15.0f);
+				cardTitle.setFillColor(sf::Color::White);
+
+				sf::Text cardText;
+				cardText.setFont(cardFont);
+				cardText.setString("20% Land Tax has been deducted!");
+				cardText.setPosition(15.0f, 100.0f);
+				cardText.setCharacterSize(15);
+				cardText.setFillColor(sf::Color::White);
+
+				sf::Texture closeButtonTexture;
+				closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
+				sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
+				closeButton.setTexture(&closeButtonTexture);
+				closeButton.setPosition(270.0f, 10.0f);
+				closeButtonTexture.setSmooth(true);
+
+
+
+
+
+				while (taxPrompt.isOpen()) {
+			
+
+					sf::Event evt;
+					while (taxPrompt.pollEvent(evt)) {
+				
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					
+							sf::Vector2f mousePos = taxPrompt.mapPixelToCoords(sf::Mouse::getPosition(taxPrompt));
+							sf::FloatRect closeButtonBounds = closeButton.getGlobalBounds();
+
+
+							if (closeButtonBounds.contains(mousePos)) {
+						
+
+								taxPrompt.close();
+								player->deductCash((int)totalTax);
+
+							}
+
+
+
+
+						}
+
+				
+					}
+
+
+					taxPrompt.clear(sf::Color(26, 188, 156));
+					taxPrompt.draw(cardTitle);
+					taxPrompt.draw(cardText);
+					taxPrompt.draw(closeButton);
+
+					taxPrompt.display();
+
+
+				}
+
+
+
+
+
+
+
+			}
+		
+			if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "GOTOJAIL") == 0) {
+		
+
+
+				sf::RenderWindow jail(sf::VideoMode(500, 200), " ", sf::Style::Titlebar);
+
+				sf::Text cardTitle;
+				cardTitle.setString("JAIL OPTIONS");
+				cardTitle.setCharacterSize(25);
+				cardTitle.setFont(stdFont);
+				cardTitle.setPosition(15.0f, 15.0f);
+				cardTitle.setFillColor(sf::Color(52, 73, 94));
+
+				sf::Text cardText;
+				cardText.setFont(cardFont);
+				cardText.setString("You have been jailed.\nSelect the option that you would like\nto use.");
+				cardText.setPosition(15.0f, 60.0f);
+				cardText.setCharacterSize(15);
+				cardText.setFillColor(sf::Color(52, 73, 94));
+
+				sf::RectangleShape* btn = new sf::RectangleShape[4];
+				for (int i = 0; i < 4; i++) {
+			
+					btn[i].setFillColor(sf::Color(52, 73, 94));
+					btn[i].setSize(sf::Vector2f(100.f, 50.0f));
+					btn[i].setPosition(15.0f + (i * 120.0f), 130.0f);
+
+				}
+
+				sf::Text* btnText = new sf::Text[4];
+				for (int i = 0; i < 4; i++) {
+
+					btnText[i].setCharacterSize(12);
+					btnText[i].setFont(stdFont);
+					btnText[i].setFillColor(sf::Color(236, 240, 241));
+
+				}
+
+				btnText[0].setString("\t TRY\nDOUBLES");
+				btnText[1].setString("USE CARD");
+				btnText[2].setString("PAY FINE");
+				btnText[3].setString("BUY CARD");
+
+				btnText[0].setPosition(30.0f , 140.0f);
+				btnText[1].setPosition(150.0f, 148.0f);
+				btnText[2].setPosition(275.0f, 148.0f);
+				btnText[3].setPosition(390.0f, 148.0f);
+
+				sf::Text err;
+				//err.setString("fine");
+				err.setCharacterSize(12);
+				err.setPosition(15.0f, 110.0f);
+				err.setFillColor(sf::Color(231, 76, 60));
+				err.setFont(stdFont);
+
+
+				while (jail.isOpen()) {
+			
+
+					sf::Event evt;
+					while (jail.pollEvent(evt)) {
+
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+							sf::Vector2f mousePos = jail.mapPixelToCoords(sf::Mouse::getPosition(jail));
+
+							sf::FloatRect btnBound[4];
+							for (int i = 0; i < 4; i++) {
+
+								btnBound[i] = btn[i].getGlobalBounds();
+
+
+								if (btnBound[i].contains(mousePos)) {
+
+
+									// options
+									// try to roll doubles
+									// use "get out of jail card"
+									// pay fine
+									// buy "get out of jail card"
+
+
+
+									if (i == 0) {
+
+										player->setIsInJail(true);
+										player->setIsInJailCount(2);
 
 										jail.close();
 
 									}
-									else {
+									else if (i == 1) {
 
-										err.setString("You do not have any cash!    * ghamgeen lamha *");
+										if (player->getHasJailRescueCard()) {
 
-									}
-
-								}
-								else if (i == 3) {
-
-									if (player->getCash() >= 400) {
-
-										int jailCardExists = -1;
-
-										Player** allPlayers = board.getPlayers();
-
-										for (int i = 0; i < board.getPlayerCount() && !jailCardExists; i++) {
-
-											if (!allPlayers[i]->getIsBankrupt() && allPlayers[i]->getHasJailRescueCard()) {
-
-												jailCardExists = i;
-
-											}
+											player->setHasJailRescueCard(player->getHasJailRescueCard() - 1);
+											player->setIsInJail(false);
+											player->setIsInJailCount(0);
 
 										}
 
-										if (jailCardExists != -1) {
+										err.setString("You do not have a jail rescue card!");
 
+									}
+									else if (i == 2) {
 
-											sf::RenderWindow bin(sf::VideoMode(250, 120), "YES OR NO?", sf::Style::Titlebar);
+										if (player->getCash() >= 400) {
 
+											player->deductCash(400);
+											player->setIsInJail(false);
+											player->setIsInJailCount(0);
+											playerPosition[playerID] = 30;
+											player->setPlayerPosition(30);
 
+											jail.close();
 
-											sf::RectangleShape yn[2];
-											sf::Text ynText[2];
+										}
+										else {
 
-											for (int i = 0; i < 2; i++) {
+											err.setString("You do not have any cash!    * ghamgeen lamha *");
 
-												yn[i].setFillColor(sf::Color(52, 73, 94));
-												yn[i].setSize(sf::Vector2f(100.0f, 50.0f));
-												yn[i].setPosition(12.0f + (i * 120.0f), 20.0f);
+										}
+
+									}
+									else if (i == 3) {
+
+										if (player->getCash() >= 400) {
+
+											int jailCardExists = -1;
+
+											Player** allPlayers = board.getPlayers();
+
+											for (int i = 0; i < board.getPlayerCount() && !jailCardExists; i++) {
+
+												if (!allPlayers[i]->getIsBankrupt() && allPlayers[i]->getHasJailRescueCard()) {
+
+													jailCardExists = i;
+
+												}
 
 											}
 
-											sf::Text note;
-											note.setString("Do you want\nto sell your card?");
-											note.setFont(cardFont);
-											note.setFillColor(sf::Color(52, 73, 94));
-											note.setPosition(12.0f, 80.0f);
-											note.setCharacterSize(14);
-
-											while (bin.isOpen()) {
+											if (jailCardExists != -1) {
 
 
-												sf::Event bEvt;
-												while (bin.pollEvent(bEvt)) {
+												sf::RenderWindow bin(sf::VideoMode(250, 120), "YES OR NO?", sf::Style::Titlebar);
 
 
 
-													if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+												sf::RectangleShape yn[2];
+												sf::Text ynText[2];
+
+												for (int i = 0; i < 2; i++) {
+
+													yn[i].setFillColor(sf::Color(52, 73, 94));
+													yn[i].setSize(sf::Vector2f(100.0f, 50.0f));
+													yn[i].setPosition(12.0f + (i * 120.0f), 20.0f);
+
+												}
+
+												sf::Text note;
+												note.setString("Do you want\nto sell your card?");
+												note.setFont(cardFont);
+												note.setFillColor(sf::Color(52, 73, 94));
+												note.setPosition(12.0f, 80.0f);
+												note.setCharacterSize(14);
+
+												while (bin.isOpen()) {
 
 
-														mousePos = jail.mapPixelToCoords(sf::Mouse::getPosition(bin));
-
-														sf::FloatRect ynBounds[2];
-														ynBounds[0] = yn[0].getGlobalBounds();
-														ynBounds[1] = yn[1].getGlobalBounds();
+													sf::Event bEvt;
+													while (bin.pollEvent(bEvt)) {
 
 
-														if (ynBounds[0].contains(mousePos)) {
+
+														if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 
 
-															player->deductCash(400);
-															allPlayers[jailCardExists]->addCash(400);
-															allPlayers[jailCardExists]->setHasJailRescueCard(allPlayers[jailCardExists]->getHasJailRescueCard() - 1);
+															mousePos = jail.mapPixelToCoords(sf::Mouse::getPosition(bin));
 
-															bin.close();
+															sf::FloatRect ynBounds[2];
+															ynBounds[0] = yn[0].getGlobalBounds();
+															ynBounds[1] = yn[1].getGlobalBounds();
+
+
+															if (ynBounds[0].contains(mousePos)) {
+
+
+																player->deductCash(400);
+																allPlayers[jailCardExists]->addCash(400);
+																allPlayers[jailCardExists]->setHasJailRescueCard(allPlayers[jailCardExists]->getHasJailRescueCard() - 1);
+
+																bin.close();
+
+
+															}
+															else if (ynBounds[1].contains(mousePos)) {
+
+
+																err.setString("Player refused to sell.");
+															
+															
+																bin.close();
+
+
+															}
+
+
 
 
 														}
-														else if (ynBounds[1].contains(mousePos)) {
-
-
-															err.setString("Player refused to sell.");
-															
-															
-															bin.close();
-
-
-														}
-
 
 
 
 													}
 
 
+													bin.clear(sf::Color(236, 240, 241));
+
+													for (int i = 0; i < 2; i++) {
+
+														bin.draw(yn[i]);
+														bin.draw(ynText[i]);
+
+													}
+
+													bin.draw(note);
+
+													bin.display();
+
 
 												}
 
 
-												bin.clear(sf::Color(236, 240, 241));
-
-												for (int i = 0; i < 2; i++) {
-
-													bin.draw(yn[i]);
-													bin.draw(ynText[i]);
-
-												}
-
-												bin.draw(note);
-
-												bin.display();
 
 
 											}
+											else {
 
+												err.setString("No one owns a \"get out of jail card\" yet.");
 
+											}
 
 
 										}
 										else {
 
-											err.setString("No one owns a \"get out of jail card\" yet.");
+											err.setString("You do not have any cash  * ghamgeen lamha *");
 
 										}
 
-
-									}
-									else {
-
-										err.setString("You do not have any cash  * ghamgeen lamha *");
 
 									}
 
@@ -1351,130 +1911,135 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 							}
 
-
 						}
+
+
 
 					}
 
 
-
-				}
-
-
-				jail.clear(sf::Color(236, 240, 241));
-				jail.draw(cardTitle);
-				jail.draw(cardText);
+					jail.clear(sf::Color(236, 240, 241));
+					jail.draw(cardTitle);
+					jail.draw(cardText);
 				
 
-				for (int i = 0; i < 4; i++) {
-					jail.draw(btn[i]);
-					jail.draw(btnText[i]);
+					for (int i = 0; i < 4; i++) {
+						jail.draw(btn[i]);
+						jail.draw(btnText[i]);
+					}
+
+					jail.draw(err);
+
+					jail.display();
+			
 				}
 
-				jail.draw(err);
+				delete[] btn;
+				delete[] btnText;
 
-				jail.display();
-			
+				if (player->getIsInJail() && toJail) {
+
+					player->setPlayerPosition(10);
+					playerPosition[playerID] = 10;
+					player->setIsInJailCount(2);
+
+				}
+
+
+
+
 			}
 
-			delete[] btn;
-			delete[] btnText;
-
-
-
-
-		}
-
-		if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "PROPERTYTAX") == 0) {
+			if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "PROPERTYTAX") == 0) {
 		
-			/*
+				/*
 			
-			Pay 10% tax on land, 20% tax on houses and 30% on hotels
-			and shops on each visit of this cell
+				Pay 10% tax on land, 20% tax on houses and 30% on hotels
+				and shops on each visit of this cell
 
-			*/
-
-
-			Space** cells = board.getCells();
-
-			float totalTax = 0;
+				*/
 
 
-			for (int i = 0; i < 40; i++) {
+				Space** cells = board.getCells();
+
+				float totalTax = 0;
 
 
-				if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0) {
+				for (int i = 0; i < 40; i++) {
+
+
+					if (strcmp(cells[i]->getSpaceType(), "PRIVATE") == 0) {
 				
-					PrivateProperty* p = (PrivateProperty*) cells[i];
+						PrivateProperty* p = (PrivateProperty*) cells[i];
 
 
-					totalTax += (
+						totalTax += (
 						
-						(p->getPurchasePrice() * 0.10f) +
-						(p->getHouseCount() * 20.0f) +
-						(p->getHotelCount() * 210.0f) +
-						(p->getShopCount() * 90.0f)
+							(p->getPurchasePrice() * 0.10f) +
+							(p->getHouseCount() * 20.0f) +
+							(p->getHotelCount() * 210.0f) +
+							(p->getShopCount() * 90.0f)
 
-						);
+							);
 
 
 
-				}
-				else if (strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
+					}
+					else if (strcmp(cells[i]->getSpaceType(), "COMMERCIAL") == 0) {
 				
-					CommercialProperty* p = (CommercialProperty*)cells[i];
+						CommercialProperty* p = (CommercialProperty*)cells[i];
 
-					totalTax += (
+						totalTax += (
 
-						(p->getPurchasePrice() * 0.10f)
+							(p->getPurchasePrice() * 0.10f)
 
-						);
+							);
+
+
+					}
 
 
 				}
+
+
+				player->deductCash(totalTax);
+
 
 
 			}
 
 
-			player->deductCash(totalTax);
-
-
-
-		}
-
-
-
-	}
-	else {
-
-
-		// Check if the player has rolled doubles. If he does, the player gets out.
-
-		int diceRoll[2];
-
-		diceRoll[0] = board.getPrevTurns()[board.getPlayerCount() - 1][0];
-		diceRoll[1] = board.getPrevTurns()[board.getPlayerCount() - 1][1];
-
-		if (diceRoll[0] == diceRoll[1] && player->getIsInJailCount() == 2) {
-
-			player->setIsInJail(false);
-			player->setIsInJailCount(0);
-
-			movePlayer(diceRoll[0] + diceRoll[1], playerID, window);
 
 		}
 		else {
 
-			player->setIsInJailCount(player->getIsInJailCount() - 1);
 
-			if (player->getIsInJailCount() == 0)
+			// Check if the player has rolled doubles. If he does, the player gets out.
+
+			int diceRoll[2];
+
+			diceRoll[0] = board.getPrevTurns()[board.getPlayerCount() - 1][0];
+			diceRoll[1] = board.getPrevTurns()[board.getPlayerCount() - 1][1];
+
+			if (diceRoll[0] == diceRoll[1] && player->getIsInJailCount() == 2) {
+
 				player->setIsInJail(false);
+				player->setIsInJailCount(0);
+
+				movePlayer(diceRoll[0] + diceRoll[1], playerID, window);
+
+			}
+			else {
+
+				player->setIsInJailCount(player->getIsInJailCount() - 1);
+
+				if (player->getIsInJailCount() == 0)
+					player->setIsInJail(false);
+
+			}
+
 
 		}
-
-
-	}
 
 
 	{
@@ -1484,16 +2049,17 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 			// also set the boolean to true
 			// also set the inJailCount to 2
 			playerPosition[playerID] = 10;
-			player->setIsInJailCount(2);
+			player->setPlayerPosition(10);
+
+			if (!player->getIsInJailCount())
+				player->setIsInJailCount(2);
 
 		}
 
 
 	}
 
-
-
-
+	}
 
 }
 
@@ -1513,6 +2079,7 @@ void Monopoly::playDice(sf::RenderWindow& window,
 
 
 
+
 		int* diceNum = board.rollDice();
 
 		//if (existsInProp) {
@@ -1521,7 +2088,7 @@ void Monopoly::playDice(sf::RenderWindow& window,
 
 			board.getPlayerByID(board.getTurn())->setIsRenting(-1);
 
-			if (diceNum[0] > 0 && diceNum[1] > 0 && board.getDRollCount() < 3) {
+			if (diceNum[0] > 0 && diceNum[1] > 0 && board.getDRollCount() < 3 && !bankruptPlayers[board.getTurn()]) {
 
 
 				if (diceNum[0] == diceNum[1] && board.getDRollCount()) {
@@ -1550,6 +2117,20 @@ void Monopoly::playDice(sf::RenderWindow& window,
 			}
 			else {
 
+
+				/*if (bankruptPlayers[board.getTurn()]) {
+				
+					while (bankruptPlayers[board.getTurn()]) {
+						board.setTurn(
+
+							(board.getTurn() + 1) % board.getPlayerCount()
+
+						);
+					}
+
+				}*/
+
+
 				if (board.getDRollCount() == 3) {
 
 					movePlayer(board.getTurn(), 0, window, dealChoice, true);
@@ -1568,20 +2149,7 @@ void Monopoly::playDice(sf::RenderWindow& window,
 
 			}
 
-		//}
-		//else {
-
-		//	board.setTurn(
-
-		//		(board.getTurn() + 1)
-		//		% board.getPlayerCount()
-
-		//	);
-
-		//}
-
 	}
-	//}
 
 }
 
@@ -1640,10 +2208,14 @@ void Monopoly::checkBankruptcy() {
 			for (int j = 0; j < 40; j++) {
 
 
-				if (strcmp(cells[j]->getSpaceType(), "PRIVATE") == 0 && strcmp(cells[j]->getSpaceType(), "COMMERCIAL") == 0) {
+				if (strcmp(cells[j]->getSpaceType(), "PRIVATE") == 0 || strcmp(cells[j]->getSpaceType(), "COMMERCIAL") == 0) {
 				
 
 					Property* p = (Property*) cells[j];
+
+					//cout << "Name  -> " << p->getPropertyName() << endl;
+					//cout << "Owner -> " << p->getOwnerID() << endl;
+					//cout << "PID   -> " << player[i]->getPlayerID() << endl;
 
 
 					if (p->getOwnerID() == player[i]->getPlayerID()) {
@@ -1660,7 +2232,7 @@ void Monopoly::checkBankruptcy() {
 			}
 
 
-			// cout << "Properties owned by " << i << propertiesOwned << endl;
+			//cout << "Properties owned by " << i << ", " << propertiesOwned << endl;
 
 
 			isBankrupt = (propertiesOwned <= 0);
@@ -1720,6 +2292,11 @@ void Monopoly::checkBankruptcy() {
 				p->setOwnerID(-1);
 
 
+				player[i]->setIsBankrupt(false);
+				bankruptPlayers[player[i]->getPlayerID()] = false;
+
+
+
 			}
 
 		}
@@ -1751,6 +2328,7 @@ void Monopoly::checkBankruptcy() {
 }
 
 
+bool Monopoly::getGameWon() { return gameWon; }
 
 
 // REVIEW
@@ -1846,6 +2424,9 @@ bool Monopoly::canBuildHouse(int group, int playerid)
 
 Monopoly::~Monopoly() {
 
+	if (playerPosition) delete[] playerPosition;
+	if (bCoord) delete[] bCoord;
+	if (bankruptPlayers) delete[] bankruptPlayers;
 
 }
 

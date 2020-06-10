@@ -988,38 +988,7 @@ int main()
         playerCash[i].setFont(stdFont);
         playerCash[i].setCharacterSize(11);
 
-        float playerMoney = (float)game.getBoard().getPlayers()[i]->getCash();
-        char* playerMoneyChar = new char[10];
-
-
-        if (playerMoney >= 1000) {
-
-            float flPointPart = (playerMoney / 1000) - (int)(playerMoney / 1000);
-            flPointPart *= 100;
-
-
-            char* flPointPartChar = new char[10];
-
-
-
-            _itoa((int)(playerMoney / 1000), playerMoneyChar, 10);
-            _itoa((int)(flPointPart), flPointPartChar, 10);
-
-            strcat(playerMoneyChar, ".");
-            strcat(playerMoneyChar, flPointPartChar);
-            strcat(playerMoneyChar, "K");
-
-            playerCash[i].setString(playerMoneyChar);
-
-        }
-        else {
-
-            _itoa((int)playerMoney, playerMoneyChar, 10);
-
-            playerCash[i].setString(playerMoneyChar);
-
-        }
-
+        playerCash[i].setString(to_string(game.getBoard().getPlayers()[i]->getCash()));
         playerCash[i].setPosition(735.f + (i * 100.0f), 125.0f);
 
     }
@@ -1216,6 +1185,16 @@ int main()
     promptText[4].setPosition(400.0f, 380.0f);
     promptText[4].setFillColor(sf::Color(236, 240, 241));
 
+
+
+    sf::Text gameWon;
+    gameWon.setFont(stdFont);
+    gameWon.setCharacterSize(50);
+    gameWon.setFillColor(sf::Color::Red);
+    gameWon.setPosition(200.0f, 400.0f);
+    gameWon.setString("GAME WON!");
+    gameWon.setOutlineColor(sf::Color::White);
+    gameWon.setOutlineThickness(5);
 
 
 
@@ -1556,79 +1535,8 @@ int main()
         window.draw(turnText);
         window.draw(turnDisplayPiece);
 
-
-
-        // Purchase Prompt functionality
-
-        /*Player* player;
-
-        if (game.getBoard().getDRollCount() == 0) {
-            
-            player = game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn());
-            currInd = player->getPlayerPosition();
-
-        }
-        else {
-            player = game.getBoard().getPlayerByID(game.getBoard().getTurn());
-            currInd = player->getPlayerPosition();
-        }
-
-        if (strcmp(game.getBoard().getCells()[currInd]->getSpaceType(), "PRIVATE") == 0 && !player->getIsBankrupt() &&
-            game.getBoard().getDRollCount() == 0) {
-
-            cout << "currInd ->" << currInd << endl;
-
-            PrivateProperty* p = (PrivateProperty*)game.getBoard().getCells()[currInd];
-
-            promptText[0].setString(p->getPropertyName());
-
-            promptText[1].setString(to_string(p->getPurchasePrice()));
-
-            promptText[2].setString(to_string(p->getRentPrice()));
-
-            for (int i = 0; i < 20; i++) {
-
-
-                bool c1 = currInd == privatePropertySpaces[i];
-                bool c2 = p->getOwnerID() != game.getBoard().getPreviousTurn();
-                bool c3 = game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getIsRenting() != currInd;
-
-                if (currInd == privatePropertySpaces[i] && p->getOwnerID() != game.getBoard().getPreviousTurn()
-                    && game.getBoard().getPlayerByID(game.getBoard().getPreviousTurn())->getIsRenting() != currInd) {
-
-                    showPurchasePrompt = true;
-
-                }
-
-
-            }
-
-        }
-        else if (strcmp(game.getBoard().getCells()[currInd]->getSpaceType(), "PRIVATE") == 0 && !player->getIsBankrupt() &&
-            game.getBoard().getDRollCount() == 1) {
-        
-
-
-
-        
-        
-        }*/
-
-
-        /*if (showPurchasePrompt && dealChoice == -1) {
-        
-            window.draw(boardPrompt);
-            window.draw(buyButton);
-            window.draw(rentButton);
-
-
-            for (int i = 0; i < 5; i++) {
-
-                window.draw(promptText[i]);
-
-            }
-        
-        }*/
+        if (game.getGameWon())
+            window.draw(gameWon);
 
 
 
@@ -1703,41 +1611,16 @@ int main()
         // Prints all the player icons on the screen
         for (int i = 0; i < totalPlayers; i++) {
             window.draw(playerIcon[i]);
-            
 
-            float playerMoney = (float)game.getBoard().getPlayers()[i]->getCash();
-            char* playerMoneyChar = new char[10];
-
-
-            if (playerMoney >= 1000) {
-
-                float flPointPart = (playerMoney / 1000) - (int)(playerMoney / 1000);
-                flPointPart *= 100;
-
-
-                char* flPointPartChar = new char[10];
-
-
-
-                _itoa((int)(playerMoney / 1000), playerMoneyChar, 10);
-                _itoa((int)(flPointPart), flPointPartChar, 10);
-
-                strcat(playerMoneyChar, ".");
-                strcat(playerMoneyChar, flPointPartChar);
-                strcat(playerMoneyChar, "K");
-
-                playerCash[i].setString(playerMoneyChar);
-
+            if (!game.getBoard().getPlayerByID(i)->getIsBankrupt()) {
+                playerCash[i].setString(to_string(game.getBoard().getPlayers()[i]->getCash()));
+                playerCash[i].setFillColor(sf::Color(46, 204, 113));
             }
             else {
-
-                _itoa((int)playerMoney, playerMoneyChar, 10);
-
-                playerCash[i].setString(playerMoneyChar);
-
+                playerCash[i].setString("BANKRUPT");
+                playerCash[i].setFillColor(sf::Color(231, 76, 60));
             }
 
-            
             window.draw(playerCash[i]);
 
 

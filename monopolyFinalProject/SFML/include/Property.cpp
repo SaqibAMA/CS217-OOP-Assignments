@@ -129,7 +129,9 @@ int Property::getPurchasePrice() {
 }
 
 int Property::getRentPrice() {
+
 	return rentPrice;
+
 }
 
 int Property::getMortgagePrice() {
