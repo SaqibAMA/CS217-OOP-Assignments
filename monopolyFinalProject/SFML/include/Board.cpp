@@ -284,6 +284,8 @@ int* Board::rollDice() {
 	//diceNum[0] = 4;
 	//diceNum[1] = 3;
 
+	//cin >> diceNum[0] >> diceNum[1];
+
 	for (int i = 0; i < playerCount - 1; i++) {
 	
 		prevTurns[i][0] = prevTurns[i + 1][0];
@@ -428,7 +430,7 @@ void Board::upgradeProperty(int index, int i, int j) {
 	//Player* owner = getPlayerByID(3);
 	PrivateProperty* p = (PrivateProperty*)getCells()[index];
 	
-	if (p->getOwnerID() != -1) {
+	if (p->getOwnerID() != -1 && !p->getMortgaged()) {
 
 		Player* owner = getPlayerByID(p->getOwnerID());
 

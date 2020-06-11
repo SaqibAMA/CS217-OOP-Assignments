@@ -119,7 +119,9 @@ int Property::getOwnerID() {
 	return ownerID;
 }
 bool Property::getMortgaged() {
+	
 	return mortgaged;
+
 }
 
 

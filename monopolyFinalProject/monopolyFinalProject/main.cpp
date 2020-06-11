@@ -838,6 +838,18 @@ int main()
     cardUpgradeIcon[2].setPosition(1015.0f + 143.0f, 315.0f);
 
 
+    sf::Text* mortgageStatus = new sf::Text[3];
+    for (int i = 0; i < 3; i++) {
+
+        mortgageStatus[i].setString("M");
+        mortgageStatus[i].setCharacterSize(14);
+        mortgageStatus[i].setFont(stdFont);
+        mortgageStatus[i].setFillColor(sf::Color(149, 165, 166));
+        mortgageStatus[i].setPosition(825.0f + (i * 142), 285.0f);
+
+    }
+
+
 
     // Property Upgrade Prompt
 
@@ -1198,24 +1210,29 @@ int main()
 
 
 
-    /*
-   //  Placebo
-    {
-        PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
+   // //  Placebo
+   //{
 
-        propertyCell->setOwnerID(0);
+   //     game.getBoard().getPlayerByID(0)->setHasJailRescueCard(2);
+   //     cout << "Added jail rescue card..." << endl;
+   //     cout << game.getBoard().getPlayerByID(0)->getHasJailRescueCard() << endl;
 
-        propertyCell = (PrivateProperty*)game.getBoard().getCells()[3];
+   //     PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
 
-        propertyCell->setOwnerID(0);
+   //     propertyCell->setOwnerID(0);
+   //     propertyCell->setMortgaged(true);
+
+   //     propertyCell = (PrivateProperty*)game.getBoard().getCells()[3];
+
+   //     propertyCell->setOwnerID(0);
 
 
-        propertyCell = (PrivateProperty*)game.getBoard().getCells()[6];
+   //     propertyCell = (PrivateProperty*)game.getBoard().getCells()[6];
 
-        propertyCell->setOwnerID(0);
+   //     propertyCell->setOwnerID(0);
 
-    }
-    */
+   // }
+   // 
 
 
     while (window.isOpen()) {
@@ -1247,6 +1264,7 @@ int main()
 
                 sf::FloatRect commercialNavBtnLeftBounds = commercialNavButton[0].getGlobalBounds();
                 sf::FloatRect commercialNavBtnRightBounds = commercialNavButton[1].getGlobalBounds();
+
 
                 sf::FloatRect** buildingIconBounds = new sf::FloatRect * [3];
                 for (int i = 0; i < 3; i++) {
@@ -1362,6 +1380,25 @@ int main()
                 }
 
 
+
+                // Mortgage Prompt
+
+                sf::FloatRect mortgageBtnBounds[3];
+                for (int i = 0; i < 3; i++) {
+                
+                    mortgageBtnBounds[i] = mortgageStatus[i].getGlobalBounds();
+
+                    if (mortgageBtnBounds[i].contains(mousePos)) {
+                    
+                        game.mortgageProperty(privatePropertySpaces[i + privatePropertyCardScroll]);
+
+                    }
+
+
+                }
+
+
+
                 // Purchase prompt
 
                 sf::FloatRect buyButtonBounds = buyButton.getGlobalBounds();
@@ -1421,7 +1458,7 @@ int main()
 
                     game.playDice(window, dice, diceTexture, dealChoice);
 
-                    showPurchasePrompt = false;
+                    // showPurchasePrompt = false;
 
 
 
@@ -1552,13 +1589,19 @@ int main()
             commercialCardPrice[i].setString(commercialPropertyPrices[i + commercialPropertyCardScroll]);
             commercialCardRent[i].setString(commercialPropertyRents[i + commercialPropertyCardScroll]);
 
+            Property* p = (Property*) game.getBoard().getCells()[privatePropertySpaces[i + privatePropertyCardScroll]];
+
+            mortgageStatus[i].setFillColor(
+                (p->getMortgaged()) ? sf::Color(231, 76, 60) : sf::Color(149, 165, 166));
+
             window.draw(cardTitle[i]);
             window.draw(cardPrice[i]);
             window.draw(cardRent[i]);
             window.draw(cardUpgradeIcon[i]);
+            window.draw(mortgageStatus[i]);
 
 
-            PrivateProperty* p = (PrivateProperty*)game.getBoard().getCells()[privatePropertySpaces[i + privatePropertyCardScroll]];
+            // PrivateProperty* p = (PrivateProperty*)game.getBoard().getCells()[privatePropertySpaces[i + privatePropertyCardScroll]];
 
             if (p->getOwnerID() == -1) {
                 cardOwnerIcon[i].setFillColor(cardOwnerColors[5][0]);
@@ -1617,7 +1660,7 @@ int main()
                 playerCash[i].setFillColor(sf::Color(46, 204, 113));
             }
             else {
-                playerCash[i].setString("BANKRUPT");
+                playerCash[i].setString("0");
                 playerCash[i].setFillColor(sf::Color(231, 76, 60));
             }
 

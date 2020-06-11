@@ -570,8 +570,55 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 						if (!barter) {
 
-							player->setIsBankrupt(true);
-							player->setCash(0);
+							//player->setIsBankrupt(true);
+							//player->setCash(0);
+
+							player->deductCash(property->getRentPrice());
+
+							sf::RenderWindow prompt(sf::VideoMode(280, 90), "NOT ENOUGH CASH!", sf::Style::Titlebar);
+
+							sf::Text nec;
+							nec.setString("NOT ENOUGH CASH\nRenting this property\ninstead.");
+							nec.setPosition(5.0f, 5.0f);
+							nec.setFont(stdFont);
+							nec.setCharacterSize(15);
+							nec.setFillColor(sf::Color::Black);
+
+							sf::Texture closeBtnTexture;
+							closeBtnTexture.loadFromFile("assets/upgrade_prompt_close.png");
+							sf::RectangleShape closeBtn(sf::Vector2f(15.0f, 15.0f));
+							closeBtn.setTexture(&closeBtnTexture);
+							closeBtn.setPosition(250.0f, 5.0f);
+
+							while (prompt.isOpen()) {
+
+								sf::Event evt;
+								while (prompt.pollEvent(evt)) {
+
+									if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+
+										sf::Vector2f mousePos = prompt.mapPixelToCoords(sf::Mouse::getPosition(prompt));
+										sf::FloatRect closeBtnBounds = closeBtn.getGlobalBounds();
+
+										if (closeBtnBounds.contains(mousePos)) {
+
+											prompt.close();
+
+										}
+
+
+									}
+
+								}
+
+								prompt.clear(sf::Color::White);
+								prompt.draw(nec);
+								prompt.draw(closeBtn);
+								prompt.display();
+
+							}
+
 
 						}
 						else {
@@ -587,8 +634,57 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 					}
 					else if (propertiesOwned == 0) {
 
-						player->setIsBankrupt(true);
-						player->setCash(0);
+						player->deductCash(property->getRentPrice());
+
+
+
+						sf::RenderWindow prompt(sf::VideoMode(280, 90), "NOT ENOUGH CASH!", sf::Style::Titlebar);
+
+						sf::Text nec;
+						nec.setString("NOT ENOUGH CASH\nRenting this property\ninstead.");
+						nec.setPosition(5.0f, 5.0f);
+						nec.setFont(stdFont);
+						nec.setCharacterSize(15);
+						nec.setFillColor(sf::Color::Black);
+
+						sf::Texture closeBtnTexture;
+						closeBtnTexture.loadFromFile("assets/upgrade_prompt_close.png");
+						sf::RectangleShape closeBtn(sf::Vector2f(15.0f, 15.0f));
+						closeBtn.setTexture(&closeBtnTexture);
+						closeBtn.setPosition(250.0f, 5.0f);
+
+						while (prompt.isOpen()) {
+
+							sf::Event evt;
+							while (prompt.pollEvent(evt)) {
+
+								if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+
+									sf::Vector2f mousePos = prompt.mapPixelToCoords(sf::Mouse::getPosition(prompt));
+									sf::FloatRect closeBtnBounds = closeBtn.getGlobalBounds();
+
+									if (closeBtnBounds.contains(mousePos)) {
+
+										prompt.close();
+
+									}
+
+
+								}
+
+							}
+
+							prompt.clear(sf::Color::White);
+							prompt.draw(nec);
+							prompt.draw(closeBtn);
+							prompt.display();
+
+						}
+
+
+						//player->setIsBankrupt(true);
+						//player->setCash(0);
 
 					}
 
@@ -995,8 +1091,54 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 						if (!barter) {
 
-							player->setIsBankrupt(true);
-							player->setCash(0);
+							//player->setIsBankrupt(true);
+							//player->setCash(0);
+							player->deductCash(property->getRentPrice());
+
+							sf::RenderWindow prompt(sf::VideoMode(280, 90), "NOT ENOUGH CASH!", sf::Style::Titlebar);
+
+							sf::Text nec;
+							nec.setString("NOT ENOUGH CASH\nRenting this property\ninstead.");
+							nec.setPosition(5.0f, 5.0f);
+							nec.setFont(stdFont);
+							nec.setCharacterSize(15);
+							nec.setFillColor(sf::Color::Black);
+
+							sf::Texture closeBtnTexture;
+							closeBtnTexture.loadFromFile("assets/upgrade_prompt_close.png");
+							sf::RectangleShape closeBtn(sf::Vector2f(15.0f, 15.0f));
+							closeBtn.setTexture(&closeBtnTexture);
+							closeBtn.setPosition(250.0f, 5.0f);
+
+							while (prompt.isOpen()) {
+
+								sf::Event evt;
+								while (prompt.pollEvent(evt)) {
+
+									if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+
+										sf::Vector2f mousePos = prompt.mapPixelToCoords(sf::Mouse::getPosition(prompt));
+										sf::FloatRect closeBtnBounds = closeBtn.getGlobalBounds();
+
+										if (closeBtnBounds.contains(mousePos)) {
+
+											prompt.close();
+
+										}
+
+
+									}
+
+								}
+
+								prompt.clear(sf::Color::White);
+								prompt.draw(nec);
+								prompt.draw(closeBtn);
+								prompt.display();
+
+							}
+
 
 						}
 						else {
@@ -1012,8 +1154,56 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 					}
 					else if (propertiesOwned == 0) {
 
-						player->setIsBankrupt(true);
-						player->setCash(0);
+						//player->setIsBankrupt(true);
+						//player->setCash(0);
+
+						player->deductCash(property->getRentPrice());
+
+
+						sf::RenderWindow prompt(sf::VideoMode(280, 90), "NOT ENOUGH CASH!", sf::Style::Titlebar);
+
+						sf::Text nec;
+						nec.setString("NOT ENOUGH CASH\nRenting this property\ninstead.");
+						nec.setPosition(5.0f, 5.0f);
+						nec.setFont(stdFont);
+						nec.setCharacterSize(15);
+						nec.setFillColor(sf::Color::Black);
+
+						sf::Texture closeBtnTexture;
+						closeBtnTexture.loadFromFile("assets/upgrade_prompt_close.png");
+						sf::RectangleShape closeBtn(sf::Vector2f(15.0f, 15.0f));
+						closeBtn.setTexture(&closeBtnTexture);
+						closeBtn.setPosition(250.0f, 5.0f);
+
+						while (prompt.isOpen()) {
+
+							sf::Event evt;
+							while (prompt.pollEvent(evt)) {
+
+								if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+
+									sf::Vector2f mousePos = prompt.mapPixelToCoords(sf::Mouse::getPosition(prompt));
+									sf::FloatRect closeBtnBounds = closeBtn.getGlobalBounds();
+
+									if (closeBtnBounds.contains(mousePos)) {
+
+										prompt.close();
+
+									}
+
+
+								}
+
+							}
+
+							prompt.clear(sf::Color::White);
+							prompt.draw(nec);
+							prompt.draw(closeBtn);
+							prompt.display();
+
+						}
+
 
 					}
 
@@ -1650,7 +1840,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 
 			}
-		
+			
 			if (strcmp(board.getCells()[playerPosition[playerID]]->getSpaceType(), "GOTOJAIL") == 0) {
 		
 
@@ -1750,9 +1940,12 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 											player->setIsInJail(false);
 											player->setIsInJailCount(0);
 
-										}
+											jail.close();
 
-										err.setString("You do not have a jail rescue card!");
+										}
+										else {
+											err.setString("You do not have a jail rescue card!");
+										}
 
 									}
 									else if (i == 2) {
@@ -1783,7 +1976,9 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 											Player** allPlayers = board.getPlayers();
 
-											for (int i = 0; i < board.getPlayerCount() && !jailCardExists; i++) {
+											for (int i = 0; i < board.getPlayerCount() && jailCardExists == -1; i++) {
+
+												cout << "Player " << i << " -> " << allPlayers[i]->getHasJailRescueCard() << endl;
 
 												if (!allPlayers[i]->getIsBankrupt() && allPlayers[i]->getHasJailRescueCard()) {
 
@@ -1798,8 +1993,6 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 												sf::RenderWindow bin(sf::VideoMode(250, 120), "YES OR NO?", sf::Style::Titlebar);
 
-
-
 												sf::RectangleShape yn[2];
 												sf::Text ynText[2];
 
@@ -1808,6 +2001,12 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 													yn[i].setFillColor(sf::Color(52, 73, 94));
 													yn[i].setSize(sf::Vector2f(100.0f, 50.0f));
 													yn[i].setPosition(12.0f + (i * 120.0f), 20.0f);
+
+													ynText[i].setCharacterSize(13);
+													ynText[i].setFont(stdFont);
+													ynText[i].setFillColor(sf::Color::White);
+													ynText[i].setPosition(45.0f + (i * 125.0f), 35.0f);
+													ynText[i].setString((i == 0) ? "YES" : "NO");
 
 												}
 
@@ -1844,6 +2043,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 																allPlayers[jailCardExists]->setHasJailRescueCard(allPlayers[jailCardExists]->getHasJailRescueCard() - 1);
 
 																bin.close();
+																jail.close();
 
 
 															}
@@ -2211,11 +2411,7 @@ void Monopoly::checkBankruptcy() {
 				if (strcmp(cells[j]->getSpaceType(), "PRIVATE") == 0 || strcmp(cells[j]->getSpaceType(), "COMMERCIAL") == 0) {
 				
 
-					Property* p = (Property*) cells[j];
-
-					//cout << "Name  -> " << p->getPropertyName() << endl;
-					//cout << "Owner -> " << p->getOwnerID() << endl;
-					//cout << "PID   -> " << player[i]->getPlayerID() << endl;
+					Property* p = (Property*)cells[j];
 
 
 					if (p->getOwnerID() == player[i]->getPlayerID()) {
@@ -2255,21 +2451,45 @@ void Monopoly::checkBankruptcy() {
 				for (int j = 0; j < 40; j++) {
 
 
-					if (strcmp(cells[j]->getSpaceType(), "PRIVATE") == 0 && strcmp(cells[j]->getSpaceType(), "COMMERCIAL")) {
+					if (strcmp(cells[j]->getSpaceType(), "PRIVATE") == 0 || strcmp(cells[j]->getSpaceType(), "COMMERCIAL") == 0) {
 
 
 						Property* p = (Property*)cells[j];
 
-						if (p->getOwnerID() == player[i]->getPlayerID() && abs(deficit - p->getPurchasePrice()) < minDiff && !p->getMortgaged()) {
+						//cout << "Owner -> " << p->getOwnerID() << endl;
+						//cout << "Player ID -> " << player[i]->getPlayerID() << endl;
+						//cout << "Mortgaged -> " << p->getMortgaged() << endl;
+						//cout << "Deficit -> " << deficit << endl;
 
-							propertyInd = j;
+
+						if (p->getOwnerID() == player[i]->getPlayerID() && !p->getMortgaged() && deficit > 0) {
+
+							cout << "Seizing property ->" << p->getPropertyName() << endl;
+
+							p->setOwnerID(-1);
+							deficit -= p->getPurchasePrice();
+							player[i]->addCash(p->getPurchasePrice());
+
+
+							if (strcmp(p->getSpaceType(), "PRIVATE") == 0) {
+								
+								PrivateProperty* _p = (PrivateProperty* ) p;
+
+								_p->setHouseCount(0);
+								_p->setShopCount(0);
+								_p->setHotelCount(0);
+
+							}
+
 
 						}
+
+						/*
 						else if (p->getOwnerID() == player[i]->getPlayerID() && abs(deficit - (p->getPurchasePrice() / 2)) < minDiff && p->getMortgaged()) {
 
 							propertyInd = j;
 
-						}
+						}*/
 
 
 					}
@@ -2277,24 +2497,53 @@ void Monopoly::checkBankruptcy() {
 
 				}
 
+				cout << "Deficit of Player " << i << " " << deficit << endl;
+
+				if (deficit <= 0) {
+
+					player[i]->setIsBankrupt(false);
+					bankruptPlayers[player[i]->getPlayerID()] = false;
+
+				}
+				else {
+
+					player[i]->setIsBankrupt(true);
+					bankruptPlayers[player[i]->getPlayerID()] = true;
+
+				}
+
+				//if (propertyInd != -1) {
+				//	
+				//	Property* p = (Property*)cells[propertyInd];
+
+				//	player[i]->addCash(
+
+				//		(!p->getMortgaged()) ?
+				//		p->getPurchasePrice() :
+				//		(p->getPurchasePrice() / 2) - (0.2f * p->getPurchasePrice())
+
+				//	);
+
+				//	p->setOwnerID(-1);
+
+				//	player[i]->setIsBankrupt(false);
+				//	bankruptPlayers[player[i]->getPlayerID()] = false;
 
 
-				Property* p = (Property*)cells[propertyInd];
+				//	/*
 
-				player[i]->addCash(
+				//	This was initially resulting in unreadable memory
+				//	exception
 
-					(!p->getMortgaged()) ?
-					p->getPurchasePrice() :
-					(p->getPurchasePrice() / 2) - (0.2f * p->getPurchasePrice())
-
-				);
-
-				p->setOwnerID(-1);
+				//	*/
+				//	if (p->getMortgaged() && p) p->setMortgaged(false);
+				//
+				//}
+				//else {
 
 
-				player[i]->setIsBankrupt(false);
-				bankruptPlayers[player[i]->getPlayerID()] = false;
 
+				//}
 
 
 			}
@@ -2329,6 +2578,89 @@ void Monopoly::checkBankruptcy() {
 
 
 bool Monopoly::getGameWon() { return gameWon; }
+
+
+void Monopoly::mortgageProperty(int cellNum) {
+
+	Property* p = (Property *)board.getCells()[cellNum];
+	
+	int propertyValue = p->getPurchasePrice() +
+		(p->getHouseCount() * 100)
+		+ (p->getShopCount() * 300)
+		+ (p->getHotelCount() * 1000)
+		+ (p->getHasWifi() * 30)
+		+ (p->getHasElectricity() * 50)
+		+ (p->getHasGas() * 50);
+
+	if (p->getOwnerID() != -1 && !p->getMortgaged()) {
+	
+		p->setMortgaged(true);
+		board.getPlayerByID(p->getOwnerID())->addCash(propertyValue / 2);
+
+	}
+	else if (p->getOwnerID() != -1 && p->getMortgaged()) {
+	
+		if (board.getPlayerByID(p->getOwnerID())->getCash() >= ((propertyValue / 2) + (0.2 * propertyValue))) {
+		
+			p->setMortgaged(false);
+			board.getPlayerByID(p->getOwnerID())->deductCash((propertyValue / 2.0) + (0.2f * propertyValue));
+
+		}
+		else {
+
+			sf::RenderWindow prompt(sf::VideoMode(280, 90), "NOT ENOUGH CASH!", sf::Style::Titlebar);
+
+			sf::Font stdFont;
+			stdFont.loadFromFile("fonts/Montserrat-Black.ttf");
+
+			sf::Text nec;
+			nec.setString("NOT ENOUGH CASH!\nYou need 20% more than\noriginal price to unmortgage.");
+			nec.setPosition(5.0f, 5.0f);
+			nec.setFont(stdFont);
+			nec.setCharacterSize(15);
+			nec.setFillColor(sf::Color::Black);
+
+			sf::Texture closeBtnTexture;
+			closeBtnTexture.loadFromFile("assets/upgrade_prompt_close.png");
+			sf::RectangleShape closeBtn(sf::Vector2f(15.0f, 15.0f));
+			closeBtn.setTexture(&closeBtnTexture);
+			closeBtn.setPosition(250.0f, 5.0f);
+
+			while (prompt.isOpen()) {
+			
+				sf::Event evt;
+				while (prompt.pollEvent(evt)) {
+				
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+
+						sf::Vector2f mousePos = prompt.mapPixelToCoords(sf::Mouse::getPosition(prompt));
+						sf::FloatRect closeBtnBounds = closeBtn.getGlobalBounds();
+
+						if (closeBtnBounds.contains(mousePos)) {
+
+							prompt.close();
+
+						}
+
+
+					}
+
+				}
+
+				prompt.clear(sf::Color::White);
+				prompt.draw(nec);
+				prompt.draw(closeBtn);
+				prompt.display();
+
+			}
+
+		}
+
+	}
+
+
+}
 
 
 // REVIEW

@@ -77,6 +77,7 @@ public:
 	void checkBankruptcy();
 
 	bool getGameWon();
+	void mortgageProperty(int);
 
 
 

@@ -63,6 +63,7 @@ Player::Player(const Player& p)
 	isbankrupt = p.isbankrupt;
 	playerPosition = p.playerPosition;
 	inJailCount = p.inJailCount;
+	isRenting = p.isRenting;
 }
 
 void Player::addCash(int amount)
