@@ -382,8 +382,18 @@ void Board::allocatePlayers() {
 
 	this->players = new Player * [playerCount];
 
+	const char* names[5] = {
+
+		"Saqib",
+		"Nabeel",
+		"Salman",
+		"Abdur Rehman",
+		"Chooran"
+
+	};
+
 	for (int i = 0; i < playerCount; i++)
-		this->players[i] = new Player("Saqib", i);
+		this->players[i] = new Player(names[i], i);
 
 }
 
@@ -447,16 +457,35 @@ void Board::upgradeProperty(int index, int i, int j) {
 
 		}
 
+		
+		int totalHouses = 0;
+		int minHouses = INT_MAX;
+
 		for (int i = 0; i < propertyMap[groupInd]->value && canUpgrade; i++) {
 
 			PrivateProperty* p = (PrivateProperty*)cells[propertyMap[groupInd]->list[i]];
 			if (p->getOwnerID() != owner->getPlayerID()) {
 
 				canUpgrade = false;
+				totalHouses += p->getHouseCount();
 
 			}
 
 		}
+
+
+
+		for (int i = 0; i < propertyMap[groupInd]->value; i++) {
+
+			PrivateProperty* p = (PrivateProperty*)cells[propertyMap[groupInd]->list[i]];
+
+			if (p->getHouseCount() < minHouses) {
+				minHouses = p->getHouseCount();
+			}
+
+		}
+
+
 
 
 		if (canUpgrade) {
@@ -464,9 +493,78 @@ void Board::upgradeProperty(int index, int i, int j) {
 			if (i == 0 && j == 0) {
 
 				if (owner->getCash() >= 100) {
-					p->addHouse();
-					owner->deductCash(100);
+
+					//if (minHouses == INT_MAX) {
+					//	
+					//	p->addHouse();
+					//	owner->deductCash(100);
+					//
+					//}
+					//else {
+
+						if (p->getHouseCount() == minHouses) {
+
+							p->addHouse();
+							owner->deductCash(100);
+
+						}
+						else {
+
+							// Error message
+
+							sf::RenderWindow prompt(sf::VideoMode(280, 90), "NOT ENOUGH CASH!", sf::Style::Titlebar);
+
+							sf::Font stdFont;
+							stdFont.loadFromFile("fonts/Montserrat-Black.ttf");
+
+							sf::Text nec;
+							nec.setString("CANNOT BUILD\nHouses must be\nequally spread out.");
+							nec.setPosition(5.0f, 5.0f);
+							nec.setFont(stdFont);
+							nec.setCharacterSize(15);
+							nec.setFillColor(sf::Color::Black);
+
+							sf::Texture closeBtnTexture;
+							closeBtnTexture.loadFromFile("assets/upgrade_prompt_close.png");
+							sf::RectangleShape closeBtn(sf::Vector2f(15.0f, 15.0f));
+							closeBtn.setTexture(&closeBtnTexture);
+							closeBtn.setPosition(250.0f, 5.0f);
+
+							while (prompt.isOpen()) {
+
+								sf::Event evt;
+								while (prompt.pollEvent(evt)) {
+
+									if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+
+										sf::Vector2f mousePos = prompt.mapPixelToCoords(sf::Mouse::getPosition(prompt));
+										sf::FloatRect closeBtnBounds = closeBtn.getGlobalBounds();
+
+										if (closeBtnBounds.contains(mousePos)) {
+
+											prompt.close();
+
+										}
+
+
+									}
+
+								}
+
+								prompt.clear(sf::Color::White);
+								prompt.draw(nec);
+								prompt.draw(closeBtn);
+								prompt.display();
+
+							}
+
+						}
+
+					//}
+
 				}
+
 
 			}
 			else if (i == 0 && j == 1) {

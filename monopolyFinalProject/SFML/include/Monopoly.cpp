@@ -2464,7 +2464,7 @@ void Monopoly::checkBankruptcy() {
 
 						if (p->getOwnerID() == player[i]->getPlayerID() && !p->getMortgaged() && deficit > 0) {
 
-							cout << "Seizing property ->" << p->getPropertyName() << endl;
+							//cout << "Seizing property ->" << p->getPropertyName() << endl;
 
 							p->setOwnerID(-1);
 							deficit -= p->getPurchasePrice();
@@ -2484,20 +2484,13 @@ void Monopoly::checkBankruptcy() {
 
 						}
 
-						/*
-						else if (p->getOwnerID() == player[i]->getPlayerID() && abs(deficit - (p->getPurchasePrice() / 2)) < minDiff && p->getMortgaged()) {
-
-							propertyInd = j;
-
-						}*/
-
 
 					}
 
 
 				}
 
-				cout << "Deficit of Player " << i << " " << deficit << endl;
+				//cout << "Deficit of Player " << i << " " << deficit << endl;
 
 				if (deficit <= 0) {
 
@@ -2510,40 +2503,44 @@ void Monopoly::checkBankruptcy() {
 					player[i]->setIsBankrupt(true);
 					bankruptPlayers[player[i]->getPlayerID()] = true;
 
+
+					for (int j = 0; j < 40; j++) {
+
+
+						if (strcmp(cells[j]->getSpaceType(), "PRIVATE") == 0 || strcmp(cells[j]->getSpaceType(), "COMMERCIAL") == 0) {
+						
+
+							Property* p = (Property* ) cells[j];
+
+
+							if (p->getMortgaged()) {
+							
+								p->setOwnerID(-1);
+								p->setMortgaged(false);
+
+
+								if (strcmp(p->getSpaceType(), "PRIVATE") == 0) {
+
+									PrivateProperty* _p = (PrivateProperty*) p;
+
+									_p->setHouseCount(0);
+									_p->setShopCount(0);
+									_p->setHotelCount(0);
+
+								}
+
+
+							}
+
+
+						
+						}
+
+
+					}
+
+
 				}
-
-				//if (propertyInd != -1) {
-				//	
-				//	Property* p = (Property*)cells[propertyInd];
-
-				//	player[i]->addCash(
-
-				//		(!p->getMortgaged()) ?
-				//		p->getPurchasePrice() :
-				//		(p->getPurchasePrice() / 2) - (0.2f * p->getPurchasePrice())
-
-				//	);
-
-				//	p->setOwnerID(-1);
-
-				//	player[i]->setIsBankrupt(false);
-				//	bankruptPlayers[player[i]->getPlayerID()] = false;
-
-
-				//	/*
-
-				//	This was initially resulting in unreadable memory
-				//	exception
-
-				//	*/
-				//	if (p->getMortgaged() && p) p->setMortgaged(false);
-				//
-				//}
-				//else {
-
-
-
-				//}
 
 
 			}
@@ -2584,13 +2581,24 @@ void Monopoly::mortgageProperty(int cellNum) {
 
 	Property* p = (Property *)board.getCells()[cellNum];
 	
-	int propertyValue = p->getPurchasePrice() +
-		(p->getHouseCount() * 100)
-		+ (p->getShopCount() * 300)
-		+ (p->getHotelCount() * 1000)
-		+ (p->getHasWifi() * 30)
-		+ (p->getHasElectricity() * 50)
-		+ (p->getHasGas() * 50);
+	int propertyValue = 0;
+
+	if (strcmp(p->getSpaceType(), "PRIVATE") == 0) {
+
+		propertyValue = p->getPurchasePrice() +
+			(p->getHouseCount() * 100)
+			+ (p->getShopCount() * 300)
+			+ (p->getHotelCount() * 1000)
+			+ (p->getHasWifi() * 30)
+			+ (p->getHasElectricity() * 50)
+			+ (p->getHasGas() * 50);
+
+	}
+	else {
+
+		propertyValue = p->getPurchasePrice();
+
+	}
 
 	if (p->getOwnerID() != -1 && !p->getMortgaged()) {
 	

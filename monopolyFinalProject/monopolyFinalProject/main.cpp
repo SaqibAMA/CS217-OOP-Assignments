@@ -989,6 +989,16 @@ int main()
 
     }
 
+    sf::Text* commercialMortgageStatus = new sf::Text[3];
+    for (int i = 0; i < 3; i++) {
+
+        commercialMortgageStatus[i].setString("M");
+        commercialMortgageStatus[i].setCharacterSize(14);
+        commercialMortgageStatus[i].setFont(stdFont);
+        commercialMortgageStatus[i].setFillColor(sf::Color(149, 165, 166));
+        commercialMortgageStatus[i].setPosition(825.0f + (i * 142), 437.0f);
+
+    }
 
     // Player Cash Text setup
 
@@ -1210,29 +1220,29 @@ int main()
 
 
 
-   // //  Placebo
-   //{
+    //  Placebo
+   {
 
-   //     game.getBoard().getPlayerByID(0)->setHasJailRescueCard(2);
-   //     cout << "Added jail rescue card..." << endl;
-   //     cout << game.getBoard().getPlayerByID(0)->getHasJailRescueCard() << endl;
+        game.getBoard().getPlayerByID(0)->setHasJailRescueCard(2);
+        cout << "Added jail rescue card..." << endl;
+        cout << game.getBoard().getPlayerByID(0)->getHasJailRescueCard() << endl;
 
-   //     PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
+        PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
 
-   //     propertyCell->setOwnerID(0);
-   //     propertyCell->setMortgaged(true);
+        propertyCell->setOwnerID(0);
+        propertyCell->setMortgaged(true);
 
-   //     propertyCell = (PrivateProperty*)game.getBoard().getCells()[3];
+        propertyCell = (PrivateProperty*)game.getBoard().getCells()[3];
 
-   //     propertyCell->setOwnerID(0);
+        propertyCell->setOwnerID(0);
 
 
-   //     propertyCell = (PrivateProperty*)game.getBoard().getCells()[6];
+        propertyCell = (PrivateProperty*)game.getBoard().getCells()[6];
 
-   //     propertyCell->setOwnerID(0);
+        propertyCell->setOwnerID(0);
 
-   // }
-   // 
+    }
+    
 
 
     while (window.isOpen()) {
@@ -1384,18 +1394,26 @@ int main()
                 // Mortgage Prompt
 
                 sf::FloatRect mortgageBtnBounds[3];
+                sf::FloatRect commercialMortgageBtnBounds[3];
                 for (int i = 0; i < 3; i++) {
-                
+
                     mortgageBtnBounds[i] = mortgageStatus[i].getGlobalBounds();
+                    commercialMortgageBtnBounds[i] = commercialMortgageStatus[i].getGlobalBounds();
 
                     if (mortgageBtnBounds[i].contains(mousePos)) {
-                    
+
                         game.mortgageProperty(privatePropertySpaces[i + privatePropertyCardScroll]);
+
+                    }
+                    else if (commercialMortgageBtnBounds[i].contains(mousePos)) {
+
+                        game.mortgageProperty(commercialPropertySpaces[i + commercialPropertyCardScroll]);
 
                     }
 
 
                 }
+
 
 
 
@@ -1631,6 +1649,13 @@ int main()
             window.draw(commercialCardTitle[i]);
             window.draw(commercialCardPrice[i]);
             window.draw(commercialCardRent[i]);
+
+
+            commercialMortgageStatus[i].setFillColor(
+                (c->getMortgaged()) ? sf::Color(231, 76, 60) : sf::Color(149, 165, 166));
+
+
+            window.draw(commercialMortgageStatus[i]);
 
 
             // enable switching based on connection

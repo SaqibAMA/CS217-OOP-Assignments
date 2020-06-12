@@ -29,7 +29,7 @@ Player::Player(const char* Name, int Playerid)
 	}
 	name[j] = '\0';
 	playerid = Playerid;
-	cash = 500;
+	cash = 5000;
 	propertylist = nullptr;
 	propertylistsize = 0;
 	isInJail = false;
