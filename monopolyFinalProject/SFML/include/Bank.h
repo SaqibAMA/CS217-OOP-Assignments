@@ -26,6 +26,7 @@ public:
 	void payMortageToPlayerByID(int, Player);
 	void declarePlayerBankruptByID(Player** player, int playerCount);
 
+	~Bank();
 
 	// 6th June
 	Property** appendPropertyList(Property*);

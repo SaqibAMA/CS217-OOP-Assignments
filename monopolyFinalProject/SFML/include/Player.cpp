@@ -37,6 +37,7 @@ Player::Player(const char* Name, int Playerid)
 	isbankrupt = false;
 	playerPosition = 0;
 	inJailCount = 0;
+	isRenting = 0;
 
 }
 
@@ -222,15 +223,27 @@ void Player::setPlayerPosition(int x) {
 int Player::getIsRenting() { return isRenting; }
 void Player::setIsRenting(int isRenting) { this->isRenting = isRenting; }
 
-
-
-
-
 int& Player::getCashRef() {
 
 	return cash;
 
 }
+
+
+Player::~Player() {
+
+	if (propertylist) {
+		
+		free(propertylist);
+
+	}
+
+	if (name) delete[] name;
+
+}
+
+
+
 
 
 
@@ -279,42 +292,4 @@ void Player::setIsInJailCount(int i) {
 }
 int Player::getIsInJailCount() {
 	return inJailCount;
-}
-
-
-
-
-
-
-
-
-
-
-// Review
-
-//  NEW FUNC(2):
-void Player::atJail(Player& a) {
-
-	// If players wants to pay fine ... 
-	std::cout << "Do you want to pay fine?" << std::endl;
-	char b[5];
-	cin.getline(b, 20);
-	if (strcmp(b, "yes") || (strcmp(b, "Yes"))) {
-		a.deductCash(400);
-	}
-	if (strcmp(b, "no") || (strcmp(b, "No"))) {
-		// JAIL RESCUE CARD WALLA ROOLA : 
-		if (a.getHasJailRescueCard() > 0) {
-			a.setPlayerPosition(11);
-			a.hasJailRescueCard--;
-		}
-		a.inJailCount = 0;
-		if (a.inJailCount < 2) {
-			/*
-			 Dice walla jo kaam krna ha Kar loo ....
-			*/
-			a.inJailCount++;
-		}
-	}
-
 }

@@ -160,3 +160,12 @@ Property* Bank::getProperty(int id) {
 
 	return nullptr;
 }
+
+
+Bank::~Bank() {
+
+	if (size) {
+		free(List);
+	}
+
+}

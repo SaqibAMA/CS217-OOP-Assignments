@@ -41,14 +41,34 @@ int main()
     introScreenTexture.loadFromFile("assets/intro-splash-screen.png");
     introScreen.setTexture(&introScreenTexture);
 
-    window.draw(introScreen);
+
+    sf::Font montLight;
+    montLight.loadFromFile("fonts/Montserrat-Light.ttf");
+
+    sf::Text introScreenText[3];
+    for (int i = 0; i < 3; i++) {
+    
+        introScreenText[i].setFont(montLight);
+        introScreenText[i].setString((i == 0) ? "START GAME" : "EXIT GAME");
+        introScreenText[i].setCharacterSize(22);
+
+    }
+
+    introScreenText[2].setString("SAQIB ALI \t NABEEL AHMED \t SALMAN HAIDER \t ABDUR REHMAN");
+    introScreenText[2].setCharacterSize(15);
+
+    introScreenText[0].setPosition(570.0f, 450.0f);
+    introScreenText[1].setPosition(580.0f, 520.0f);
+    introScreenText[2].setPosition(370.0f, 690.0f);
 
     bool gameStarted = false;
 
+    /*
     while (!gameStarted) {
 
         sf::Event evt;
         while (window.pollEvent(evt)) {
+
 
             if (evt.type == evt.Closed) {
 
@@ -57,18 +77,6 @@ int main()
             }
 
             if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-
-
-                /*
-
-                Play button bounds
-
-                485, 505
-                795, 505
-                485, 592
-                795, 592
-
-                */
 
                 int mouseX = sf::Mouse::getPosition(window).x;
                 int mouseY = sf::Mouse::getPosition(window).y;
@@ -83,6 +91,55 @@ int main()
         }
 
         window.draw(introScreen);
+        window.display();
+
+    }
+    */
+
+
+    while (!gameStarted) {
+
+        sf::Event evt;
+        while (window.pollEvent(evt)) {
+        
+            if (evt.type == evt.Closed) {
+            
+                window.close();
+
+            }
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                sf::FloatRect startGameBounds = introScreenText[0].getGlobalBounds();
+                sf::FloatRect exitBounds = introScreenText[1].getGlobalBounds();
+
+
+                if (exitBounds.contains(mousePos)) {
+
+                    window.close();
+
+                }
+
+                if (startGameBounds.contains(mousePos)) {
+                
+                    gameStarted = true;
+
+                }
+
+
+
+            }
+
+        }
+
+        window.clear();
+        window.draw(introScreen);
+        
+        window.draw(introScreenText[0]);
+        window.draw(introScreenText[2]);
+
+
         window.display();
 
     }
@@ -180,7 +237,8 @@ int main()
 
             // Background screen
             sf::Texture playerNumberScreenTexture;
-            playerNumberScreenTexture.loadFromFile("assets/player-number-selection-screen.png");
+            //playerNumberScreenTexture.loadFromFile("assets/player-number-selection-screen.png");
+            playerNumberScreenTexture.loadFromFile("assets/selection-screen.png");
             sf::RectangleShape playerNumberScreen(sf::Vector2f(1280.0f, 720.0f));
             playerNumberScreen.setTexture(&playerNumberScreenTexture);
 
@@ -208,7 +266,11 @@ int main()
             fivePlayerCard.setPosition(sf::Vector2f(
                 fourPlayerCard.getPosition().x + 260, threePlayerCard.getPosition().y));
 
-            while (totalPlayers == -1) {
+            bool playerSelected = false;
+
+            sf::Clock clk;
+
+            while (!playerSelected) {
 
 
                 sf::Event evt;
@@ -239,8 +301,31 @@ int main()
 
                     }
 
+                }
+
+                if (totalPlayers == -1)
+                    clk.restart();
+
+
+                if (totalPlayers != -1 && clk.getElapsedTime().asMilliseconds() < 1200) {
+
+
+                    threePlayerCard.setPosition(threePlayerCard.getPosition().x, threePlayerCard.getPosition().y - (clk.getElapsedTime().asSeconds() * 12.0f));
+
+                    fourPlayerCard.setPosition(fourPlayerCard.getPosition().x, fourPlayerCard.getPosition().y - (clk.getElapsedTime().asSeconds() * 10.0f));
+
+                    fivePlayerCard.setPosition(fivePlayerCard.getPosition().x, fivePlayerCard.getPosition().y - (clk.getElapsedTime().asSeconds() * 8.0f));
+
 
                 }
+
+                if (totalPlayers != -1 && clk.getElapsedTime().asMilliseconds() > 1200) {
+
+                    clk.restart();
+                    playerSelected = true;
+
+                }
+
 
                 window.draw(playerNumberScreen);
                 window.draw(threePlayerCard);
@@ -304,7 +389,7 @@ int main()
 
             // Background screen
             sf::Texture playerNumberScreenTexture;
-            playerNumberScreenTexture.loadFromFile("assets/player-number-selection-screen.png");
+            playerNumberScreenTexture.loadFromFile("assets/game-bg.png");
             sf::RectangleShape playerNumberScreen(sf::Vector2f(1280.0f, 720.0f));
             playerNumberScreen.setTexture(&playerNumberScreenTexture);
 
@@ -323,10 +408,10 @@ int main()
 
                 sf::Text noGamesTxt;
                 noGamesTxt.setString("No games saved previously!");
-                noGamesTxt.setFillColor(sf::Color::Red);  // Setting the text color to cream
-                noGamesTxt.setFont(stdFont);
+                noGamesTxt.setFillColor(sf::Color::White);  // Setting the text color to cream
+                noGamesTxt.setFont(montLight);
 
-                noGamesTxt.setPosition(sf::Vector2f(400.0f, 250.0f));
+                noGamesTxt.setPosition(sf::Vector2f(440.0f, 250.0f));
 
                 while (choice != 1) {
 
@@ -373,11 +458,11 @@ int main()
             else {
 
                 sf::Text totalGamesText;
-                totalGamesText.setString("~ SAVED GAMES ~");
+                totalGamesText.setString("- SAVED GAMES -");
 
                 totalGamesText.setCharacterSize(35);
                 totalGamesText.setFont(stdFont);
-                totalGamesText.setFillColor(sf::Color(163, 191, 46));
+                totalGamesText.setFillColor(sf::Color(236, 240, 241));
                 totalGamesText.setPosition(sf::Vector2f(470.0f, 130.0f));
 
                 sf::Text* gamesListText = new sf::Text[totalGames];
@@ -385,8 +470,8 @@ int main()
                 for (int i = 0; i < totalGames; i++) {
 
                     gamesListText[i].setCharacterSize(30);
-                    gamesListText[i].setFont(stdFont);
-                    gamesListText[i].setFillColor(sf::Color(94, 60, 54));
+                    gamesListText[i].setFont(montLight);
+                    gamesListText[i].setFillColor(sf::Color(189, 195, 199));
                     gamesListText[i].setString(list[i]);
                     gamesListText[i].setPosition(sf::Vector2f(500.0f, 220.0f + ((float)i * 50.0f)));
 
@@ -417,8 +502,12 @@ int main()
                                 sf::FloatRect gamesListTextBound = gamesListText[i].getGlobalBounds();
 
                                 if (gamesListTextBound.contains(mousePos)) {
+
+
                                     gameChoiceSelected = i;
                                     gameStarted = true;
+                                    game.loadGame(list[i]);
+                                
                                 }
 
 
@@ -464,6 +553,11 @@ int main()
 
     // Setting up the favicon for that window again
     window.setIcon(314, 229, favicon.getPixelsPtr());
+
+    sf::Texture gameBGTexture;
+    gameBGTexture.loadFromFile("assets/game-bg.png");
+    sf::RectangleShape gameBG(sf::Vector2f(1280.0f, 720.0f));
+    gameBG.setTexture(&gameBGTexture);
 
     sf::Texture gameScreenTexture;
     gameScreenTexture.loadFromFile("assets/game-screen.png");
@@ -515,9 +609,9 @@ int main()
 
     sf::Texture cameraButtonTexture;
     cameraButtonTexture.loadFromFile("assets/camera.png");
-    sf::RectangleShape cameraButton(sf::Vector2f(106.5f, 80.25f));
+    sf::RectangleShape cameraButton(sf::Vector2f(111.0f, 111.0f));
     cameraButton.setTexture(&cameraButtonTexture);
-    cameraButton.setPosition(1150.0f, 620.0f);
+    cameraButton.setPosition(930.0f, 600.0f);
     cameraButtonTexture.setSmooth(true);
 
 
@@ -1209,6 +1303,19 @@ int main()
 
 
 
+    sf::Texture saveGameBtnTexture;
+    saveGameBtnTexture.loadFromFile("assets/saveBtn.png");
+    sf::RectangleShape saveGameBtn(sf::Vector2f(111.0f, 111.0f));
+    saveGameBtn.setTexture(&saveGameBtnTexture);
+    saveGameBtn.setPosition(840.0f, 600.0f);
+
+    /*sf::Text saveBtnText;
+    saveBtnText.setString("SAVE");
+    saveBtnText.setFont(stdFont);
+    saveBtnText.setCharacterSize(14);
+    saveBtnText.setPosition(1115.0f, 520.0f);*/
+
+
     sf::Text gameWon;
     gameWon.setFont(stdFont);
     gameWon.setCharacterSize(50);
@@ -1220,12 +1327,13 @@ int main()
 
 
 
+
+
+
     //  Placebo
    {
 
         game.getBoard().getPlayerByID(0)->setHasJailRescueCard(2);
-        cout << "Added jail rescue card..." << endl;
-        cout << game.getBoard().getPlayerByID(0)->getHasJailRescueCard() << endl;
 
         PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
 
@@ -1253,9 +1361,16 @@ int main()
         while (window.pollEvent(evt)) {
 
 
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+
+                game.saveGame();
+
+            }
+
+
             if (evt.type == evt.Closed) {
 
-                // game.saveGame(0);
+                game.saveGame();
                 window.close();
 
             }
@@ -1312,6 +1427,15 @@ int main()
                     delete[] buildingIconBounds[i];
                 delete[] buildingIconBounds;
 
+
+                // Save Button functionality
+                sf::FloatRect saveGameBtnBounds = saveGameBtn.getGlobalBounds();
+
+                if (saveGameBtnBounds.contains(mousePos)) {
+                
+                    game.saveGame();
+
+                }
 
 
                 // Property Upgrade function tracking
@@ -1581,6 +1705,9 @@ int main()
 
         }
 
+        window.clear();
+
+        window.draw(gameBG);
         window.draw(gameScreen);
         window.draw(cameraButton);
         window.draw(diceButton);
@@ -1589,6 +1716,7 @@ int main()
         window.draw(turnDisplay);
         window.draw(turnText);
         window.draw(turnDisplayPiece);
+        window.draw(saveGameBtn);
 
         if (game.getGameWon())
             window.draw(gameWon);

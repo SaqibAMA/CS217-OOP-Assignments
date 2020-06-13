@@ -56,6 +56,9 @@ void Monopoly::setTotalPlayers(int totalPlayers) {
 	board.setPlayerCount(totalPlayers);
 	board.allocatePrevTurns();
 	board.allocatePlayers();
+
+	if (bankruptPlayers) delete[] bankruptPlayers;
+
 	bankruptPlayers = new bool[board.getPlayerCount()];
 
 	for (int i = 0; i < totalPlayers; i++) {
@@ -111,11 +114,10 @@ void Monopoly::printPlayerOnCell(
 
 void Monopoly::initializePositions() {
 
-
 	playerPosition = new int[board.getPlayerCount()];
 
 	for (int i = 0; i < board.getPlayerCount(); i++) {
-		playerPosition[i] = 0;
+		playerPosition[i] = board.getPlayerByID(i)->getPlayerPosition();
 	}
 
 
@@ -2671,202 +2673,569 @@ void Monopoly::mortgageProperty(int cellNum) {
 }
 
 
-// REVIEW
+void Monopoly::saveGame() {
 
-/***
-bool Monopoly::canBuildHouse(int group, int playerid)
-{
-	bool canbuild = true;
-	if (group == 0)
-	{
-		if (Playersarray[playerid].searchInProperty(0) &&
-			Playersarray[playerid].searchInProperty(1) &&
-			Playersarray[playerid].searchInProperty(2))
-		{
-			return true;
+
+	sf::RenderWindow window(sf::VideoMode(265, 166), "SAVE GAME", sf::Style::Titlebar);
+
+	sf::Font stdFont;
+	stdFont.loadFromFile("fonts/Montserrat-Black.ttf");
+
+	char saveName[100];
+	saveName[0] = '\0';
+
+	sf::Text saveGameTitle;
+	saveGameTitle.setString("ENTER NAME: ");
+	saveGameTitle.setFont(stdFont);
+	saveGameTitle.setFillColor(sf::Color(26, 188, 156));
+	saveGameTitle.setCharacterSize(18);
+	saveGameTitle.setPosition(15.0f, 15.0f);
+
+	sf::Text name;
+	name.setString("> ");
+	name.setFont(stdFont);
+	name.setFillColor(sf::Color(26, 188, 156));
+	name.setCharacterSize(18);
+	name.setPosition(15.0f, 35.0f);
+
+	sf::Text nameText;
+	nameText.setString(saveName);
+	nameText.setFont(stdFont);
+	nameText.setFillColor(sf::Color(44, 62, 80));
+	nameText.setCharacterSize(18);
+	nameText.setPosition(35.0f, 35.0f);
+
+	sf::String svName;
+
+	int nameLen = 0;
+
+
+	while (window.isOpen()) {
+	
+	
+		sf::Event evt;
+		while (window.pollEvent(evt)) {
+		
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+
+				window.close();
+
+			}
+
+			if (evt.type == sf::Event::TextEntered) {
+
+				if (evt.text.unicode == 13) {
+					
+					nameLen++;
+					window.close();
+
+					for (int i = 0; i < nameLen; i++)
+						saveName[i] = svName.getData()[i];
+
+				}
+				else if (evt.text.unicode >= 97 && evt.text.unicode < 128) {
+					svName += evt.text.unicode;
+					nameText.setString(svName);
+
+					nameLen++;
+				}
+
+			}
+
+
 		}
-		else return false;
+
+		window.clear(sf::Color(236, 240, 241));
+		
+		window.draw(saveGameTitle);
+		window.draw(name);
+		window.draw(nameText);
+
+		window.display();
+
 
 	}
-	if (group == 1)
-	{
-		if (Playersarray[playerid].searchInProperty(3) &&
-			Playersarray[playerid].searchInProperty(4))
-		{
-			return true;
-		}
-		else return false;
+
+
+
+	char pDataFileName[100];
+	pDataFileName[0] = '\0';
+	strcat(pDataFileName, "savedGames/");
+	strcat(pDataFileName, saveName);
+	strcat(pDataFileName, "_PropertyData.monopoly");
+
+	ofstream fout;
+	fout.open(pDataFileName);
+
+
+	int privatePropertySpaces[20] = {
+
+		1, 3, 6, 8,
+		9, 11, 13, 14,
+		16, 18, 19, 21,
+		23, 24, 26, 27,
+		29, 31, 32, 34,
+
+	};
+
+
+	int commercialPropertySpaces[8] = {
+
+		5, 12, 15, 25,
+		28, 35, 37, 39
+
+	};
+
+
+
+	for (int i = 0; i < 20; i++) {
+
+		PrivateProperty* p = (PrivateProperty*)board.getCells()[privatePropertySpaces[i]];
+
+		fout <<
+			p->getPropertyID() << " " <<
+			p->getOwnerID() << " " <<
+			p->getHouseCount() << " " <<
+			p->getShopCount() << " " <<
+			p->getHotelCount() << " " <<
+			p->getMortgaged() << " " <<
+			p->getHasWifi() << " " <<
+			p->getHasElectricity() << " " <<
+			p->getHasGas() << endl;
+
 
 	}
-	if (group == 2)
-	{
-		if (Playersarray[playerid].searchInProperty(5) &&
-			Playersarray[playerid].searchInProperty(6) &&
-			Playersarray[playerid].searchInProperty(7))
-		{
-			return true;
-		}
-		else return false;
+	
+	
+	for (int i = 0; i < 8; i++) {
+
+		CommercialProperty* p = (CommercialProperty *) board.getCells()[commercialPropertySpaces[i]];
+
+		fout <<
+			i << " " <<
+			p->getOwnerID() << " " <<
+			p->getMortgaged() << endl;
+
 
 	}
-	if (group == 3)
-	{
-		if (Playersarray[playerid].searchInProperty(8) &&
-			Playersarray[playerid].searchInProperty(9) &&
-			Playersarray[playerid].searchInProperty(10))
-		{
-			return true;
-		}
-		else return false;
+
+
+	fout.close();
+
+
+	char playerDataFileName[100];
+	playerDataFileName[0] = '\0';
+	strcat(playerDataFileName, "savedGames/");
+	strcat(playerDataFileName, saveName);
+	strcat(playerDataFileName, "_PlayerData.monopoly");
+
+	fout.open(playerDataFileName);
+
+
+	fout << board.getPlayerCount() << endl;
+
+
+	for (int i = 0; i < board.getPlayerCount(); i++) {
+
+
+		Player* p = board.getPlayerByID(i);
+
+		fout <<
+			p->getPlayerID() << " " <<
+			p->getCash() << " " <<
+			p->getIsInJail() << " " <<
+			p->getIsInJailCount() << " " <<
+			p->getHasJailRescueCard() << " " <<
+			p->getIsRenting() << " " <<
+			p->getPlayerPosition() << " " <<
+			p->getIsBankrupt() << endl;
+
 
 	}
-	if (group == 4)
-	{
-		if (Playersarray[playerid].searchInProperty(11) &&
-			Playersarray[playerid].searchInProperty(12) &&
-			Playersarray[playerid].searchInProperty(13))
-		{
-			return true;
+
+
+	fout.close();
+
+	char boardDataFileName[100];
+	boardDataFileName[0] = '\0';
+	strcat(boardDataFileName, "savedGames/");
+	strcat(boardDataFileName, saveName);
+	strcat(boardDataFileName, "_BoardData.monopoly");
+
+
+	fout.open(boardDataFileName);
+
+
+
+	fout <<
+		board.getPreviousTurn() << " " <<
+		board.getTurn() << " " <<
+		board.getDRollCount() << " " <<
+		board.getCurrRollAmount() << " " << endl;
+		
+		for (int i = 0; i < board.getPlayerCount(); i++) {
+			
+			fout << board.getPrevTurns()[i][0] << " " << board.getPrevTurns()[i][1] << endl;
+
 		}
-		else return false;
+
+
+
+	fout.close();
+
+
+	ifstream savedGamesList("savedGames/savedGamesList.txt");
+
+	int listSize = 0;
+	savedGamesList >> listSize;
+
+	if (listSize == 0) {
+
+		
+		savedGamesList.close();
+
+		ofstream fout("savedGames/savedGamesList.txt");
+
+
+		fout << "1" << endl;
+		fout << saveName << endl;
+
+
+		fout.close();
+
 
 	}
-	if (group == 5)
-	{
-		if (Playersarray[playerid].searchInProperty(14) &&
-			Playersarray[playerid].searchInProperty(15) &&
-			Playersarray[playerid].searchInProperty(16))
-		{
-			return true;
+	else {
+
+		savedGamesList.ignore();
+
+		char** list = new char* [listSize];
+
+		bool duplicate = false;
+
+		for (int i = 0; i < listSize; i++) {
+
+			char temp[100];
+			savedGamesList >> temp;
+
+			list[i] = new char[strlen(temp) + 1];
+
+			strcpy(list[i], temp);
+
+			if (strcmp(list[i], saveName) == 0) duplicate = true;
+
+
 		}
-		else return false;
+
+		if (!duplicate) {
+		
+			savedGamesList.close();
+
+			ofstream fout("savedGames/savedGamesList.txt");
+
+
+			fout << listSize + 1 << endl;
+
+			for (int i = 0; i < listSize; i++)
+				fout << list[i] << endl;
+
+			fout << saveName << endl;
+
+
+			fout.close();
+
+		}
+		else {
+
+			savedGamesList.close();
+
+		}
+
+
 
 	}
-	if (group == 6)
-	{
-		if (Playersarray[playerid].searchInProperty(17) &&
-			Playersarray[playerid].searchInProperty(18) &&
-			Playersarray[playerid].searchInProperty(19))
-		{
-			return true;
-		}
-		else return false;
 
-	}
 }
-**/
+
+void Monopoly::loadGame(char* saveName = nullptr) {
+
+	if (saveName == nullptr) {
+
+		sf::RenderWindow window(sf::VideoMode(265, 166), "LOAD GAME", sf::Style::Titlebar);
+
+		sf::Font stdFont;
+		stdFont.loadFromFile("fonts/Montserrat-Black.ttf");
+
+		saveName = new char[100];
+		saveName[0] = '\0';
+
+		sf::Text saveGameTitle;
+		saveGameTitle.setString("ENTER NAME: ");
+		saveGameTitle.setFont(stdFont);
+		saveGameTitle.setFillColor(sf::Color(26, 188, 156));
+		saveGameTitle.setCharacterSize(18);
+		saveGameTitle.setPosition(15.0f, 15.0f);
+
+		sf::Text name;
+		name.setString("> ");
+		name.setFont(stdFont);
+		name.setFillColor(sf::Color(26, 188, 156));
+		name.setCharacterSize(18);
+		name.setPosition(15.0f, 35.0f);
+
+		sf::Text nameText;
+		nameText.setString(saveName);
+		nameText.setFont(stdFont);
+		nameText.setFillColor(sf::Color(44, 62, 80));
+		nameText.setCharacterSize(18);
+		nameText.setPosition(35.0f, 35.0f);
+
+		sf::String svName;
+
+		int nameLen = 0;
+
+
+		while (window.isOpen()) {
+
+
+			sf::Event evt;
+			while (window.pollEvent(evt)) {
+
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+
+					window.close();
+
+				}
+
+				if (evt.type == sf::Event::TextEntered) {
+
+					if (evt.text.unicode == 13) {
+
+						nameLen++;
+						window.close();
+
+						for (int i = 0; i < nameLen; i++)
+							saveName[i] = svName.getData()[i];
+
+					}
+					else if (evt.text.unicode >= 97 && evt.text.unicode < 128) {
+						svName += evt.text.unicode;
+						nameText.setString(svName);
+
+						nameLen++;
+					}
+
+				}
+
+
+			}
+
+			window.clear(sf::Color(236, 240, 241));
+
+			window.draw(saveGameTitle);
+			window.draw(name);
+			window.draw(nameText);
+
+			window.display();
+
+
+		}
+	}
+
+
+	int privatePropertySpaces[20] = {
+
+		1, 3, 6, 8,
+		9, 11, 13, 14,
+		16, 18, 19, 21,
+		23, 24, 26, 27,
+		29, 31, 32, 34,
+
+	};
+
+
+	int commercialPropertySpaces[8] = {
+
+		5, 12, 15, 25,
+		28, 35, 37, 39
+
+	};
+
+
+	char pDataFileName[100];
+	pDataFileName[0] = '\0';
+	strcat(pDataFileName, "savedGames/");
+	strcat(pDataFileName, saveName);
+	strcat(pDataFileName, "_PropertyData.monopoly");
+
+	ifstream fin(pDataFileName);
+
+	for (int i = 0; i < 20; i++) {
+
+		int tInt;
+		bool tBool;
+		
+		fin >> tInt;
+
+		PrivateProperty* p = (PrivateProperty*) board.getCells()[privatePropertySpaces[tInt]];
+
+		fin >> tInt;
+
+		p->setOwnerID(tInt);
+
+		fin >> tInt; 
+
+		p->setHouseCount(tInt);
+
+		fin >> tInt;
+
+		p->setShopCount(tInt);
+
+		fin >> tInt;
+
+		p->setHotelCount(tInt);
+
+		fin >> tBool;
+
+		p->setMortgaged(tBool);
+
+		fin >> tBool;
+
+		p->setHasWifi(tBool);
+
+		fin >> tBool;
+
+		p->setHasElectricity(tBool);
+
+		fin >> tBool;
+
+		p->setHasGas(tBool);
+
+		fin.ignore();
+
+	}
+
+	for (int i = 0; i < 8; i++) {
+
+		int tInt;
+		bool tBool;
+
+		fin >> tInt;
+
+		CommercialProperty* p = (CommercialProperty*)board.getCells()[commercialPropertySpaces[tInt]];
+
+		fin >> tInt;
+
+		p->setOwnerID(tInt);
+
+		fin >> tBool;
+
+		p->setMortgaged(tBool);
+
+		fin.ignore();
+
+	}
+
+	fin.close();
 
 
 
+	char playerDataFileName[100];
+	playerDataFileName[0] = '\0';
+	strcat(playerDataFileName, "savedGames/");
+	strcat(playerDataFileName, saveName);
+	strcat(playerDataFileName, "_PlayerData.monopoly");
+
+	fin.open(playerDataFileName);
 
 
-// Destructor
+	int tP;
+	fin >> tP;
+	fin.ignore();
 
-Monopoly::~Monopoly() {
+	setTotalPlayers(tP);
 
-	if (playerPosition) delete[] playerPosition;
+	for (int i = 0; i < tP; i++) {
+
+		Player* p = board.getPlayerByID(i);
+
+		int tInt;
+		bool tBool;
+
+		fin >> tInt;
+		p->setPlayerID(tInt);
+
+		fin >> tInt;
+		p->setCash(tInt);
+
+		fin >> tBool;
+		p->setIsInJail(tBool);
+
+		fin >> tInt;
+		p->setIsInJailCount(tInt);
+
+		fin >> tInt;
+		p->setHasJailRescueCard(tInt);
+
+		fin >> tInt;
+		p->setIsRenting(tInt);
+
+		fin >> tInt;
+		p->setPlayerPosition(tInt);
+
+		fin >> tBool;
+		p->setIsBankrupt(tBool);
+
+		fin.ignore();
+
+
+	}
+
+
+	fin.close();
+
+	char boardDataFileName[100];
+	boardDataFileName[0] = '\0';
+	strcat(boardDataFileName, "savedGames/");
+	strcat(boardDataFileName, saveName);
+	strcat(boardDataFileName, "_BoardData.monopoly");
+
+
+	fin.open(boardDataFileName);
+
+	int temp;
+
+	fin >> temp;
+	board.setPreviousTurn(temp);
+
+	fin >> temp;
+	board.setTurn(temp);
+
+	fin >> temp;
+	board.setDRollCount(temp);
+
+	fin >> temp;
+	board.setCurrRollAmount(temp);
+
+	for (int i = 0; i < tP; i++) {
+
+		fin >> temp;
+		board.getPrevTurns()[i][0] = temp;
+		
+		fin >> temp;
+		board.getPrevTurns()[i][1] = temp;
+
+		fin.ignore();
+
+	}
+
+
+}
+
+Monopoly:: ~Monopoly() {
+
 	if (bCoord) delete[] bCoord;
+	if (playerPosition) delete[] playerPosition;
 	if (bankruptPlayers) delete[] bankruptPlayers;
 
-}
-
-
-
-void Monopoly::loadGame() {
-	ifstream SavedGame;
-	SavedGame.open("Saved.txt");
-	int count = 0;
-	int i = 0;
-	SavedGame >> count;
-	setTotalPlayers(count);
-	while (!SavedGame.eof()) {
-		Property** propertylist = nullptr;
-		int id = i;
-		char* temp = new char[20];
-		int cash;
-		int propertySize = 0;
-		bool isInJail;
-		int hasJailRescueCard;
-		bool isbankrupt;
-		int playerPosition;
-		int inJailCount;
-		bool hasWifi;
-		bool hasGas;
-		bool hasElectricity;
-		SavedGame >> temp;
-		SavedGame >> cash;
-		SavedGame >> propertySize;
-		Property** plots = new  Property * [propertySize];
-		for (int i = 0; i < propertySize; i++) {
-			plots[i] = new Property;
-		}
-		int ProID;
-		int check = 0;
-		for (int i = 0; i < propertySize; i++) {
-			SavedGame >> ProID;
-			plots[i] = bank.getProperty(ProID);
-			bank.appendPropertyList(bank.getProperty(ProID));
-			SavedGame >> check;
-			for (int i = 0; i < check; i++) {
-				plots[i]->addHouse();
-			}
-			SavedGame >> check;
-			for (int i = 0; i < check; i++) {
-				plots[i]->addShop();
-			}
-			SavedGame >> check;
-			for (int i = 0; i < check; i++) {
-				plots[i]->addHotel();
-			}
-			SavedGame >> hasWifi;
-			if (hasWifi == true) {
-				plots[i]->addWifi();
-			}
-			SavedGame >> hasGas;
-			if (hasGas == true) {
-				plots[i]->addGas();
-			}
-			SavedGame >> hasElectricity;
-			if (hasElectricity == true) {
-				plots[i]->addElectricity();
-			}
-		}
-		SavedGame >> isInJail;
-		SavedGame >> hasJailRescueCard;
-		SavedGame >> isbankrupt;
-		SavedGame >> playerPosition;
-		SavedGame >> inJailCount;
-		board.setPlayerData(id, temp, cash, propertySize, plots, isInJail, hasJailRescueCard, isbankrupt, playerPosition, inJailCount);
-	}
-
-}
-
-void Monopoly::saveGame() {
-	ofstream save;
-	save.open("Save.txt");
-	save << getTotalPlayers();
-	for (int i = 0; i < getTotalPlayers(); i++) {
-		save << board.getPlayerName(i) << " ";
-		save << board.getPlayercash(i) << " ";
-		save << board.getPlayerListSize(i) << " ";
-		Property** temp = new Property * [board.getPlayerListSize(i)];
-		temp = board.getPlayerList(i);
-		for (int j = 0; j < board.getPlayerListSize(i); j++) {
-			save << temp[i]->getPropertyID() << " ";
-			save << temp[i]->getHouseCount() << " ";
-			save << temp[i]->getShopCount() << " ";
-			save << temp[i]->getHotelCount() << " ";
-			save << temp[i]->getHasWifi() << " ";
-			save << temp[i]->getHasGas() << " ";
-			save << temp[i]->getHasElectricity() << " ";
-		}
-		save << board.getPlayerisInJail(i) << " ";
-		save << board.getPlayerhasJailRescueCard(i) << " ";
-		save << board.getPlayerisbankrupt(i) << " ";
-		save << board.getPlayerplayerPosition(i) << " ";
-		save << board.getPlayerinJailCount(i);
-		if (i < getTotalPlayers() - 1) {
-			save << endl;
-		}
-	}
 }

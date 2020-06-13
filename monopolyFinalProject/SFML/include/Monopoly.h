@@ -1,6 +1,8 @@
 
 #pragma once
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <Bank.h>
 #include <Board.h>
 #include <SFML/Graphics.hpp>
@@ -91,7 +93,7 @@ public:
 
 
 	// 6th June
-	void loadGame();
+	void loadGame(char*);
 	void saveGame();
 
 

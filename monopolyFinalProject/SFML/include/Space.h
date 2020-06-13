@@ -36,7 +36,7 @@ public:
 
 	void removePlayerFromSpace(int);
 
-	~Space();
+	virtual ~Space();
 
 
 

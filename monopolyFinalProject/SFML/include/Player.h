@@ -77,7 +77,7 @@ public:
 		isbankrupt = p.isbankrupt;
 	}
 
-
+	~Player();
 
 	int getIsRenting();
 	void setIsRenting(int);

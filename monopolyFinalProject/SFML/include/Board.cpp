@@ -251,6 +251,8 @@ void Board::setPlayerCount(int playerCount) {
 
 void Board::allocatePrevTurns() {
 
+	if (prevTurns) free(prevTurns);
+
 	prevTurns = new int*[playerCount];
 
 	for (int i = 0; i < playerCount; i++) {
@@ -379,6 +381,8 @@ Player** Board::getPlayers() {
 }
 
 void Board::allocatePlayers() {
+
+	if (players) delete[] players;
 
 	this->players = new Player * [playerCount];
 
