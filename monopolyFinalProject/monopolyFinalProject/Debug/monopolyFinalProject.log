@@ -1,4 +1,2 @@
-﻿  Monopoly.cpp
-D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Monopoly.cpp(2198,24): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\SFML\include\Monopoly.cpp(2607,75): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+﻿  main.cpp
   monopolyFinalProject.vcxproj -> D:\FAST\Semester 02\OOP\Assignments\CS217-OOP-Assignments\monopolyFinalProject\Debug\monopolyFinalProject.exe

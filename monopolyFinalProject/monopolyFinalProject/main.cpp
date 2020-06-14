@@ -1331,7 +1331,7 @@ int main()
 
 
     //  Placebo
-   {
+   /*{
 
         game.getBoard().getPlayerByID(0)->setHasJailRescueCard(2);
 
@@ -1349,7 +1349,7 @@ int main()
 
         propertyCell->setOwnerID(0);
 
-    }
+    }*/
     
 
 

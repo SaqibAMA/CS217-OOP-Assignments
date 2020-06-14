@@ -1218,49 +1218,54 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 				CommunityCard* c = (CommunityCard*)board.getCommunityChest()[randCard];
 
-				sf::RenderWindow card(sf::VideoMode(500, 170), "Community Chest Card", sf::Style::Titlebar);
+				sf::RenderWindow card(sf::VideoMode(500, 250), "COMMUNITY CHEST CARD", sf::Style::Titlebar);
+
+
+				sf::Texture cardBGTexture;
+				cardBGTexture.loadFromFile("assets/communityBG.png");
+				sf::RectangleShape cardBG(sf::Vector2f(500.0f, 250.0f));
+				cardBG.setTexture(&cardBGTexture);
 
 
 				sf::Text cardTitle;
-				cardTitle.setString("Community\nChest.");
+				cardTitle.setString("COMMUNITY\nCHEST");
 				cardTitle.setCharacterSize(25);
 				cardTitle.setFont(stdFont);
-				cardTitle.setPosition(5.0f, 5.0f);
+				cardTitle.setPosition(15.0f, 15.0f);
 				cardTitle.setFillColor(sf::Color::White);
 
 
 				char* _cardText = c->getCardAction();
-				char* modCardText = nullptr;
 
-				if (strlen(_cardText) >= 34) {
+				for (int i = 0; i < strlen(_cardText); i++) {
+					if (_cardText[i] == '.') {
+						_cardText[i] = '\n';
 
-					modCardText = new char[strlen(_cardText) + 2];
+						if (i + 1 < strlen(_cardText)) {
 
+							for (int j = i + 1; j < strlen(_cardText); j++)
+								_cardText[j] = _cardText[j + 1];
 
-					int spaceAt = 34;
+						}
 
-					while (_cardText[spaceAt] != ' ' && _cardText[spaceAt] != '\0') spaceAt++;
-
-					for (unsigned int i = 0; i < strlen(_cardText) + 2; i++)
-						modCardText[i] = _cardText[i];
-
-					modCardText[spaceAt] = '\n';
+					}
 
 				}
+			
 
 				sf::Text cardText;
 				cardText.setFont(cardFont);
-				cardText.setString((modCardText) ? modCardText : _cardText);
-				cardText.setPosition(5.0f, 100.0f);
-				cardText.setCharacterSize(15);
+				cardText.setString(_cardText);
+				cardText.setPosition(15.0f, 100.0f);
+				cardText.setCharacterSize(22);
 				cardText.setFillColor(sf::Color::White);
 
-				sf::Texture closeButtonTexture;
-				closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
-				sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
-				closeButton.setTexture(&closeButtonTexture);
+				sf::Text closeButton;
+				closeButton.setString("X");
+				closeButton.setCharacterSize(20);
+				closeButton.setFont(stdFont);
 				closeButton.setPosition(470.0f, 10.0f);
-				closeButtonTexture.setSmooth(true);
+				closeButton.setFillColor(sf::Color::White);
 
 
 				while (card.isOpen()) {
@@ -1288,6 +1293,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 					}
 
 					card.clear(sf::Color(52, 152, 219));
+					card.draw(cardBG);
 
 					card.draw(cardTitle);
 					card.draw(cardText);
@@ -1416,49 +1422,63 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 				ChanceCard* c = (ChanceCard*)board.getChance()[randCard];
 
-				sf::RenderWindow card(sf::VideoMode(500, 170), "Chance Card", sf::Style::Titlebar);
+				sf::RenderWindow card(sf::VideoMode(500, 250), "Chance Card", sf::Style::Titlebar);
+
+
+				sf::Texture cardBGTexture;
+				cardBGTexture.loadFromFile("assets/chanceBG.png");
+				sf::RectangleShape cardBG(sf::Vector2f(500.0f, 250.0f));
+				cardBG.setTexture(&cardBGTexture);
 
 
 				sf::Text cardTitle;
-				cardTitle.setString("Chance.");
+				cardTitle.setString("CHANCE CARD.");
 				cardTitle.setCharacterSize(25);
 				cardTitle.setFont(stdFont);
-				cardTitle.setPosition(5.0f, 5.0f);
+				cardTitle.setPosition(15.0f, 15.0f);
 				cardTitle.setFillColor(sf::Color::White);
 
 
+				
+				
 				char* _cardText = c->getCardAction();
-				char* modCardText = nullptr;
 
-				if (strlen(_cardText) >= 34) {
+				for (int i = 0; i < strlen(_cardText); i++) {
+					if (_cardText[i] == '.') {
+						_cardText[i] = '\n';
 
-					modCardText = new char[strlen(_cardText) + 2];
+						if (i + 1 < strlen(_cardText)) {
 
+							for (int j = i + 1; j < strlen(_cardText); j++)
+								_cardText[j] = _cardText[j + 1];
 
-					int spaceAt = 34;
+						}
 
-					while (_cardText[spaceAt] != ' ' && _cardText[spaceAt] != '\0') spaceAt++;
-
-					for (unsigned int i = 0; i < strlen(_cardText) + 2; i++)
-						modCardText[i] = _cardText[i];
-
-					modCardText[spaceAt] = '\n';
-
+					}
+					
 				}
 
 				sf::Text cardText;
 				cardText.setFont(cardFont);
-				cardText.setString((modCardText) ? modCardText : _cardText);
-				cardText.setPosition(5.0f, 100.0f);
-				cardText.setCharacterSize(15);
+				cardText.setString(_cardText);
+				cardText.setPosition(15.0f, 100.0f);
+				cardText.setCharacterSize(22);
 				cardText.setFillColor(sf::Color::White);
 
-				sf::Texture closeButtonTexture;
-				closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
-				sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
-				closeButton.setTexture(&closeButtonTexture);
+				sf::Text closeButton;
+				closeButton.setString("X");
+				closeButton.setCharacterSize(20);
+				closeButton.setFont(stdFont);
 				closeButton.setPosition(470.0f, 10.0f);
-				closeButtonTexture.setSmooth(true);
+				closeButton.setFillColor(sf::Color::White);
+
+				//sf::Texture closeButtonTexture;
+				//closeButtonTexture.loadFromFile("assets/upgrade_prompt_close.png");
+				//sf::RectangleShape closeButton(sf::Vector2f(20.0f, 20.0f));
+				//closeButton.setTexture(&closeButtonTexture);
+				//closeButton.setPosition(470.0f, 10.0f);
+				//closeButtonTexture.setSmooth(true);
+				//closeButton.setFillColor(sf::Color::White);
 
 
 				while (card.isOpen()) {
@@ -1485,7 +1505,8 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 					}
 
-					card.clear(sf::Color(230, 126, 34));
+					card.clear(sf::Color::White);
+					card.draw(cardBG);
 
 					card.draw(cardTitle);
 					card.draw(cardText);
