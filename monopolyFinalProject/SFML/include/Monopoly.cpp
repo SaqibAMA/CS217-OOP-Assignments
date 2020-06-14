@@ -400,8 +400,6 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 													bidTurn = (bidTurn + 1) % board.getPlayerCount();
 													bidsMade++;
 
-													cout << "bidTurn -> " << bidTurn << endl;
-
 
 												}
 												else if (bidButtonBounds.contains(mousePos)){
@@ -416,10 +414,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 
 													bidTurn = (bidTurn + 1) % board.getPlayerCount();
-													bidsMade++;
-
-													cout << "bidTurn -> " << bidTurn << endl;
-												
+													bidsMade++;												
 
 												}
 
@@ -523,8 +518,6 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 					}
 
-
-
 					if (player->getCash() >= property->getPurchasePrice() && dealChoice == 0) {
 
 
@@ -538,7 +531,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 					}
 					else if (player->getCash() >= property->getRentPrice() && dealChoice == 1) {
 
-						if (property->getOwnerID() != -1)
+						if (property->getOwnerID() != -1 && !property->getMortgaged())
 							board.getPlayerByID(property->getOwnerID())->addCash(property->getRentPrice());
 
 						player->setIsRenting(property->getPropertyID());
@@ -1044,8 +1037,6 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 
 					}
 
-
-
 					if (player->getCash() >= property->getPurchasePrice() && dealChoice == 0) {
 
 
@@ -1059,7 +1050,7 @@ void Monopoly::movePlayer(int playerID, int currRollCount, sf::RenderWindow& win
 					}
 					else if (player->getCash() >= property->getRentPrice() && dealChoice == 1) {
 
-						if (property->getOwnerID() != -1)
+						if (property->getOwnerID() != -1 && !property->getMortgaged())
 							board.getPlayerByID(property->getOwnerID())->addCash(property->getRentPrice());
 
 						player->setIsRenting(property->getPropertyID());

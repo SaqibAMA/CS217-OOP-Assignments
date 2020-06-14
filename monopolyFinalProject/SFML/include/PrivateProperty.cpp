@@ -93,6 +93,19 @@ bool PrivateProperty::getHasElectricity() {
 	return hasElectricity;
 }
 //SPECIAL FUNCITONS
+bool PrivateProperty::isUpgraded() {
+	return (
+		
+		houseCount ||
+		shopCount ||
+		hotelCount ||
+		hasElectricity ||
+		hasGas ||
+		hasWifi
+
+		);
+}
+
 void PrivateProperty::addHouse() {
 	houseCount++;
 }
@@ -133,6 +146,58 @@ void PrivateProperty::putsPlayersOnSpace (int& playerCash, int dealChoice) {
 		playerCash -= getPurchasePrice();
 	else
 		playerCash -= getRentPrice();
+
+
+}
+
+int PrivateProperty::getPurchasePrice() {
+
+	
+	if (!Property::getMortgaged()) {
+		return (
+
+			Property::getPurchasePrice()
+			+ (houseCount * 100)
+			+ (shopCount * 300)
+			+ (hotelCount * 1000)
+			+ (hasWifi * 30)
+			+ (hasGas * 50)
+			+ (hasElectricity * 50)
+
+
+			);
+	}
+	else {
+
+		int totalPrice = Property::getPurchasePrice()
+			+ (houseCount * 100)
+			+ (shopCount * 300)
+			+ (hotelCount * 1000)
+			+ (hasWifi * 30)
+			+ (hasGas * 50)
+			+ (hasElectricity * 50);
+
+
+		return (int)(totalPrice * 0.2f);
+
+	}
+
+}
+
+int PrivateProperty::getRentPrice() {
+
+	float rentFactor = 1 +
+		
+		  ((houseCount > 0) * 0.3f)
+		+ ((shopCount > 0) * 0.6f)
+		+ ((hotelCount > 0) * 0.8f)
+		+ ((hasWifi) * 0.1f)
+		+ ((hasGas) * 0.2f)
+		+ ((hasElectricity) * 0.2f)
+
+		;
+
+	return (rentFactor * Property::getRentPrice());
 
 
 }

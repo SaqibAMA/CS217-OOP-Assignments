@@ -35,6 +35,7 @@ public:
 	bool getHasGas();
 	bool getHasElectricity();
 	//SPECIAL FUNCTIONS
+	bool isUpgraded();
 	void addHouse();
 	void addHotel();
 	void addShop();
@@ -42,6 +43,9 @@ public:
 	void addGas();
 	void addElectricity();
 	int calculateRent();
+
+	int getPurchasePrice();
+	int getRentPrice();
 
 
 

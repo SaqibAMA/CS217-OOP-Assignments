@@ -38,8 +38,8 @@ public:
 	int getOwnerID();
 	bool getMortgaged();
 
-	int getPurchasePrice();
-	int getRentPrice();
+	virtual int getPurchasePrice();
+	virtual int getRentPrice();
 	int getMortgagePrice();
 
 	void setPurchasePrice(int);

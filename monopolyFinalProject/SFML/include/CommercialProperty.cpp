@@ -23,6 +23,18 @@ CommercialProperty::CommercialProperty(CommercialProperty& CommPro) {
 	this->setMortgagePrice(CommPro.getMortgagePrice());
 }
 
+int CommercialProperty::getPurchasePrice() {
+
+	return Property::getPurchasePrice();
+
+}
+
+int CommercialProperty::getRentPrice() {
+
+	return Property::getRentPrice();
+
+}
+
 CommercialProperty::~CommercialProperty() {
 
 

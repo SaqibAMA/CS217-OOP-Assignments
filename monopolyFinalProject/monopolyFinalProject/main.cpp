@@ -1938,6 +1938,42 @@ int main()
     }
 
     delete[] playerPrevPos;
+    for (int i = 0; i < 3; i++) {
+        delete[] buildingIcon[i];
+        delete[] upgradeIcon[i];
+        delete[] upgradeIconTexture[i];
+        delete[] cardOwnerColors[i];
+        delete[] upgradePromptIconsTexture[i];
+        delete[] upgradePromptIcons[i];
+    }
+    delete[] buildingIcon;
+    delete[] buildingIconTextures;
+    delete[] upgradeIcon;
+    delete[] upgradeIconTexture;
+    delete[] playerCash;
+    delete[] mortgageStatus;
+    delete[] cardUpgradeIcon;
+    delete[] cardOwnerIcon;
+    delete[] cardOwnerColors;
+    delete[] cardRent;
+    delete[] cardPrice;
+    delete[] cardTitle;
+    delete[] commercialMortgageStatus;
+    delete[] commercialCardOwnerIcon;
+    delete[] commercialCardRent;
+    delete[] commercialCardPrice;
+    delete[] commercialCardTitle;
+    delete[] navButton;
+    delete[] navButtonTexture;
+    delete[] commercialNavButton;
+    delete[] dice;
+    delete[] diceTexture;
+    delete[] playerIcon;
+    delete[] playerIconTexture;
+    delete[] playerTextures;
+    delete[] playerPieces;
+    delete[] upgradePromptIconsTexture;
+    delete[] upgradePromptIcons;
 
 
     return 0;
