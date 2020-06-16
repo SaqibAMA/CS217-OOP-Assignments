@@ -1331,14 +1331,13 @@ int main()
 
 
     //  Placebo
-   /*{
+   {
 
         game.getBoard().getPlayerByID(0)->setHasJailRescueCard(2);
 
         PrivateProperty* propertyCell = (PrivateProperty*)game.getBoard().getCells()[1];
 
         propertyCell->setOwnerID(0);
-        propertyCell->setMortgaged(true);
 
         propertyCell = (PrivateProperty*)game.getBoard().getCells()[3];
 
@@ -1349,7 +1348,7 @@ int main()
 
         propertyCell->setOwnerID(0);
 
-    }*/
+    }
     
 
 
